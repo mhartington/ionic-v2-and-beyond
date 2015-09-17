@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+
+  <title>Ionic: V2 and beyond</title>
+
+  <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+  <meta name="author" content="Hakim El Hattab">
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+  <link rel="stylesheet" href="css/reveal.css">
+  <link rel="stylesheet" href="css/theme/ionic.css" id="theme">
+
+  <!-- Code syntax highlighting -->
+  <link rel="stylesheet" href="lib/css/oceanicnext.css">
+
+  <!-- icons -->
+  <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+    document.getElementsByTagName('head')[0].appendChild(link);
+  </script>
+
+  <!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+</head>
+
+<body>
+
+  <div class="reveal">
+
+    <!-- Any section element inside of this container is displayed as a slide -->
+    <div class="slides">
+
+     <section>
+        <img src="img/ionic-logo-vertical-vector.svg" class="logo" width="450" style="display:block; margin:auto; margin-bottom:50px;">
+        <h1 style="font-weight:bold;text-shadow: -3px 2px 2px #000;font-size:80px"><em>V2 and Beyond</em></h1>
+      </section>
+
+      <section>
+        <h3 style="text-transform:lowercase"><code>$ whoami</code></h3>
+
+        <img class="headshot" src="https://pbs.twimg.com/profile_images/578237281384841216/R3ae1n61.png" alt="Mike Hartington">
+        <h3>Mike Hartington</h3>
+        <p>Ionic Team Member</p>
+        <p>Involved with Ionic since 2013</p>
+        <a target="_blank" style="font-size:70px; margin-right:40px" href="https://twitter.com/mhartington" class="icon ion-social-twitter"></a>
+        <a target="_blank" style="font-size:70px" href="https://github.com/mhartington/" class="icon ion-social-github"></a>
+      </section>
+
+      <section data-markdown>
+      ### This is still being worked on
+      Things may appear differently once released
+      </section>
+
+      <section>
+        <h3 style="font-size:80px; font-weight: bold;">Ionic V1!</h3>
+        <p>SDK for Developing Hybrid Apps</p>
+        <p>Focused on mobile first</p>
+        <p>Sass for easy customization</p>
+        <p>Angular for code strucutre</p>
+      </section>
+
+      <section data-background="https://raw.githubusercontent.com/mhartington/ionic-presents/gh-pages/img/superpower.jpg">
+        <h3 style="font-weight:bold;text-shadow: -3px 2px 2px #000;">Number of apps created with ionic: 1 billion</h3>
+        <h3 style="font-weight:bold;text-shadow: -3px 2px 2px #000;">Over 19,000 starts on github</h3>
+        <h3 style="font-weight:bold;text-shadow: -3px 2px 2px #000;">Over 92,000 apps started in the last month</h3>
+      </section>
+
+      <section data-markdown>
+       ## Ionic V1 is great
+
+       _but_
+      </section>
+
+      <section data-markdown>
+        ## There's alway room for improvements
+      </section>
+
+      <section  data-markdown>
+        ### What we've been doing
+
+        Taking the feedback from developers - good and bad
+
+        Looking at new techniques
+
+        Looking at where we feel short
+      </section>
+
+      <section>
+        <h3>Places where Ionic could improve</h3>
+        <p class="fragment">Navigation</p>
+        <p class="fragment">Performance</p>
+        <p class="fragment">Complexity</p>
+      </section>
+
+      <section data-markdown>
+        ## V2 is built from the lessons that we've learned since V1
+      </section>
+
+      <!-- Goals -->
+      <section data-markdown>
+        ### Goals
+        Better performance
+
+        Easier to understand
+
+        Faster to build
+
+        Simpler concepts and code
+
+        Better navigation control
+      </section>
+
+      <!-- Performance -->
+      <section>
+        <h2>Performance</h2>
+        <section data-markdown>
+          NG1 used a digest cyle to detect changes
+
+          Data could change anywhere at anytime
+
+          `$timeout` and `$scope.$apply` to trigger a digest
+        </section>
+
+        <section data-markdown>
+          <script type="text/template">
+          NG2 brings a new kind of change detechtion
+
+          Changes are detected on every browser event
+
+          Flow from parent to child - Unidirectional
+
+          The change detection can go through<br>
+          thousands of bindings in milliseconds
+          </script>
+        </section>
+
+        <section>
+          <h3>Take Away</h3>
+          <p>Changes are easier to reason about</p>
+          <p>Immutable data and Observables for greater performance</p>
+          <br>
+          <small><a href="http://victorsavkin.com/post/110170125256/change-detection-in-angular-2" target="_blank">CHANGE DETECTION IN ANGULAR 2 by VICTOR SAVKIN</a></small>
+        </section>
+
+      </section>
+
+      <!-- Mature Javascript-->
+      <section>
+        <h2>Mature Javascript</h2>
+
+        <section>
+          <p>ES5 has served us well for many years</p>
+          <p>JS world has gone through some changes</p>
+          <p>All for cleaner and simpiler code</p>
+        </section>
+
+        <section>
+          <p>NG2 and Ionic V2 use these new standards</p>
+          <p>Classes and Modules FTW</p>
+          <p>You can even write NG1 code in ES6 to ease the transition</p>
+        </section>
+
+        <section>
+          <p>Out of the box, Ionic 2 is setup for ES6</p>
+          <p>All the build and transpiling tools are setup for you</p>
+          <p>You just write your code, and we build</p>
+        </section>
+
+        <section>
+          <h3>Typescript</h3>
+          <p>Ionic V2 is written in Typescript</p>
+          <p>You can write in TS as well as ES6</p>
+          <p>Code completion and intellisense for free</p>
+          <p>The build process will handle both filetypes</p>
+        </section>
+
+        <section>
+          <p>The JS community is moving towards ES6 as well as TS</p>
+          <p>Support in major browsers as well as editors</p>
+          <p>Faster and simpiler way to write your javasctipt</p>
+        </section>
+
+      </section>
+
+      <!-- Simplicity -->
+      <section>
+        <h2>Simplicity</h2>
+
+        <section>
+          <p>Ionic V1 made development dead simple</p>
+          <p>Could we make things even more straigh forward?</p>
+          <p>Where were places that we could help developers </p>
+        </section>
+
+        <section>
+          <p>NG2 introduces many new topics</p>
+          <p>Perfect place for Ionic to step in and help out</p>
+          <!-- <p>Places like bootstrapping an app</p> -->
+        </section>
+
+  <!--       <section> -->
+  <!--         <p>Bootstrapping a NG2 app</p> -->
+  <!--         <pre><code class="javscript"> -->
+  <!-- bootstrap(MyComp1, MyComp2, MyComp3); -->
+  <!--         </code></pre> -->
+  <!--  -->
+  <!--       </section> -->
+
+
+  <!--       <section> -->
+  <!--         <p>NG2 Bootstrapping has been simpified into a single tag</p> -->
+  <!--         <pre><code class="html"> -->
+  <!-- <ion&#45;app></ion&#45;app> -->
+  <!--         </code></pre> -->
+  <!--         <p>This is instead of having to manually <br> bootstrap every component you need</p> -->
+  <!--       </section> -->
+
+        <section>
+          <h3>
+            <code>@IonicView</code>
+          </h3>
+          <p>Automagically handles the <code>@Component</code> and <code>@View</code> for you</p>
+          <p>Also wraps the template in an an ion-view</p>
+        </section>
+
+        <section>
+          <h3>Ionicons</h3>
+          <p>Reworked for Ionic 2</p>
+          <p>Each Icon has a platform specific counter part</p>
+          <p>Ionic will switch out the icon for you to fit each platform</p>
+          <p>Adds appropriate ARIA attributes for added accessibility</p>
+        </section>
+
+        <section>
+        <h3>Sass</h3>
+        <p>Colors have reworked to used Sass maps</p>
+        <p>You can add and remove colors as you need them</p>
+        <p>Simple starting point to really customize your app to fit your brand</p>
+        <p>Build process already included into V2</p>
+        </section>
+
+
+      </section>
+
+      <!-- Navigation -->
+      <section>
+        <h2>Navigation</h2>
+
+        <section>
+          <p>V1s navigation used UI-Router</p>
+          <p>Allowed for complex navigation, such as in tabs</p>
+          <p>Navigation in arbitrary components was not easy</p>
+        </section>
+
+        <section>
+          <p>Tied to a URL</p>
+          <p>Couldn't create app history from nothing</p>
+          <p>Deep linking from outside an app was difficult</p>
+        </section>
+
+        <section>
+          <h3>We decoupled routing from Ionic</h3>
+        </section>
+
+        <section>
+          <h3>Simplicity FTW</h3>
+          <p>New views get "pushed" on to the history stack</p>
+          <p>Want to go back? You "pop" back from that view</p>
+          <p>This push/pop metaphor is inspired by native navigation</p>
+        </section>
+
+        <section>
+          <h3>But what about URLs?</h3>
+        </section>
+
+        <section>
+          <p>Ionic apps aren't tighly coupled to the URL</p>
+          <p>You can push to a new view, then tell the
+            <br>browser what <strong>you</strong> want the URL to be</p>
+          <p>You are in control</p>
+        </section>
+
+        <section>
+          <pre data-trim><code class="javascript">
+  .state('master',{
+    url:'/',
+    tempalateUrl: 'templates/master.html'
+  })
+  .state('detail',{
+    url:'/detail',
+    tempalateUrl: 'templates/detail.html'
+  })
+          </code></pre>
+
+          <pre data-trim><code class"handlebars">
+  <ion-view view-title="Master">
+    <ion-content>
+      <a class="button" ui-sref="detail"></a>
+    </ion-content>
+  </ion-view>
+          </code></pre>
+        </section>
+
+        <section>
+<pre data-trim><code class="javascript">
+  import {DetailPage} from './detail';
+  @IonicView({
+    templateUrl: '/app/master/master.html'
+  })
+  export class MasterPage {
+    constructor(nav: NavController) {
+      this.nav = nav
+    }
+    pushState() {
+      this.nav.push(DetailPage)
+    }
+  }
+
+</code></pre>
+
+<pre><code>
+  &lt;ion-content&gt;
+    &lt;a button (click)=&quot;pushState()&quot;&gt;&lt;/a&gt;
+  &lt;/ion-content&gt;
+
+</code></pre>
+        </section>
+
+        <section>
+          <h3>Take Away</h3>
+          <p>Views can be rendered in anything and everything</p>
+          <p>URLs have been separated from navigation</p>
+          <p>App's history can be dynamically created</p>
+        </section>
+
+      </section>
+
+      <section>
+          <h3>Final Message</h3>
+          <p>Ionic 1 is still a great solution for hybrid apps</p>
+          <p>Ionic 2 is built from the lessons learned in Ionic 1</p>
+          <p>We will continue to keep pushing what hybird apps can do</p>
+      </section>
+
+      <section>
+        <h2><code style="font-size: 80px">&lt;/html&gt;</code></h2>
+        <a href="https://twitter.com/mhartington" target="_blank">@mhartington</a>
+      </section>
+
+    </div>
+
+  </div>
+
+  <script src="lib/js/head.min.js"></script>
+  <script src="js/reveal.js"></script>
+
+  <script>
+    // Full list of configuration options available at:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+      controls: true,
+      progress: true,
+      history: true,
+      center: true,
+
+      transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+      // Optional reveal.js plugins
+      dependencies: [{
+        src: 'lib/js/classList.js',
+        condition: function() {
+          return !document.body.classList;
+        }
+      }, {
+        src: 'plugin/markdown/marked.js',
+        condition: function() {
+          return !!document.querySelector('[data-markdown]');
+        }
+      }, {
+        src: 'plugin/markdown/markdown.js',
+        condition: function() {
+          return !!document.querySelector('[data-markdown]');
+        }
+      }, {
+        src: 'plugin/highlight/highlight.js',
+        async: true,
+        condition: function() {
+          return !!document.querySelector('pre code');
+        },
+        callback: function() {
+          hljs.initHighlightingOnLoad();
+        }
+      }, {
+        src: 'plugin/zoom-js/zoom.js',
+        async: true
+      }, {
+        src: 'plugin/notes/notes.js',
+        async: true
+      }]
+    });
+  </script>
+
+</body>
+
+</html>
