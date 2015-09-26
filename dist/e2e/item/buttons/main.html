@@ -1,0 +1,90 @@
+<ion-toolbar><ion-title>Items as Links/Buttons</ion-title></ion-toolbar>
+
+<ion-list>
+
+  <a ion-item href="#">
+    a[ion-item]
+  </a>
+
+  <a ion-item class="activated" href="#">
+    a[ion-item].activated
+  </a>
+
+  <button ion-item>
+    button[ion-item]
+  </button>
+
+  <button ion-item class="activated">
+    button[ion-item].activated
+  </button>
+
+  <ion-item>
+    <button item-left>Default</button>
+    Inner Buttons
+    <button outline item-right>Outline</button>
+  </ion-item>
+
+  <ion-item>
+    <button item-left>
+      <icon home></icon>
+      Left Icon
+    </button>
+    left icon buttons
+    <button outline item-right>
+      <icon star></icon>
+      Left Icon
+    </button>
+  </ion-item>
+
+  <ion-item>
+    <button item-left>
+      Right Icon
+      <icon home></icon>
+    </button>
+    right icon buttons
+    <button outline item-right>
+      Right Icon
+      <icon star></icon>
+    </button>
+  </ion-item>
+
+  <ion-item>
+    <button clear item-left>
+      <icon navigate></icon>
+    </button>
+    icon only buttons
+    <button clear item-right>
+      <icon navigate></icon>
+    </button>
+  </ion-item>
+
+  <ion-item>
+    ion-item right icon/text button
+    <button item-right>
+      <icon refresh></icon>
+      Refresh
+    </button>
+  </ion-item>
+
+  <ion-item>
+    <button clear item-left>
+      <icon settings></icon>
+      Settings
+    </button>
+    ion-item left clear button
+  </ion-item>
+
+  <ion-item>
+    ion-item right clear button
+    <button secondary clear item-right>
+      Edit
+    </button>
+  </ion-item>
+
+  <ion-item class="item-text-wrap">
+    This is multiline text that has a
+    long description of about how the text is really long.
+    <button outline item-right>View</button>
+  </ion-item>
+
+</ion-list>

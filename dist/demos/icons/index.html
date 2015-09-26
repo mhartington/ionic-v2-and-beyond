@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <!-- https://www.chromium.org/developers/design-documents/chromium-graphics/how-to-get-gpu-rasterization -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+  <link href="../../css/ionic.css" rel="stylesheet">
+  <style>
+    icon{
+      font-size: 80px;
+    }
+    .row-wrap {
+      -webkit-flex-wrap: wrap;
+      -moz-flex-wrap: wrap;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  }
+
+  ion-col.col-33 {
+
+    -webkit-box-flex: 0;
+    -webkit-flex: 33.3333%;
+    -ms-flex: 33.3333%;
+    flex: 33.3333%;
+    max-width: 33.3333% !important;
+    text-align: center;
+}
+  </style>
+</head>
+<body>
+
+  <ion-app>
+    <ion-loading-icon></ion-loading-icon>
+  </ion-app>
+
+  <script src="../../js/ionic.bundle.js"></script>
+
+  <script>
+    System.config({
+      "paths": {
+        "*": "*.js",
+        "ionic/*": "ionic/*",
+        "angular2/*": "angular2/*",
+        "rx": "rx"
+      }
+    })
+    System.import("index");
+  </script>
+
+</body>
+</html>

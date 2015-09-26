@@ -1,13 +1,13 @@
 <!doctype html>
 <html lang="en">
 
-<head>
+<head><!--{{{-->
   <meta charset="utf-8">
 
   <title>Ionic: V2 and beyond</title>
 
-  <meta name="description" content="A framework for easily creating beautiful presentations using HTML">
-  <meta name="author" content="Hakim El Hattab">
+  <meta name="description" content="A overview of Ionic 2">
+  <meta name="author" content="Mike Hartington">
 
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
@@ -21,8 +21,9 @@
   <link rel="stylesheet" href="lib/css/oceanicnext.css">
 
   <!-- icons -->
-  <link rel="stylesheet" href="http://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+  <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
   <!-- Printing and PDF exports -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
   <script>
     var link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -32,9 +33,9 @@
   </script>
 
   <!--[if lt IE 9]>
-		<script src="lib/js/html5shiv.js"></script>
-		<![endif]-->
-</head>
+    <script src="lib/js/html5shiv.js"></script>
+    <![endif]-->
+</head><!--}}}-->
 
 <body>
 
@@ -43,317 +44,617 @@
     <!-- Any section element inside of this container is displayed as a slide -->
     <div class="slides">
 
-     <section>
-        <img src="img/ionic-logo-vertical-vector.svg" class="logo" width="450" style="display:block; margin:auto; margin-bottom:50px;">
-        <h1 style="font-weight:bold;text-shadow: -3px 2px 2px #000;font-size:80px"><em>V2 and Beyond</em></h1>
+      <section>
+        <img src="img/ionic-sdk-landscape-white-1024.png" class="logo" width="450" style="display:block; margin:auto; margin-bottom:100px;">
+        <h1 style="font-size:75px">V2 and Beyond</h1>
+        <p>Mike Hartington | @mhartington</p>
       </section>
 
       <section>
-        <h3 style="text-transform:lowercase"><code>$ whoami</code></h3>
+        <h3>Ionic 2 is still in Alpha</h3>
+        <p>Final API may or may not look the same</p>
 
-        <img class="headshot" src="https://pbs.twimg.com/profile_images/578237281384841216/R3ae1n61.png" alt="Mike Hartington">
-        <h3>Mike Hartington</h3>
-        <p>Ionic Team Member</p>
-        <p>Involved with Ionic since 2013</p>
-        <a target="_blank" style="font-size:70px; margin-right:40px" href="https://twitter.com/mhartington" class="icon ion-social-twitter"></a>
-        <a target="_blank" style="font-size:70px" href="https://github.com/mhartington/" class="icon ion-social-github"></a>
-      </section>
-
-      <section data-markdown>
-      ### This is still being worked on
-      Things may appear differently once released
+        <aside class="notes">
+          <p>Ionic 2 is still in early alpha, so apis may change down the road</p>
+          <p>But while the APIs may change, the ideas and concepts will stay the same</p>
+        </aside>
       </section>
 
       <section>
-        <h3 style="font-size:80px; font-weight: bold;">Ionic V1!</h3>
+        <h3 style="font-size:80px;">Ionic V1!</h3>
         <p>SDK for Developing Hybrid Apps</p>
         <p>Focused on mobile first</p>
         <p>Sass for easy customization</p>
         <p>Angular for code strucutre</p>
-      </section>
 
-      <section data-background="https://raw.githubusercontent.com/mhartington/ionic-presents/gh-pages/img/superpower.jpg">
-        <h3 style="font-weight:bold;text-shadow: -3px 2px 2px #000;">Number of apps created with ionic: 1 billion</h3>
-        <h3 style="font-weight:bold;text-shadow: -3px 2px 2px #000;">Over 19,000 starts on github</h3>
-        <h3 style="font-weight:bold;text-shadow: -3px 2px 2px #000;">Over 92,000 apps started in the last month</h3>
-      </section>
-
-      <section data-markdown>
-       ## Ionic V1 is great
-
-       _but_
-      </section>
-
-      <section data-markdown>
-        ## There's alway room for improvement
-      </section>
-
-      <section  data-markdown>
-        ### What we've been doing
-
-        Taking feedback from developers - good and bad
-
-        Looking at new techniques
-
-        Looking at where we fall short
+        <aside class="notes">
+          <p>Ionic seems to have taken the world by storm</p>
+        </aside>
       </section>
 
       <section>
-        <h3>Places where Ionic could improve</h3>
-        <p class="fragment">Navigation</p>
-        <p class="fragment">Performance</p>
-        <p class="fragment">Complexity</p>
+          <h3>The Stats:</h3>
+          <p>34th most popular OSS project (19,000+ stars on GitHub)</p>
+          <p>ONE MILLION apps built with the SDK</p>
+          <p>105 Meetup Groups around the world</p>
+          <p>Ionic apps top app store charts</p>
+          <p>Used everywhere from
+            <br>Fortune 50 co’s to YC/TechStars companies</p>
+
+          <aside class="notes">
+            <li>Now while we think ionic is pretty great, so do a lot of other people.</li>
+            <li>it's become rather popular all around the world, and there's been apps that have gotten featured on the ios and android app store</li>
+            <li>Sworkit</li>
+          </aside>
       </section>
 
-      <section data-markdown>
-        ## V2 is built from the lessons that we've learn from V1
+      <section>
+        <h2> Ionic V1 is great</h2>
+        <p class="fragment">But a lot's changed since its release</p>
+
+        <aside class="notes">
+          <li>V1 is great</li>
+          <li>Need to build an app now, use it it's stable</li>
+          <p>but</p>
+          <li>It's over 2 years old</li>
+        </aside>
+      </section>
+
+      <section>
+        <h3>2 years is a long time in web tech!</h3>
+        <aside class="notes">
+        <p>Ionic was created 2 years ago....thats ages in web tech</p>
+        </aside>
+      </section>
+
+      <section>
+        <h3>What it was like in 2013</h3>
+        <p>Breaking Bad had its series finale</p>
+        <p>The iPhone 5 with iOS 6 was released</p>
+        <p>Android 2.3 was still a thing</p>
+
+        <aside class="notes">
+          <p>In 2013, the mobile landscape was completely difrernt than what it was today</p>
+          <p>iOS is essntially gone, and 2.3 is at less than 1% today</p>
+        </aside>
+      </section>
+
+      <section>
+        <h3>A lot's changed since then</h3>
+        <p>Better devices!</p>
+        <p>Fewer bad devices!</p>
+        <p>New browser APIs!</p>
+        <p>New browser engines!</p>
+
+        <aside class="notes">
+          <p>We have a lot better devices, but more importantly, a lot less bad devices</p>
+          <p>We also have chrome on android, the same chrome that you get on desktop</p>
+        </aside>
+      </section>
+
+      <section>
+        <h2>V1 was built for the mobile devices of yesterday</h2>
+      </section>
+
+      <section>
+        <h2>V2 will be the same powerful framework, but built for the future</h2>
+
+        <aside class="notes">
+        Every thing that you know and love about Ionic V1, will be in V2, but built to be long lasting and work great on any potential device
+        </aside>
       </section>
 
       <!-- Goals -->
-      <section data-markdown>
-        ### Goals
-        Better performance
+      <section>
+        <h3>GOALS TO IMPROVE FROM V1</h3>
+        <p>Performance</p>
+        <p>Simplicity</p> <!-- attributes -->
+        <p>Near Native UX</p> <!-- ios/md and navigation -->
+        <p>Creative Freedom</p> <!-- Sass and Web animations -->
+        <p>Future Proof</p> <!-- ES6 and Typescript -->
 
-        Easier to understand
-
-        Faster to build
-
-        Simpler concepts and code
-
-        Better navigation control
+        <aside class="notes">
+          <li>Simplicity: Can we make development with ionic even easier than it was in v1</li>
+          <li>Native UX and Design: Can we push our navtive ux even further while still making it easy to cusitmize to your brand</li>
+          <li>Furture Proof: How can we make sure Ionic is built for the future</li>
+        </aside>
       </section>
 
-      <!-- Performance -->
       <section>
-        <h2>Performance</h2>
-        <section data-markdown>
-          NG1 used a digest cyle to detect changes
-
-          Data could change anywhere at anytime
-
-          `$timeout` and `$scope.$apply` to trigger a digest
-        </section>
-
-        <section data-markdown>
-          <script type="text/template">
-          NG2 brings a new kind of change detechtion
-
-          Changes are detected on every browser event
-
-          Flow from parent to child - Unidirectional
-
-          The change detection can go through<br>
-          thousands of bindings in milliseconds
-          </script>
-        </section>
-
-        <section>
-          <h3>Take Away</h3>
-          <p>Changes are easier to reason about</p>
-          <p>Immutable data and Observables for greater performance</p>
-          <br>
-          <small><a href="http://victorsavkin.com/post/110170125256/change-detection-in-angular-2" target="_blank">CHANGE DETECTION IN ANGULAR 2 by VICTOR SAVKIN</a></small>
-        </section>
-
+        <p>Talk is cheap</p>
+        <p>Let's see some code</p>
       </section>
 
-      <!-- Mature Javascript-->
-      <section>
-        <h2>Mature Javascript</h2>
+      <!-- Simplicity - attribute -->
+      <section><!--{{{-->
+        <section><!--{{{-->
+          <h2>Simplicity</h2>
+          <p>Using properties instead of classes</p>
+        </section><!--}}}-->
 
+        <section><!--{{{-->
+          <h3>V1 Buttons</h3>
+          <pre><code class="html">
+<a class="button button-positive"></a>
+<a class="button button-outlined button-balanced"></a>
+<a class="button button-clear button-dark"></a>
+<a class="button button-assertive button-icon ion-close"></a>
+          </code></pre>
+
+          <aside class="notes">
+            While this is traditional what every framework does, it can become quite cluttered the more classes you add
+          </aside>
+        </section><!--}}}-->
+
+        <section><!--{{{-->
+          <h3>Classes can get <br>complex and cluttered</h3>
+
+        </section><!--}}}-->
+
+        <section><!--{{{-->
+          <h3>Move things to properties instead</h3>
+          <p>Easier to understand and less markup</p>
+          <p>Easy to overide with classes</p>
+
+          <aside class="notes"><p>Properties provide a simple and easy way to do the same thing as classes, but make your markup easier to understand</p></aside>
+        </section><!--}}}-->
+
+        <section><!--{{{-->
+          <div class="flex">
+            <div class="code-left" style="margin-top:60px;">
+              <pre><code class="html">
+      &lt;button block&gt;Default&lt;/button&gt;
+      &lt;button secondary block&gt;Secondary&lt;/button&gt;
+      &lt;button danger block&gt;Danger&lt;/button&gt;
+      &lt;button light block&gt;Light&lt;/button&gt;
+      &lt;button dark block&gt;Dark&lt;/button&gt;
+              </code></pre>
+            </div>
+            <div class="demo">
+              <div class="demo-buttons">
+                <button class="button" onclick="togglePlatform('buttons')"><i class="icon ion-social-apple"></i></button>
+                <button class="button" onclick="togglePlatform('buttons')"><i class="icon ion-social-android"></i></button>
+
+              </div>
+              <iframe id="buttons" src="dist/demos/buttons/" frameborder="0"></iframe>
+            </div>
+          </div>
+        </section><!--}}}-->
+
+        <section><!--{{{-->
+          <h3>Equally easy to style and extend</h3>
+          <pre><code class="css">
+  [round]{
+    border-radius: 30px;
+  }
+  [button][block]{
+    width: 80%;
+  }
+        </code></pre>
+        </section>
+<!--}}}-->
+
+        <section><!--{{{-->
+          <p>Ionic 2 uses element properties</p>
+          <p>Less clutter, easier to reason, and just as customizable</p>
+          <p>Doesn't change how you write your styles</p>
+
+          <aside class="notes">
+          Ionic is using element properties to keep your markup clean and simple, but you can still easily use CSS classes just like you always did.
+
+          </aside>
+        </section><!--}}}-->
+      </section><!--}}}-->
+
+      <!-- Native UX - ios/md -->
+      <section><!--{{{-->
         <section>
-          <p>ES5 has served us well for many years</p>
-          <p>JS world has gone through some changes</p>
-          <p>All for cleaner and simpler code</p>
+          <h2>Near Native UX</h2>
+          <p>The different modes for Ionic 2</p>
         </section>
 
         <section>
-          <p>NG2 and Ionic V2 use these new standards</p>
-          <p>Classes and Modules FTW</p>
-          <p>You can even write NG1 code in ES6 to ease the transition</p>
+          <h3>Platform Continuity</h3>
+          <p>Ionic V1 would change <em>some</em> components based on their platform </p>
         </section>
-
         <section>
-          <p>Out of the box, Ionic 2 is setup for ES6</p>
-          <p>All the build and transpiling tools are setup for you</p>
-          <p>You just write your code, and we build</p>
+          <h2>Material Design has first class support in Ionic 2</h2>
+
         </section>
+        <!-- icons -->
+         <section><!--{{{-->
+        <h2>Icons</h2>
+        <div class="flex">
 
-        <section>
-          <h3>Typescript</h3>
-          <p>Ionic V2 is written in Typescript</p>
-          <p>You can write in TS as well as ES6</p>
-          <p>Code completion and intellisense for free</p>
-          <p>The build process will handle both filetypes</p>
-        </section>
+        <div class="code-left"><!--{{{-->
+          <pre><code class="html">
+  &lt;icon home&gt;&lt;/icon&gt;
+  &lt;icon person&gt;&lt;/icon&gt;
+  &lt;icon settings&gt;&lt;/icon&gt;
+  &lt;icon globe&gt;&lt;/icon&gt;
+  &lt;icon lock&gt;&lt;/icon&gt;
+  &lt;icon mail&gt;&lt;/icon&gt;
+  &lt;icon options&gt;&lt;/icon&gt;
+  &lt;icon camera&gt;&lt;/icon&gt;
+  &lt;icon calculator&gt;&lt;/icon&gt;
+  &lt;icon finger-print&gt;&lt;/icon&gt;
+  &lt;icon flash&gt;&lt;/icon&gt;
+  &lt;icon beer&gt;&lt;/icon&gt;
+          </code></pre>
+        </div><!--}}}-->
+        <div class="demo"><!--{{{-->
+          <div class="demo-buttons">
+            <button class="button" onclick="togglePlatform('icons')"><i class="icon ion-social-apple"></i></button>
+            <button class="button" onclick="togglePlatform('icons')"><i class="icon ion-social-android"></i></button>
 
-        <section>
-          <p>The JS community is moving towards ES6 as well as TS</p>
-          <p>Support in major browsers as well as editors</p>
-          <p>Faster and simpiler way to write your javasctipt</p>
-        </section>
+          </div>
+          <iframe id="icons" src="dist/demos/icons/" frameborder="0"></iframe>
+        </div><!--}}}-->
+        </div>
+         </section><!--}}}-->
 
-      </section>
+         <!-- action sheet -->
+        <section><!--{{{-->
+            <h3>Action Sheet</h3>
+            <div class="flex">
+              <div class="code-left">
+                <pre><code class="javascript">
+    this.actionSheet.open({
+      buttons: [
+        {text: 'Share This'},
+        {text: 'Move'}],
+      destructiveText: 'Delete',
+      titleText: 'Modify your album',
+      cancelText: 'Cancel'
+    });
 
-      <!-- Simplicity -->
-      <section>
-        <h2>Simplicity</h2>
+                </code></pre>
+              </div>
+              <div class="demo">
+                <div class="demo-buttons">
+                  <button class="button" onclick="togglePlatform('action-sheet')"><i class="icon ion-social-apple"></i></button>
+                  <button class="button" onclick="togglePlatform('action-sheet')"><i class="icon ion-social-android"></i></button>
 
-        <section>
-          <p>Ionic V1 made development dead simple</p>
-          <p>Could we make things even more straightforward?</p>
-          <p>Where were the places where we could help developers?/p>
-        </section>
+                </div>
+                <iframe id='action-sheet' src="dist/demos/action-sheet/" frameborder="0"></iframe>
+              </div>
+            </div>
 
-        <section>
-          <p>NG2 introduces many new topics</p>
-          <p>Perfect place for Ionic to step in and help out</p>
-          <!-- <p>Places like bootstrapping an app</p> -->
-        </section>
+        </section><!--}}}-->
 
-  <!--       <section> -->
-  <!--         <p>Bootstrapping a NG2 app</p> -->
-  <!--         <pre><code class="javscript"> -->
-  <!-- bootstrap(MyComp1, MyComp2, MyComp3); -->
-  <!--         </code></pre> -->
-  <!--  -->
-  <!--       </section> -->
+        <!-- sidemenu -->
+        <section><!--{{{-->
+            <h3>SideMenu</h3>
+            <div class="flex">
+              <div class="code-left">
+                <p>iOS: reveal underneath the content</p>
+                <p>MD: overlay on top of the content</p>
+                <p>Highly configurable</p>
+              </div>
+              <div class="demo">
+                <div class="demo-buttons">
+                  <button class="button" onclick="togglePlatform('menu')"><i class="icon ion-social-apple"></i></button>
+                  <button class="button" onclick="togglePlatform('menu')"><i class="icon ion-social-android"></i></button>
 
+                </div>
+                <iframe id='menu' src="dist/demos/menu/" frameborder="0"></iframe>
+              </div>
+            </div>
 
-  <!--       <section> -->
-  <!--         <p>NG2 Bootstrapping has been simpified into a single tag</p> -->
-  <!--         <pre><code class="html"> -->
-  <!-- <ion&#45;app></ion&#45;app> -->
-  <!--         </code></pre> -->
-  <!--         <p>This is instead of having to manually <br> bootstrap every component you need</p> -->
-  <!--       </section> -->
+        </section><!--}}}-->
 
-        <section>
-          <h3>
-            <code>@IonicView</code>
+        <!-- navigation -->
+        <section><!--{{{-->
+            <h3>Navigation</h3>
+            <div class="flex">
+              <div class="code-left">
+                <p>More than just different animations</p>
+                <p>Built using Web Animations API</p>
+                <p>Easy to change and add new animations</p>
+              </div>
+              <div class="demo">
+                <div class="demo-buttons">
+                  <button class="button" onclick="togglePlatform('navigation')"><i class="icon ion-social-apple"></i></button>
+                  <button class="button" onclick="togglePlatform('navigation')"><i class="icon ion-social-android"></i></button>
+
+                </div>
+                <iframe id='navigation' src="dist/demos/navigation/" frameborder="0"></iframe>
+              </div>
+            </div>
+
+        </section><!--}}}-->
+
+        <section><!--{{{-->
+          <h3>All highly configurable</h3>
+          <p>Same easy configuration as V1</p>
+          <p>Much easier to change the design</p>
+        </section><!--}}}-->
+      </section><!--}}}-->
+
+      <!-- Native UX pt 2 - navigation -->
+      <section><!--{{{-->
+
+        <section><!--{{{-->
+          <h2>Navigation</h2>
+          <p>More robust and powerful</p>
+        </section><!--}}}-->
+
+        <section><!--{{{-->
+          <h3 class="fragment">
+            <blockquote>
+              I need to open a modal, then navigate to a subview
+            </blockquote>
           </h3>
-          <p>Automagically handles the <code>@Component</code> and <code>@View</code> for you</p>
-          <p>Also wraps the template in an an ion-view</p>
-        </section>
+          <h3 class="fragment">
+            <blockquote>
+              I want to create a subview in a sidemenu
+            </blockquote>
+          </h3>
+        </section><!--}}}-->
 
-        <section>
-          <h3>Ionicons</h3>
-          <p>Reworked for Ionic 2</p>
-          <p>Each Icon has a platform specific counter part</p>
-          <p>Ionic will switch out the icon for you to fit each platform</p>
-          <p>Adds appropriate ARIA attributes for added accessibility</p>
-        </section>
+        <section><!--{{{-->
+          <p>V1's routing was tightly coupled to URLs</p>
+          <p>Uses UI-Router, which didn’t give full control</p>
+          <p>For V2, we needed to rethink navigation</p>
+        </section><!--}}}-->
 
-        <section>
-        <h3>Sass</h3>
-        <p>Colors have reworked to used Sass maps</p>
-        <p>You can add and remove colors as you need them</p>
-        <p>Simple starting point to really customize your app to fit your brand</p>
-        <p>Build process already included into V2</p>
-        </section>
+        <section><!--{{{-->
+          <h3>V1's Routing</h3>
+          <pre><code class="javascript" data-trim>
+.config(function($stateProvider){
+  $stateProvider
+    .state('firstpage', {
+      url:'/firstpage',
+      templateUrl: 'firstpage.html'
+    })
+    .state('secondpage', {
+      url:'/secondpage',
+      templateUrl: 'secondpage.html'
+    })
+    .state('thirdpage', {
+      url:'/thirdpage/:id',
+      templateUrl: 'thirdpage.html'
+    });
+});
+          </code></pre>
+          <p>UI-Router</p>
+        </section><!--}}}-->
 
+        <section><!--{{{-->
+          <h3>Doesn't give the flexibility you want</h3>
+          <p>Navigation is more about a user experience</p>
+          <p>Traditional browser-based URLs don't offer that</p>
+          <p>Developers <strong>NEED</strong> to be in complete control</p>
+        </section><!--}}}-->
 
-      </section>
-
-      <!-- Navigation -->
-      <section>
-        <h2>Navigation</h2>
-
-        <section>
-          <p>V1s navigation used UI-Router</p>
-          <p>Allowed for complex navigation, such as in tabs</p>
-          <p>Navigation in arbitrary components was not easy</p>
-        </section>
-
-        <section>
-          <p>Tied to a URL</p>
-          <p>Couldn't create app history from nothing</p>
-          <p>Deep linking from outside an app was difficult</p>
-        </section>
-
-        <section>
-          <h3>We decoupled routing from Ionic</h3>
-        </section>
-
-        <section>
-          <h3>Simplicity FTW</h3>
-          <p>New views get "pushed" on to the history stack</p>
-          <p>Want to go back? You "pop" back from that view</p>
-          <p>This push/pop metaphor is inspired by native navigation</p>
-        </section>
-
-        <section>
-          <h3>But what about URLs?</h3>
-        </section>
-
-        <section>
-          <p>Ionic apps aren't tighly coupled to the URL</p>
-          <p>You can push to a new view, then tell the
-            <br>browser what <strong>you</strong> want the URL to be</p>
-          <p>You are in control</p>
-        </section>
-
-        <section>
+        <section><!--{{{-->
+          <h3>Push/Pop Navigation</h3>
           <pre data-trim><code class="javascript">
-  .state('master',{
-    url:'/',
-    tempalateUrl: 'templates/master.html'
-  })
-  .state('detail',{
-    url:'/detail',
-    tempalateUrl: 'templates/detail.html'
-  })
-          </code></pre>
-
-          <pre data-trim><code class"handlebars">
-  <ion-view view-title="Master">
-    <ion-content>
-      <a class="button" ui-sref="detail"></a>
-    </ion-content>
-  </ion-view>
-          </code></pre>
-        </section>
-
-        <section>
-<pre data-trim><code class="javascript">
-  import {DetailPage} from './detail';
-  @IonicView({
-    templateUrl: '/app/master/master.html'
-  })
-  export class MasterPage {
+  import SecondPage from '../secondpage';
+  export class FirstPage {
     constructor(nav: NavController) {
       this.nav = nav
-    }
+    };
     pushState() {
-      this.nav.push(DetailPage)
+      this.nav.push(SecondPage)
+    };
+  };
+
+</code></pre>
+
+<aside class="notes">
+  <li>Heavily inspired by native implimentations</li>
+  <li>Much more flexible an mature navigation pattern</li>
+</aside>
+        </section><!--}}}-->
+
+
+        <section><!--{{{-->
+          <h3>Navigation Recap</h3>
+          <p>Navigation is not tied to URL</p>
+          <p>More control over the navigation experience</p>
+          <p>More powerful and flexible than V1</p>
+        </section><!--}}}-->
+
+      </section><!--}}}-->
+
+      <!-- Creative Freedom -->
+        <section><!--{{{-->
+            <section>
+              <h2>Creative Freedom</h2>
+              <p>Make anything possible</p>
+            </section>
+
+            <section>
+              <h3>Making Sass even easier</h3>
+              <p>Sass is enabled by default</p>
+              <p>Apps should fit their brand first</p>
+              <p>Build tools already included</p>
+            </section>
+
+            <section>
+              <h3>V1: Colors were hardcoded in</h3>
+              <pre><code class="stylus">
+  $light:                           #fff !default;
+  $stable:                          #f8f8f8 !default;
+  $positive:                        #387ef5 !default;
+  $calm:                            #11c1f3 !default;
+  $balanced:                        #33cd5f !default;
+  $energized:                       #ffc900 !default;
+  $assertive:                       #ef473a !default;
+  $royal:                           #886aea !default;
+  $dark:                            #444 !default;
+              </code></pre>
+              <p>Every component had a block for each color</p>
+            </section>
+
+            <section>
+              <h3>Base Colors are defined in a map</h3>
+              <pre><code class="stylus">
+  $colors: (
+    primary:    #387ef5,
+    secondary:  #32db64,
+    danger:     #f53d3d,
+    light:      #f4f4f4,
+    dark:       #222,
+  ) !default;
+              </code></pre>
+              <p>Easily change, remove, or add new colors</p>
+            </section>
+
+
+            <section>
+              <h3>Design for your brand</h3>
+              <pre><code class="stylus">
+  $colors: (
+    primary:    #387ef5,
+    myBrand:    #ead351
+  ) !default;
+              </code></pre>
+              <p>Will only generate CSS for <code>primary</code> and <code>myBrand</code></p>
+              <p>Slims down your CSS, giving you only what you need</p>
+              <p>Makes customization even easier</p>
+            </section>
+
+          <section>
+            <h2>Animations</h2>
+          </section>
+
+          <section>
+            <p>V1 animations were a mix of css and js</p>
+            <p>CSS animations can be quite limiting</p>
+            <p>No way interact with them</p>
+
+            <aside class="notes">
+              <p>CSS animations have limitations</p>
+                <li>Once Started, css animations can't be stopped</li>
+            </aside>
+          </section>
+
+            <section>
+              <h3>Web Animations API</h3>
+              <p>It aims to bring the power of CSS performance, add the benefits and flexibility of JavaScript</p>
+            </section>
+
+          <section>
+            <h3>V2 Animations</h3>
+            <div class="flex">
+              <div class="code-left">
+                <p>Nice CSS friendly syntax</p>
+                <p>Easy to define your own animations</p>
+                <pre><code data-trim class="javascript">
+    var ionitron = document.querySelector('#ionitron');
+    var spin = new Animation(ionitron);
+    spin
+      .from('transform', 'rotate(0deg)')
+      .to('transform', 'rotate(360deg)')
+    this.animation.add(spin);
+    play() {
+      this.animation.play();
     }
-  }
+                </code></pre>
+              </div>
 
-</code></pre>
+              <div class="demo">
+                <iframe src="dist/demos/animations/" id="animations" frameborder="0"></iframe>
+              </div>
+            </div>
+          </section>
 
-<pre><code>
-  &lt;ion-content&gt;
-    &lt;a button (click)=&quot;pushState()&quot;&gt;&lt;/a&gt;
-  &lt;/ion-content&gt;
+          <section>
+            <blockquote>
+              CSS friendly syntax, but adds the options of variables, controls, and finish callbacks
+            </blockquote>
+          </section>
 
-</code></pre>
-        </section>
+          <section>
+            <p>Baked into chrome natively</p>
+            <p>Great performance on android</p>
+            <p>Polyfil for iOS offers the same great performance</p>
 
-        <section>
-          <h3>Take Away</h3>
-          <p>Views can be rendered in anything and everything</p>
-          <p>URLs have been separated from navigation</p>
-          <p>App's history can be dynamically created</p>
-        </section>
+            <aside class="notes">
+              <p>THis is baked into android, and provides amazing performance</p>
+              <p>The polyfill for iOS is proving to be just as perfromant as android</p>
+            </aside>
+          </section>
 
-      </section>
+          <section>
+            <h3>Sass</h3>
+            <p>Enabled by default</p>
+            <p>Easier to add/remove custom colors</p>
+            <h3>Animations</h3>
+            <p>Web Animations API</p>
+            <p>Easy to customize</p>
+            <p>Friendly CSS syntax</p>
+            <p>Interactive control</p>
+          </section>
+
+        </section><!--}}}-->
+
+        <!-- Future Proof -->
+        <section><!--{{{-->
+          <section>
+            <h2>Future Proof</h2>
+            <p>Building Ionic with new standards</p>
+          </section>
+
+          <section>
+            <h3>JavaScript has changed</h3>
+            <p>Ionic 1 was built with ES5</p>
+            <p>ES6 brings many new features</p>
+            <p>NG2 is built on top of ES6</p>
+            <p>Different look, but all JS Classes</p>
+            <aside class="notes">
+              <li>ES5 has served us well</li>
+              <li>ES6 gives us many new features</li>
+              <p>Like javascript has grown up</p>
+            </aside>
+          </section>
+
+          <section>
+            <h3>Benefit of ES6</h3>
+            <p>Modular: Import what you need & and gets rid of globals</p>
+            <p>Scoping: <code>let</code> defines a block-scoped variable</p>
+            <p>Promises: Built into the language natively</p>
+            <p>Classes: Simpler syntax for building objects</p>
+
+            <aside class="notes">
+              <p>Modules: proper module loading prevents polution the global scope</p>
+              <p>Also able to generate a build of code that is speific to what you import</p>
+              <p>All these features that were in ng1, now are baked into js</p>
+            </aside>
+          </section>
+
+          <section>
+            <h3>TypeScript</h3>
+            <p>ES6 + ES7 Decorators + Types</p>
+            <p>Ionic 2 and NG2 built using TS</p>
+            <p>Code completion in your editor</p>
+          </section>
+
+          <section>
+            <p>Ionic supports either option: ES6 or TS</p>
+            <p>You can mix both filetypes in a project</p>
+            <p>Build system will handle them and compile down ES5</p>
+          </section>
+        </section><!--}}}-->
+
+        <!-- Closing -->
+      <section><!--{{{-->
+        <h3>Final Message</h3>
+        <p>Ionic 1 is still a great solution</p>
+        <p>V2 will provide the same ease of development as V1</p>
+        <p>Modern, powerful, and robust API</p>
+      </section><!--}}}-->
 
       <section>
-          <h3>Final Message</h3>
-          <p>Ionic 1 is still a great solution for hybrid apps</p>
-          <p>Ionic 2 is built from the lessons learned in Ionic 1</p>
-          <p>We will continue to keep pushing what hybrid apps can do</p>
+        <h2>Want to give it a try?</h2>
+        <p>We want you're feedback</p>
       </section>
+
+      <section><!--{{{-->
+        <h2>Thank you!</h2>
+      </section><!--}}}-->
 
       <section>
         <h2><code style="font-size: 80px">&lt;/html&gt;</code></h2>
@@ -366,7 +667,6 @@
 
   <script src="lib/js/head.min.js"></script>
   <script src="js/reveal.js"></script>
-
   <script>
     // Full list of configuration options available at:
     // https://github.com/hakimel/reveal.js#configuration
@@ -413,6 +713,30 @@
     });
   </script>
 
+  <script>
+    function togglePlatform(target) {
+      console.log(target);
+      var demoFrame = $('.demo > iframe#' + target);
+      var currentSrc = demoFrame.attr('src');
+      var newSrc = currentSrc.split('?')[0] + '?ionicplatform=';
+      var currentPlatform = getPlatform(currentSrc);
+      if (currentPlatform === 'ios') {
+        demoFrame.attr('src', newSrc + 'android');
+        return "android";
+      } else {
+        demoFrame.attr('src', newSrc + 'ios');
+        return "ios";
+      }
+    }
+
+    function getPlatform(iframeSrc) {
+      // return: 'ios' or android
+      if (iframeSrc.indexOf('android') > -1) {
+        return 'android';
+      }
+      return 'ios';
+    }
+  </script>
 </body>
 
 </html>

@@ -18,7 +18,7 @@
 
 @import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic);
 
-$ionicBlue: #3374de;
+$ionicBlue: #313744;
 html{
   background-color: $ionicBlue
 }
@@ -29,12 +29,12 @@ $mainColor: #fff;
 $headingColor: #fff;
 
 $mainFontSize: 32px;
-$mainFont: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
-$headingFont: 'HelveticaNeue-Light', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
+$mainFont: 'Avenir Next', san-serif;
+$headingFont: 'Avenir Next', san-serif;
 $headingTextShadow: 1px 1px 15px rgba(0, 0, 0, .2);
-$headingLetterSpacing: normal;
+$headingLetterSpacing: 1px;
 $headingTextTransform: none;
-$headingFontWeight: 200;
+$headingFontWeight: 400;
 $linkColor: white;
 $linkColorHover: white;
 $selectionBackgroundColor: lighten( $linkColor, 25% );
@@ -50,35 +50,19 @@ section.has-light-background {
   }
 }
 
-// Override theme settings (see ../template/settings.scss)
-// $mainColor: #333;
-// $headingColor: #333;
-// $headingTextShadow: none;
-// $backgroundColor: #f7f3de;
-// $linkColor: #8b743d;
-// $linkColorHover: lighten( $linkColor, 20% );
-// $selectionBackgroundColor: rgba(79, 64, 28, 0.99);
-// $heading1TextShadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0,0,0,.1), 0 0 5px rgba(0,0,0,.1), 0 1px 3px rgba(0,0,0,.3), 0 3px 5px rgba(0,0,0,.2), 0 5px 10px rgba(0,0,0,.25), 0 20px 20px rgba(0,0,0,.15);
-//
-// // Background generator
-// @mixin bodyBackground() {
-//  @include radial-gradient( rgba(247,242,211,1), rgba(255,255,255,1) );
-// }
-
 
 
 // Theme template ------------------------------
 @import "../template/theme";
 // ---------------------------------------------
 
-// Theme template ------------------------------
-// @import "theme/theme";
-// // ---------------------------------------------
-//
 .reveal {
+  font-weight: 200;
 
   h1, h2, h3, h4 {
     text-transform: uppercase;
+    font-weight:600;
+    letter-spacing:2px;
   }
 
   p, th, td, ol, ul, li {
@@ -140,7 +124,7 @@ section.has-light-background {
   }
 
   strong {
-    font-weight: 900;
+    font-weight: 500;
   }
 
   .native-logos {
@@ -252,5 +236,39 @@ section.has-light-background {
 
   .icon:hover{
     opacity:1;
+  }
+  .blur{
+    background-color: rgba(0,0,0,0.3);
+    p{
+      text-shadow: -2px 2px 0 #000;
+      font-weight: bold;
+    }
+  }
+  .demo{
+    margin-left: 15px;
+    // float: right;
+    iframe{
+      width: 328px;
+      height: 568px;
+      border: none;
+      // border-radius: 10px;
+      border: 4px solid #555;
+      background: white;
+    }
+  }
+  .button{
+    background-color: white;
+    border: none;
+  }
+
+  .code-left{
+    // float: left;
+    width:60%;
+    text-align: left;
+  }
+  .flex{
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
   }
 }
