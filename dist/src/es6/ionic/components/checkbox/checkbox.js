@@ -12,17 +12,12 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { ElementRef, Optional, NgControl } from 'angular2/angular2';
-import { Ion } from '../ion';
-import { IonInput } from '../form/input';
-import { IonicConfig } from '../../config/config';
-import { IonicComponent, IonicView } from '../../config/decorators';
+import { Component, Optional, NgControl, ElementRef, Renderer } from 'angular2/angular2';
+import { Form } from '../../util/form';
 /**
- * @name ionCheckbox
- * @description
  * The checkbox is no different than the HTML checkbox input, except it's styled differently
  *
- * See the [Angular 2 Docs](https://angular.io/docs/js/latest/api/forms/) for more info on forms and input.
+ * See the [Angular 2 Docs](https://angular.io/docs/js/latest/api/core/Form-interface.html) for more info on forms and input.
  *
  * @usage
  * ```html
@@ -31,17 +26,11 @@ import { IonicComponent, IonicView } from '../../config/decorators';
  * </ion-checkbox>
  * ```
  */
-export let Checkbox = class extends Ion {
-    /**
-     * TODO
-     * @param {ElementRef} elementRef  TODO
-     * @param {IonicConfig} ionicConfig  TODO
-     * @param {NgControl=} ngControl  TODO
-     */
-    constructor(elementRef, config, ngControl) {
-        super(elementRef, config);
-        this.tabIndex = 0;
-        this.id = IonInput.nextId();
+export let Checkbox = class {
+    constructor(form, ngControl, elementRef, renderer) {
+        renderer.setElementClass(elementRef, 'item', true);
+        this.form = form;
+        form.register(this);
         this.onChange = (_) => { };
         this.onTouched = (_) => { };
         this.ngControl = ngControl;
@@ -52,8 +41,7 @@ export let Checkbox = class extends Ion {
      * TODO
      */
     onInit() {
-        super.onInit();
-        this.labelId = 'label-' + this.id;
+        this.labelId = 'label-' + this.inputId;
     }
     /**
      * Toggle the checked state of the checkbox. Calls onChange to pass the
@@ -96,18 +84,20 @@ export let Checkbox = class extends Ion {
      * @param {Function} fn  onTouched event handler.
      */
     registerOnTouched(fn) { this.onTouched = fn; }
+    onDestroy() {
+        this.form.deregister(this);
+    }
 };
 Checkbox = __decorate([
-    IonicComponent({
+    Component({
         selector: 'ion-checkbox',
-        properties: [
+        inputs: [
             'value',
             'checked',
             'disabled',
             'id'
         ],
         host: {
-            'class': 'item no-activated',
             'role': 'checkbox',
             'tappable': 'true',
             '[attr.tab-index]': 'tabIndex',
@@ -115,17 +105,15 @@ Checkbox = __decorate([
             '[attr.aria-disabled]': 'disabled',
             '[attr.aria-labelledby]': 'labelId',
             '(click)': 'click($event)'
-        }
-    }),
-    IonicView({
-        template: '<div item-left class="media-checkbox">' +
-            '<div class="checkbox-icon"></div>' +
-            '</div>' +
+        },
+        template: '<media-checkbox disable-activated>' +
+            '<checkbox-icon></checkbox-icon>' +
+            '</media-checkbox>' +
             '<ion-item-content id="{{labelId}}">' +
             '<ng-content></ng-content>' +
             '</ion-item-content>'
     }),
-    __param(2, Optional()), 
-    __metadata('design:paramtypes', [(typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a) || Object, (typeof (_b = typeof IonicConfig !== 'undefined' && IonicConfig) === 'function' && _b) || Object, (typeof (_c = typeof NgControl !== 'undefined' && NgControl) === 'function' && _c) || Object])
+    __param(1, Optional()), 
+    __metadata('design:paramtypes', [(typeof (_a = typeof Form !== 'undefined' && Form) === 'function' && _a) || Object, (typeof (_b = typeof NgControl !== 'undefined' && NgControl) === 'function' && _b) || Object, (typeof (_c = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _c) || Object, (typeof (_d = typeof Renderer !== 'undefined' && Renderer) === 'function' && _d) || Object])
 ], Checkbox);
-var _a, _b, _c;
+var _a, _b, _c, _d;

@@ -9,22 +9,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Directive, ElementRef } from 'angular2/angular2';
+import { Directive, ElementRef, Renderer } from 'angular2/angular2';
 import { Ion } from '../ion';
-import { IonicConfig } from '../../config/config';
-import { IonicDirective } from '../../config/decorators';
+import { Config } from '../../config/config';
 import { ListVirtualScroll } from './virtual';
 import * as util from 'ionic/util';
 /**
- * @name ionList
- * @description
  * The List is a widely used interface element in almost any mobile app, and can include
  * content ranging from basic text all the way to buttons, toggles, icons, and thumbnails.
  *
  * Both the list, which contains items, and the list items themselves can be any HTML
  * element.
  *
- * Using the ionList and ionItem components make it easy to support various
+ * Using the List and Item components make it easy to support various
  * interaction modes such as swipe to edit, drag to reorder, and removing items.
  *
  */
@@ -32,10 +29,11 @@ export let List = class extends Ion {
     /**
      * TODO
      * @param {ElementRef} elementRef  TODO
-     * @param {IonicConfig} config  TODO
+     * @param {Config} config  TODO
      */
-    constructor(elementRef, config) {
+    constructor(elementRef, config, renderer) {
         super(elementRef, config);
+        renderer.setElementClass(elementRef, 'list', true);
         this.ele = elementRef.nativeElement;
     }
     /**
@@ -67,17 +65,32 @@ export let List = class extends Ion {
     setItemTemplate(item) {
         this.itemTemplate = item;
     }
+    /**
+     * Keeps track of any open item (a sliding item, for example), to close it later
+     */
+    setOpenItem(item) {
+        this.openItem = item;
+    }
+    closeOpenItem() {
+        if (this.openItem) {
+            this.openItem.close(true);
+            this.openItem = null;
+        }
+    }
+    getOpenItem() {
+        return this.openItem;
+    }
 };
 List = __decorate([
-    IonicDirective({
+    Directive({
         selector: 'ion-list',
-        properties: [
+        inputs: [
             'items',
             'virtual',
             'content'
         ]
     }), 
-    __metadata('design:paramtypes', [(typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a) || Object, (typeof (_b = typeof IonicConfig !== 'undefined' && IonicConfig) === 'function' && _b) || Object])
+    __metadata('design:paramtypes', [(typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a) || Object, (typeof (_b = typeof Config !== 'undefined' && Config) === 'function' && _b) || Object, (typeof (_c = typeof Renderer !== 'undefined' && Renderer) === 'function' && _c) || Object])
 ], List);
 /**
  * TODO
@@ -87,7 +100,7 @@ export let ListHeader = class {
 ListHeader = __decorate([
     Directive({
         selector: 'ion-header',
-        properties: [
+        inputs: [
             'id'
         ],
         host: {
@@ -96,4 +109,4 @@ ListHeader = __decorate([
     }), 
     __metadata('design:paramtypes', [])
 ], ListHeader);
-var _a, _b;
+var _a, _b, _c;

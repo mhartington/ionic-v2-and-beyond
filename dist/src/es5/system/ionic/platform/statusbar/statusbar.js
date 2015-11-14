@@ -1,6 +1,13 @@
 System.register("ionic/platform/statusbar/statusbar", ["../plugin"], function (_export) {
     /**
      * Manage the appearance of the native status bar.
+     *
+     * @usage
+     * ```js
+     * StatusBar.hide(); // Hide the bar
+     *
+     * StatusBar.setStyle(StatusBar.LIGHT_CONTENT) // Good for dark backgrounds
+     * ```
      */
     "use strict";
 
@@ -24,7 +31,7 @@ System.register("ionic/platform/statusbar/statusbar", ["../plugin"], function (_
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -109,7 +116,7 @@ System.register("ionic/platform/statusbar/statusbar", ["../plugin"], function (_
                     key: "setHexColor",
                     value: function setHexColor(hex) {
                         this.ifPlugin(function () {
-                            window.StatusBar.backgroundColorByHexName(hex);
+                            window.StatusBar.backgroundColorByHexString(hex);
                         });
                     }
 

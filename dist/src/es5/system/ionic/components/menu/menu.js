@@ -1,17 +1,46 @@
-System.register("ionic/components/menu/menu", ["angular2/angular2", "../ion", "../app/app", "../../config/config", "../../config/decorators", "../../platform/platform", "./menu-gestures"], function (_export) {
+System.register("ionic/components/menu/menu", ["angular2/angular2", "../ion", "../app/app", "../../config/config", "../../config/decorators", "../../platform/platform", "../../util/keyboard", "./menu-gestures"], function (_export) {
     /**
+     * _For basic Menu usage, see the [Menu section](../../../../components/#menus)
+     * of the Component docs._
+     *
      * Menu is a side-menu navigation that can be dragged out or toggled to show.
-     * Menu supports two display styles currently: overlay, and reveal. Overlay
-     * is the tradtional Android drawer style, and Reveal is the traditional iOS
-     * style. By default, Menu will adjust to the correct style for the platform.
+     *
+     * In order to use Menu, you must specify a [reference](https://angular.io/docs/ts/latest/guide/user-input.html#local-variables)
+     * to the content element that Menu should listen on for drag events, using the
+     * `content` property:
+     * ```html
+     * <ion-menu [content]="contentRef">
+     *   <ion-content>
+     *     <ion-list>
+     *     ...
+     *     </ion-list>
+     *   </ion-content>
+     * </ion-menu>
+     *
+     * <ion-nav #content-ref [root]="rootPage"></ion-nav>
+     * ```
+     *
+     * By default, Menus are on the left, but this can be overriden with the `side`
+     * property:
+     * ```html
+     * <ion-menu [content]="contentRef" side="right"></ion-menu>
+     * ```
+     *
+     * Menu supports two display styles: overlay, and reveal. Overlay
+     * is the traditional Android drawer style, and Reveal is the traditional iOS
+     * style. By default, Menu will adjust to the correct style for the platform,
+     * but this can be overriden using the `type` property:
+     * ```html
+     * <ion-menu [content]="contentRef" type="overlay"></ion-menu>
+     * ```
      */
     "use strict";
 
-    var forwardRef, Directive, Host, View, EventEmitter, ElementRef, Ion, IonicApp, IonicConfig, IonicComponent, IonicPlatform, gestures, __decorate, __metadata, __param, Menu, menuTypes, FALLBACK_MENU_TYPE, MenuBackdrop, _a, _b, _c, _d, _e;
+    var forwardRef, Directive, Host, EventEmitter, ElementRef, Ion, IonicApp, Config, ConfigComponent, Platform, Keyboard, gestures, __decorate, __metadata, __param, Menu, menuTypes, FALLBACK_MENU_TYPE, MenuBackdrop, _a, _b, _c, _d, _e, _f;
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -22,7 +51,6 @@ System.register("ionic/components/menu/menu", ["angular2/angular2", "../ion", ".
             forwardRef = _angular2Angular2.forwardRef;
             Directive = _angular2Angular2.Directive;
             Host = _angular2Angular2.Host;
-            View = _angular2Angular2.View;
             EventEmitter = _angular2Angular2.EventEmitter;
             ElementRef = _angular2Angular2.ElementRef;
         }, function (_ion) {
@@ -30,11 +58,13 @@ System.register("ionic/components/menu/menu", ["angular2/angular2", "../ion", ".
         }, function (_appApp) {
             IonicApp = _appApp.IonicApp;
         }, function (_configConfig) {
-            IonicConfig = _configConfig.IonicConfig;
+            Config = _configConfig.Config;
         }, function (_configDecorators) {
-            IonicComponent = _configDecorators.IonicComponent;
+            ConfigComponent = _configDecorators.ConfigComponent;
         }, function (_platformPlatform) {
-            IonicPlatform = _platformPlatform.IonicPlatform;
+            Platform = _platformPlatform.Platform;
+        }, function (_utilKeyboard) {
+            Keyboard = _utilKeyboard.Keyboard;
         }, function (_menuGestures) {
             gestures = _menuGestures;
         }],
@@ -48,7 +78,7 @@ System.register("ionic/components/menu/menu", ["angular2/angular2", "../ion", ".
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -70,24 +100,31 @@ System.register("ionic/components/menu/menu", ["angular2/angular2", "../ion", ".
             Menu = (function (_Ion) {
                 _inherits(Menu, _Ion);
 
-                function Menu(app, elementRef, config, platform) {
+                function Menu(app, elementRef, config, platform, keyboard) {
                     _classCallCheck(this, Menu);
 
                     _get(Object.getPrototypeOf(Menu.prototype), "constructor", this).call(this, elementRef, config);
                     this.app = app;
                     this.platform = platform;
+                    this.keyboard = keyboard;
                     this.opening = new EventEmitter('opening');
                     this.isOpen = false;
-                    this._disableTime = 0;
+                    this._preventTime = 0;
+                    this.isEnabled = true;
                 }
+
+                /**
+                 * @private
+                 */
 
                 _createClass(Menu, [{
                     key: "onInit",
                     value: function onInit() {
                         _get(Object.getPrototypeOf(Menu.prototype), "onInit", this).call(this);
-                        this._cntEle = this.content instanceof Node ? this.content : this.content.getNativeElement();
+                        var content = this.content;
+                        this._cntEle = content instanceof Node ? content : content && content.getNativeElement && content.getNativeElement();
                         if (!this._cntEle) {
-                            return console.error('Menu: must have a [content] element to listen for drag events on. Example:\n\n<ion-menu [content]="content"></ion-menu>\n\n<ion-content #content></ion-content>');
+                            return console.error('Menu: must have a [content] element to listen for drag events on. Example:\n\n<ion-menu [content]="content"></ion-menu>\n\n<ion-nav #content></ion-nav>');
                         }
                         if (!this.id) {
                             // Auto register
@@ -100,9 +137,11 @@ System.register("ionic/components/menu/menu", ["angular2/angular2", "../ion", ".
                         this._cntEle.classList.add('menu-content-' + this.type);
                         var self = this;
                         this.onContentClick = function (ev) {
-                            ev.preventDefault();
-                            ev.stopPropagation();
-                            self.close();
+                            if (self.isEnabled) {
+                                ev.preventDefault();
+                                ev.stopPropagation();
+                                self.close();
+                            }
                         };
                     }
                 }, {
@@ -116,6 +155,7 @@ System.register("ionic/components/menu/menu", ["angular2/angular2", "../ion", ".
                                 this._gesture = new gestures.LeftMenuGesture(this);
                                 break;
                         }
+                        this._targetGesture = new gestures.TargetGesture(this);
                     }
                 }, {
                     key: "_initType",
@@ -128,6 +168,10 @@ System.register("ionic/components/menu/menu", ["angular2/angular2", "../ion", ".
                         }
                         this._type = new menuTypeCls(this);
                         this.type = type;
+                        if (this.config.get('animate') === false) {
+                            this._type.open.duration(33);
+                            this._type.close.duration(33);
+                        }
                     }
 
                     /**
@@ -140,9 +184,9 @@ System.register("ionic/components/menu/menu", ["angular2/angular2", "../ion", ".
                     value: function setOpen(shouldOpen) {
                         var _this = this;
 
-                        // _isDisabled is used to prevent unwanted opening/closing after swiping open/close
+                        // _isPrevented is used to prevent unwanted opening/closing after swiping open/close
                         // or swiping open the menu while pressing down on the menu-toggle button
-                        if (shouldOpen === this.isOpen || this._isDisabled()) {
+                        if (shouldOpen === this.isOpen || this._isPrevented()) {
                             return Promise.resolve();
                         }
                         this._before();
@@ -154,7 +198,7 @@ System.register("ionic/components/menu/menu", ["angular2/angular2", "../ion", ".
                     key: "setProgressStart",
                     value: function setProgressStart() {
                         // user started swiping the menu open/close
-                        if (this._isDisabled()) return;
+                        if (this._isPrevented() || !this.isEnabled) return;
                         this._before();
                         this._type.setProgressStart(this.isOpen);
                     }
@@ -162,9 +206,11 @@ System.register("ionic/components/menu/menu", ["angular2/angular2", "../ion", ".
                     key: "setProgess",
                     value: function setProgess(value) {
                         // user actively dragging the menu
-                        this._disable();
-                        this.app.setTransitioning(true);
-                        this._type.setProgess(value);
+                        if (this.isEnabled) {
+                            this._prevent();
+                            this.app.setTransitioning(true);
+                            this._type.setProgess(value);
+                        }
                     }
                 }, {
                     key: "setProgressEnd",
@@ -172,49 +218,56 @@ System.register("ionic/components/menu/menu", ["angular2/angular2", "../ion", ".
                         var _this2 = this;
 
                         // user has finished dragging the menu
-                        this._disable();
-                        this.app.setTransitioning(true);
-                        this._type.setProgressEnd(shouldComplete).then(function (isOpen) {
-                            _this2._after(isOpen);
-                        });
+                        if (this.isEnabled) {
+                            this._prevent();
+                            this.app.setTransitioning(true);
+                            this._type.setProgressEnd(shouldComplete).then(function (isOpen) {
+                                _this2._after(isOpen);
+                            });
+                        }
                     }
                 }, {
                     key: "_before",
                     value: function _before() {
                         // this places the menu into the correct location before it animates in
                         // this css class doesn't actually kick off any animations
-                        this.getNativeElement().classList.add('show-menu');
-                        this.getBackdropElement().classList.add('show-backdrop');
-                        this._disable();
-                        this.app.setTransitioning(true);
+                        if (this.isEnabled) {
+                            this.getNativeElement().classList.add('show-menu');
+                            this.getBackdropElement().classList.add('show-backdrop');
+                            this._prevent();
+                            this.app.setTransitioning(true);
+                            this.keyboard.close();
+                        }
                     }
                 }, {
                     key: "_after",
                     value: function _after(isOpen) {
                         // keep opening/closing the menu disabled for a touch more yet
-                        this._disable();
-                        this.app.setTransitioning(false);
-                        this.isOpen = isOpen;
-                        this._cntEle.classList[isOpen ? 'add' : 'remove']('menu-content-open');
-                        this._cntEle.removeEventListener('click', this.onContentClick);
-                        if (isOpen) {
-                            this._cntEle.addEventListener('click', this.onContentClick);
-                        } else {
-                            this.getNativeElement().classList.remove('show-menu');
-                            this.getBackdropElement().classList.remove('show-backdrop');
+                        if (this.isEnabled) {
+                            this._prevent();
+                            this.app.setTransitioning(false);
+                            this.isOpen = isOpen;
+                            this._cntEle.classList[isOpen ? 'add' : 'remove']('menu-content-open');
+                            this._cntEle.removeEventListener('click', this.onContentClick);
+                            if (isOpen) {
+                                this._cntEle.addEventListener('click', this.onContentClick);
+                            } else {
+                                this.getNativeElement().classList.remove('show-menu');
+                                this.getBackdropElement().classList.remove('show-backdrop');
+                            }
                         }
                     }
                 }, {
-                    key: "_disable",
-                    value: function _disable() {
+                    key: "_prevent",
+                    value: function _prevent() {
                         // used to prevent unwanted opening/closing after swiping open/close
                         // or swiping open the menu while pressing down on the menu-toggle
-                        this._disableTime = Date.now() + 20;
+                        this._preventTime = Date.now() + 20;
                     }
                 }, {
-                    key: "_isDisabled",
-                    value: function _isDisabled() {
-                        return this._disableTime > Date.now();
+                    key: "_isPrevented",
+                    value: function _isPrevented() {
+                        return this._preventTime > Date.now();
                     }
 
                     /**
@@ -245,6 +298,11 @@ System.register("ionic/components/menu/menu", ["angular2/angular2", "../ion", ".
                     key: "toggle",
                     value: function toggle() {
                         return this.setOpen(!this.isOpen);
+                    }
+                }, {
+                    key: "enable",
+                    value: function enable(shouldEnable) {
+                        this.isEnabled = shouldEnable;
                     }
 
                     /**
@@ -281,6 +339,7 @@ System.register("ionic/components/menu/menu", ["angular2/angular2", "../ion", ".
                     value: function onDestroy() {
                         this.app.unregister(this.id);
                         this._gesture && this._gesture.destroy();
+                        this._targetGesture && this._targetGesture.destroy();
                         this._type && this._type.onDestroy();
                         this._cntEle = null;
                     }
@@ -296,23 +355,22 @@ System.register("ionic/components/menu/menu", ["angular2/angular2", "../ion", ".
 
             _export("Menu", Menu);
 
-            _export("Menu", Menu = __decorate([IonicComponent({
+            _export("Menu", Menu = __decorate([ConfigComponent({
                 selector: 'ion-menu',
-                properties: ['content', 'dragThreshold', 'id'],
-                defaultProperties: {
+                inputs: ['content', 'dragThreshold', 'id'],
+                defaultInputs: {
                     'side': 'left',
                     'type': 'reveal'
                 },
+                outputs: ['opening'],
                 host: {
                     'role': 'navigation'
                 },
-                events: ['opening']
-            }), View({
-                template: '<ng-content></ng-content><backdrop tappable></backdrop>',
+                template: '<ng-content></ng-content><backdrop tappable disable-activated></backdrop>',
                 directives: [forwardRef(function () {
                     return MenuBackdrop;
                 })]
-            }), __metadata('design:paramtypes', [typeof (_a = typeof IonicApp !== 'undefined' && IonicApp) === 'function' && _a || Object, typeof (_b = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _b || Object, typeof (_c = typeof IonicConfig !== 'undefined' && IonicConfig) === 'function' && _c || Object, typeof (_d = typeof IonicPlatform !== 'undefined' && IonicPlatform) === 'function' && _d || Object])], Menu));
+            }), __metadata('design:paramtypes', [typeof (_a = typeof IonicApp !== 'undefined' && IonicApp) === 'function' && _a || Object, typeof (_b = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _b || Object, typeof (_c = typeof Config !== 'undefined' && Config) === 'function' && _c || Object, typeof (_d = typeof Platform !== 'undefined' && Platform) === 'function' && _d || Object, typeof (_e = typeof Keyboard !== 'undefined' && Keyboard) === 'function' && _e || Object])], Menu));
             menuTypes = {};
             FALLBACK_MENU_TYPE = 'reveal';
 
@@ -342,6 +400,7 @@ System.register("ionic/components/menu/menu", ["angular2/angular2", "../ion", ".
                 _createClass(MenuBackdrop, [{
                     key: "clicked",
                     value: function clicked(ev) {
+                        console.debug('backdrop clicked');
                         ev.preventDefault();
                         ev.stopPropagation();
                         this.menu.close();
@@ -356,7 +415,7 @@ System.register("ionic/components/menu/menu", ["angular2/angular2", "../ion", ".
                 host: {
                     '(click)': 'clicked($event)'
                 }
-            }), __param(0, Host()), __metadata('design:paramtypes', [Menu, typeof (_e = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _e || Object])], MenuBackdrop);
+            }), __param(0, Host()), __metadata('design:paramtypes', [Menu, typeof (_f = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _f || Object])], MenuBackdrop);
         }
     };
 });

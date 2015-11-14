@@ -129,20 +129,10 @@ System.register('ionic/animations/animation', ['../util/dom', '../util/util'], f
 
                     _classCallCheck(this, Animation);
 
-                    this._el = [];
-                    this._chld = [];
-                    this._ani = [];
+                    this.reset();
                     this._opts = extend({
-                        renderDelay: 36
+                        renderDelay: 16
                     }, opts);
-                    this._bfAdd = [];
-                    this._bfSty = {};
-                    this._bfRmv = [];
-                    this._afAdd = [];
-                    this._afRmv = [];
-                    this._readys = [];
-                    this._plays = [];
-                    this._finishes = [];
                     this.elements(ele);
                     if (!document.documentElement.animate) {
                         console.error('Web Animations polyfill missing');
@@ -150,6 +140,21 @@ System.register('ionic/animations/animation', ['../util/dom', '../util/util'], f
                 }
 
                 _createClass(Animation, [{
+                    key: 'reset',
+                    value: function reset() {
+                        this._el = [];
+                        this._chld = [];
+                        this._ani = [];
+                        this._bfAdd = [];
+                        this._bfSty = {};
+                        this._bfRmv = [];
+                        this._afAdd = [];
+                        this._afRmv = [];
+                        this._readys = [];
+                        this._plays = [];
+                        this._finishes = [];
+                    }
+                }, {
                     key: 'elements',
                     value: function elements(ele) {
                         if (ele) {
@@ -192,10 +197,10 @@ System.register('ionic/animations/animation', ['../util/dom', '../util/util'], f
                 }, {
                     key: 'add',
                     value: function add(childAnimations) {
-                        childAnimations = Array.isArray(childAnimations) ? childAnimations : arguments;
-                        for (var i = 0; i < childAnimations.length; i++) {
-                            childAnimations[i].parent(this);
-                            this._chld.push(childAnimations[i]);
+                        var _childAnimations = Array.isArray(childAnimations) ? childAnimations : arguments;
+                        for (var i = 0; i < _childAnimations.length; i++) {
+                            _childAnimations[i].parent(this);
+                            this._chld.push(_childAnimations[i]);
                         }
                         return this;
                     }
@@ -206,7 +211,15 @@ System.register('ionic/animations/animation', ['../util/dom', '../util/util'], f
                             this._duration = value;
                             return this;
                         }
-                        return this._duration || this._parent && this._parent.duration();
+                        return this._duration || this._parent && this._parent.duration() || 0;
+                    }
+                }, {
+                    key: 'clearDuration',
+                    value: function clearDuration() {
+                        this._duration = null;
+                        for (var i = 0, l = this._chld.length; i < l; i++) {
+                            this._chld[i].clearDuration();
+                        }
                     }
                 }, {
                     key: 'easing',
@@ -272,12 +285,12 @@ System.register('ionic/animations/animation', ['../util/dom', '../util/util'], f
                 }, {
                     key: 'fadeIn',
                     value: function fadeIn() {
-                        return this.fromTo('opacity', 0.01, 1);
+                        return this.fromTo('opacity', 0.001, 1);
                     }
                 }, {
                     key: 'fadeOut',
                     value: function fadeOut() {
-                        return this.fromTo('opacity', 1, 0);
+                        return this.fromTo('opacity', 0.999, 0);
                     }
                 }, {
                     key: 'play',
@@ -318,7 +331,7 @@ System.register('ionic/animations/animation', ['../util/dom', '../util/util'], f
                                     resolve = res;
                                 });
 
-                                if (self._duration > _this._opts.renderDelay) {
+                                if (self._duration > 16) {
                                     // begin each animation when everything is rendered in their starting point
                                     // give the browser some time to render everything in place before starting
                                     setTimeout(kickoff, _this._opts.renderDelay);
@@ -369,7 +382,7 @@ System.register('ionic/animations/animation', ['../util/dom', '../util/util'], f
                             if (this._to) {
                                 // only animate the elements if there are defined "to" effects
                                 for (i = 0; i < this._el.length; i++) {
-                                    animation = new Animate(this._el[i], this._from, this._to, this.duration(), this.easing(), this.playbackRate(), this._opts.renderDelay);
+                                    animation = new Animate(this._el[i], this._from, this._to, this.duration(), this.easing(), this.playbackRate());
                                     if (animation.shouldAnimate) {
                                         this._ani.push(animation);
                                     }
@@ -469,6 +482,23 @@ System.register('ionic/animations/animation', ['../util/dom', '../util/util'], f
                             this._ani[i].progress(value);
                         }
                     }
+
+                    /**
+                     * Get the current time of the first animation
+                     * in the list. To get a specific time of an animation, call
+                     * subAnimationInstance.getCurrentTime()
+                     */
+                }, {
+                    key: 'getCurrentTime',
+                    value: function getCurrentTime() {
+                        if (this._chld.length > 0) {
+                            return this._chld[0].getCurrentTime();
+                        }
+                        if (this._ani.length > 0) {
+                            return this._ani[0].getCurrentTime();
+                        }
+                        return 0;
+                    }
                 }, {
                     key: 'progressEnd',
                     value: function progressEnd(shouldComplete) {
@@ -544,7 +574,7 @@ System.register('ionic/animations/animation', ['../util/dom', '../util/util'], f
                         for (i = 0; i < this._ani.length; i++) {
                             this._ani[i].dispose();
                         }
-                        this._el = this._parent = this._chld = this._ani = this._readys = this._plays = this._finishes = null;
+                        this.reset();
                     }
 
                     /*
@@ -566,6 +596,7 @@ System.register('ionic/animations/animation', ['../util/dom', '../util/util'], f
                             },
                             setStyles: function setStyles(styles) {
                                 _this2._bfSty = styles;
+                                return _this2;
                             }
                         };
                     }
@@ -609,7 +640,7 @@ System.register('ionic/animations/animation', ['../util/dom', '../util/util'], f
             _export('Animation', Animation);
 
             Animate = (function () {
-                function Animate(ele, fromEffect, toEffect, duration, easingConfig, playbackRate, renderDelay) {
+                function Animate(ele, fromEffect, toEffect, duration, easingConfig, playbackRate) {
                     _classCallCheck(this, Animate);
 
                     // https://w3c.github.io/web-animations/
@@ -620,7 +651,7 @@ System.register('ionic/animations/animation', ['../util/dom', '../util/util'], f
                         return console.error(ele.tagName, 'animation fromEffect required, toEffect:', toEffect);
                     }
                     this.toEffect = parseEffect(toEffect);
-                    this.shouldAnimate = duration > renderDelay;
+                    this.shouldAnimate = duration > 32;
                     if (!this.shouldAnimate) {
                         return inlineStyle(ele, this.toEffect);
                     }
@@ -642,7 +673,7 @@ System.register('ionic/animations/animation', ['../util/dom', '../util/util'], f
 
                 _createClass(Animate, [{
                     key: 'play',
-                    value: function play(callback) {
+                    value: function play(done) {
                         var self = this;
                         if (self.ani) {
                             self.ani.play();
@@ -661,9 +692,11 @@ System.register('ionic/animations/animation', ['../util/dom', '../util/util'], f
                             // lock in where the element will stop at
                             // if the playbackRate is negative then it needs to return
                             // to its "from" effects
-                            inlineStyle(self.ele, self.rate < 0 ? self.fromEffect : self.toEffect);
-                            self.ani = null;
-                            callback && callback();
+                            if (self.ani) {
+                                inlineStyle(self.ele, self.rate < 0 ? self.fromEffect : self.toEffect);
+                                self.ani = self.ani.onfinish = null;
+                                done && done();
+                            }
                         };
                     }
                 }, {
@@ -684,6 +717,11 @@ System.register('ionic/animations/animation', ['../util/dom', '../util/util'], f
                             value = Math.min(0.999, Math.max(0.001, value));
                             this.ani.currentTime = this.duration * value;
                         }
+                    }
+                }, {
+                    key: 'getCurrentTime',
+                    value: function getCurrentTime() {
+                        return this.ani && this.ani.currentTime || 0;
                     }
                 }, {
                     key: 'playbackRate',

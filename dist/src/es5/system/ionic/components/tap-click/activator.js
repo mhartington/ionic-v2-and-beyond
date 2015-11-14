@@ -19,31 +19,32 @@ System.register('ionic/components/tap-click/activator', ['../../util/dom'], func
                     this.app = app;
                     this.queue = [];
                     this.active = [];
-                    this.clearStateTimeout = 180;
+                    this.clearStateTimeout = 80;
                     this.clearAttempt = 0;
-                    this.activatedClass = config.setting('activatedClass') || 'activated';
+                    this.activatedClass = config.get('activatedClass') || 'activated';
                     this.x = 0;
                     this.y = 0;
                 }
 
                 _createClass(Activator, [{
                     key: 'downAction',
-                    value: function downAction(targetEle, pointerX, pointerY, callback) {
+                    value: function downAction(ev, activatableEle, pointerX, pointerY, callback) {
                         var _this = this;
 
                         // the user just pressed down
+                        if (this.disableActivated(ev)) return;
                         // remember where they pressed
                         this.x = pointerX;
                         this.y = pointerY;
                         // queue to have this element activated
-                        this.queue.push(targetEle);
+                        this.queue.push(activatableEle);
                         raf(function () {
-                            var targetEle = undefined;
+                            var activatableEle = undefined;
                             for (var i = 0; i < _this.queue.length; i++) {
-                                targetEle = _this.queue[i];
-                                if (targetEle && targetEle.parentNode) {
-                                    _this.active.push(targetEle);
-                                    targetEle.classList.add(_this.activatedClass);
+                                activatableEle = _this.queue[i];
+                                if (activatableEle && activatableEle.parentNode) {
+                                    _this.active.push(activatableEle);
+                                    activatableEle.classList.add(_this.activatedClass);
                                 }
                             }
                             _this.queue = [];
@@ -63,7 +64,7 @@ System.register('ionic/components/tap-click/activator', ['../../util/dom'], func
                     key: 'clearState',
                     value: function clearState() {
                         // all states should return to normal
-                        if ((!this.app.isEnabled() || this.app.isTransitioning()) && this.clearAttempt < 30) {
+                        if ((!this.app.isEnabled() || this.app.isTransitioning()) && this.clearAttempt < 100) {
                             // the app is actively disabled, so don't bother deactivating anything.
                             // this makes it easier on the GPU so it doesn't have to redraw any
                             // buttons during a transition. This will retry in XX milliseconds.
@@ -84,6 +85,17 @@ System.register('ionic/components/tap-click/activator', ['../../util/dom'], func
                         }
                         this.queue = [];
                         this.active = [];
+                    }
+                }, {
+                    key: 'disableActivated',
+                    value: function disableActivated(ev) {
+                        var targetEle = ev.target;
+                        for (var x = 0; x < 4; x++) {
+                            if (!targetEle) break;
+                            if (targetEle.hasAttribute('disable-activated')) return true;
+                            targetEle = targetEle.parentElement;
+                        }
+                        return false;
                     }
                 }]);
 

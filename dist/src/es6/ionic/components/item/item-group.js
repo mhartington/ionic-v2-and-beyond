@@ -9,7 +9,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Directive, ElementRef } from 'angular2/angular2';
+import { Directive, ElementRef, NgZone } from 'angular2/angular2';
+import { Content } from '../content/content';
+import { Config } from '../../config/config';
 /**
  * TODO
  */
@@ -39,9 +41,12 @@ export let ItemGroupTitle = class {
      * TODO
      * @param {ElementRef} elementRef  TODO
      */
-    constructor(elementRef) {
+    constructor(elementRef, zone, config, content) {
+        this.elementRef = elementRef;
+        this.zone = zone;
+        this.content = content;
+        // make sure the sticky class gets set on the title
         this.isSticky = true;
-        this.ele = elementRef.nativeElement;
     }
 };
 ItemGroupTitle = __decorate([
@@ -52,6 +57,6 @@ ItemGroupTitle = __decorate([
             '[class.sticky]': 'isSticky'
         }
     }), 
-    __metadata('design:paramtypes', [(typeof (_b = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _b) || Object])
+    __metadata('design:paramtypes', [(typeof (_b = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _b) || Object, (typeof (_c = typeof NgZone !== 'undefined' && NgZone) === 'function' && _c) || Object, (typeof (_d = typeof Config !== 'undefined' && Config) === 'function' && _d) || Object, (typeof (_e = typeof Content !== 'undefined' && Content) === 'function' && _e) || Object])
 ], ItemGroupTitle);
-var _a, _b;
+var _a, _b, _c, _d, _e;

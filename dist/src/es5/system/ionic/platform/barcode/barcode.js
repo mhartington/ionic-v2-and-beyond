@@ -1,4 +1,24 @@
 System.register("ionic/platform/barcode/barcode", ["../plugin"], function (_export) {
+    /**
+     * Scan barcodes and QR codes.
+     *
+     * @usage
+     *
+     * ## Scanning a code
+     *
+     * ```js
+     * Barcode.scan().then((data) => {
+     *   console.log("Result: " + result.text + "\n" + "Format: " + result.format + "\n" + "Cancelled: " + result.cancelled);
+     * }, (err) => {
+     * })
+     * ```
+     *
+     * ## Encoding data
+     *
+     * ```js
+     * Barcode.encode(Barcode.TEXT_TYPE).then((data) => {}, (fail) => {});
+     * ```
+     */
     "use strict";
 
     var NativePlugin, __decorate, __metadata, Barcode;
@@ -21,7 +41,7 @@ System.register("ionic/platform/barcode/barcode", ["../plugin"], function (_expo
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {

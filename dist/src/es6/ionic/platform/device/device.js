@@ -10,6 +10,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { NativePlugin } from '../plugin';
+/**
+ * Access information about the underlying device and platform.
+ *
+ * @usage
+ * ```js
+ * let info = Device.getDevice();
+ * // Device sits below
+ * ```
+ */
 export let Device = class {
     /**
      * Returns the whole device object.

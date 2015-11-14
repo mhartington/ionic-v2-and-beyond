@@ -10,7 +10,20 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { NativePlugin } from '../plugin';
+/**
+* Vibrate the device. Uses the HTMl5 Vibration API or the `cordova-plugin-vibration` plugin (preferred)
+*
+* @usage
+* ```js
+* Vibration.vibrate();
+* ```
+*/
 export let Vibration = class {
+    /**
+     * Vibrate the device. Note: iOS does not support the pattern parameter.
+     *
+     * @param pattern the vibration pattern in ms to use [1000,1000,1000] (vibrate three times, one second each)
+     */
     static vibrate(pattern) {
         if (!navigator.vibrate) {
             this.pluginWarn();

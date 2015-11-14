@@ -1,10 +1,7 @@
 System.register("ionic/components/icon/icon", ["angular2/angular2", "../../config/config"], function (_export) {
-    /**
-     * TODO
-     */
     "use strict";
 
-    var Directive, ElementRef, Renderer, IonicConfig, __decorate, __metadata, Icon, _a, _b, _c;
+    var Directive, ElementRef, Renderer, Config, __decorate, __metadata, Icon, _a, _b, _c;
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -16,7 +13,7 @@ System.register("ionic/components/icon/icon", ["angular2/angular2", "../../confi
             ElementRef = _angular2Angular2.ElementRef;
             Renderer = _angular2Angular2.Renderer;
         }, function (_configConfig) {
-            IonicConfig = _configConfig.IonicConfig;
+            Config = _configConfig.Config;
         }],
         execute: function () {
             __decorate = undefined && undefined.__decorate || function (decorators, target, key, desc) {
@@ -28,7 +25,7 @@ System.register("ionic/components/icon/icon", ["angular2/angular2", "../../confi
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -42,13 +39,6 @@ System.register("ionic/components/icon/icon", ["angular2/angular2", "../../confi
             };
 
             Icon = (function () {
-                /**
-                 * TODO
-                 * @param {ElementRef} elementRef  TODO
-                 * @param {IonicConfig} config  TODO
-                 * @param {Renderer} renderer  TODO
-                 */
-
                 function Icon(elementRef, config, renderer) {
                     _classCallCheck(this, Icon);
 
@@ -56,12 +46,8 @@ System.register("ionic/components/icon/icon", ["angular2/angular2", "../../confi
                     this.renderer = renderer;
                     this.eleRef = elementRef;
                     this.config = config;
-                    this.mode = config.setting('iconMode');
+                    this.mode = config.get('iconMode');
                 }
-
-                /**
-                 * TODO
-                 */
 
                 _createClass(Icon, [{
                     key: "onInit",
@@ -107,7 +93,7 @@ System.register("ionic/components/icon/icon", ["angular2/angular2", "../../confi
                             }
                             this._name = this.name;
                             this.renderer.setElementClass(this.elementRef, this.name, true);
-                            this.label = this.name.replace('ion-', '').replace('ios-', '').replace('md-', '').replace('-', ' ');
+                            this.renderer.setElementAttribute(this.elementRef, 'aria-label', this.name.replace('ion-', '').replace('ios-', '').replace('md-', '').replace('-', ' '));
                         }
                     }
                 }, {
@@ -128,12 +114,11 @@ System.register("ionic/components/icon/icon", ["angular2/angular2", "../../confi
 
             _export("Icon", Icon = __decorate([Directive({
                 selector: 'icon',
-                properties: ['name', 'ios', 'md', 'isActive'],
+                inputs: ['name', 'ios', 'md', 'isActive'],
                 host: {
-                    '[attr.aria-label]': 'label',
                     'role': 'img'
                 }
-            }), __metadata('design:paramtypes', [typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a || Object, typeof (_b = typeof IonicConfig !== 'undefined' && IonicConfig) === 'function' && _b || Object, typeof (_c = typeof Renderer !== 'undefined' && Renderer) === 'function' && _c || Object])], Icon));
+            }), __metadata('design:paramtypes', [typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a || Object, typeof (_b = typeof Config !== 'undefined' && Config) === 'function' && _b || Object, typeof (_c = typeof Renderer !== 'undefined' && Renderer) === 'function' && _c || Object])], Icon));
         }
     };
 });

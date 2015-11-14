@@ -16,7 +16,7 @@ import { Directive, ElementRef, Optional } from 'angular2/angular2';
 import { Ion } from '../ion';
 import { IonicApp } from '../app/app';
 import { ViewController } from '../nav/view-controller';
-import { Navbar } from '../nav-bar/nav-bar';
+import { Navbar } from '../navbar/navbar';
 /**
 * TODO
 */
@@ -31,11 +31,9 @@ export let MenuToggle = class extends Ion {
     * TODO
     * @param {TODO} event  TODO
     */
-    toggle(ev) {
+    toggle() {
         let menu = this.app.getComponent(this.menuToggle || 'menu');
         menu && menu.toggle();
-        ev.preventDefault();
-        ev.stopPropagation();
     }
     get isHidden() {
         if (this.withinNavbar && this.viewCtrl) {
@@ -47,12 +45,13 @@ export let MenuToggle = class extends Ion {
 MenuToggle = __decorate([
     Directive({
         selector: '[menu-toggle]',
-        properties: [
+        inputs: [
             'menuToggle'
         ],
         host: {
-            '(click)': 'toggle($event)',
-            '[hidden]': 'isHidden'
+            '(click)': 'toggle()',
+            '[hidden]': 'isHidden',
+            'menu-toggle': '' //ensures the attr is there for css when using [menu-toggle]
         }
     }),
     __param(2, Optional()),

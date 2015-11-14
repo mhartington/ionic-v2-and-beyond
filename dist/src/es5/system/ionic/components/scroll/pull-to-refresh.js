@@ -1,10 +1,8 @@
 System.register("ionic/components/scroll/pull-to-refresh", ["angular2/angular2", "../content/content", "ionic/util", "ionic/util/dom"], function (_export) {
     /**
-     * @name ionRefresher
-     * @description
-     * Allows you to add pull-to-refresh to an ionContent component.
+     * Allows you to add pull-to-refresh to an Content component.
      *
-     * Place it as the first child of your ionContent or ionScroll element.
+     * Place it as the first child of your Content or Scroll element.
      *
      * When refreshing is complete, call `refresher.complete()` from your controller.
      *
@@ -33,7 +31,7 @@ System.register("ionic/components/scroll/pull-to-refresh", ["angular2/angular2",
      */
     "use strict";
 
-    var Component, View, NgIf, NgClass, ElementRef, EventEmitter, Host, Content, util, raf, CSS, __decorate, __metadata, __param, Refresher, _a, _b;
+    var Component, NgIf, NgClass, ElementRef, EventEmitter, Host, Content, util, raf, CSS, __decorate, __metadata, __param, Refresher, _a, _b;
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -42,7 +40,6 @@ System.register("ionic/components/scroll/pull-to-refresh", ["angular2/angular2",
     return {
         setters: [function (_angular2Angular2) {
             Component = _angular2Angular2.Component;
-            View = _angular2Angular2.View;
             NgIf = _angular2Angular2.NgIf;
             NgClass = _angular2Angular2.NgClass;
             ElementRef = _angular2Angular2.ElementRef;
@@ -66,7 +63,7 @@ System.register("ionic/components/scroll/pull-to-refresh", ["angular2/angular2",
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -449,15 +446,14 @@ System.register("ionic/components/scroll/pull-to-refresh", ["angular2/angular2",
 
             _export("Refresher", Refresher = __decorate([Component({
                 selector: 'ion-refresher',
-                events: ['refresh', 'starting', 'pulling'],
-                properties: ['pullingIcon', 'pullingText', 'refreshingIcon', 'refreshingText', 'spinner', 'disablePullingRotation'],
+                inputs: ['pullingIcon', 'pullingText', 'refreshingIcon', 'refreshingText', 'spinner', 'disablePullingRotation'],
+                outputs: ['refresh', 'starting', 'pulling'],
                 host: {
                     '[class.active]': 'isActive',
                     '[class.refreshing]': 'isRefreshing',
                     '[class.refreshingTail]': 'isRefreshingTail'
-                }
-            }), View({
-                template: "<div class=\"refresher-content\" [class.refresher-with-text]=\"pullingText || refreshingText\">\n      <div class=\"icon-pulling\">\n        <i class=\"icon\" [ng-class]=\"pullingIcon\"></i>\n      </div>\n      <div class=\"text-pulling\" [inner-html]=\"pullingText\" *ng-if=\"pullingText\"></div>\n      <div class=\"icon-refreshing\">\n        <!--<ion-spinner ng-if=\"showSpinner\" icon=\"{{spinner}}\"></ion-spinner>-->\n        <i class=\"icon\" [ng-class]=\"refreshingIcon\"></i>\n      </div>\n      <div class=\"text-refreshing\" [inner-html]=\"refreshingText\" *ng-if=\"refreshingText\"></div>\n    </div>",
+                },
+                template: '<div class="refresher-content" [class.refresher-with-text]="pullingText || refreshingText">' + '<div class="icon-pulling">' + '<i class="icon" [ng-class]="pullingIcon"></i>' + '</div>' + '<div class="text-pulling" [inner-html]="pullingText" *ng-if="pullingText"></div>' + '<div class="icon-refreshing">' + '<i class="icon" [ng-class]="refreshingIcon"></i>' + '</div>' + '<div class="text-refreshing" [inner-html]="refreshingText" *ng-if="refreshingText"></div>' + '</div>',
                 directives: [NgIf, NgClass]
             }), __param(0, Host()), __metadata('design:paramtypes', [typeof (_a = typeof Content !== 'undefined' && Content) === 'function' && _a || Object, typeof (_b = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _b || Object])], Refresher));
         }

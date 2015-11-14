@@ -1,25 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <title>Ionic E2E</title>
   <meta charset="UTF-8" />
-  <!-- https://www.chromium.org/developers/design-documents/chromium-graphics/how-to-get-gpu-rasterization -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <link href="../../../css/ionic.css" rel="stylesheet">
 
   <script>
-    // dynamically load the stylesheet depending on theme querystring
-    // defaults to use the light-theme
-    var theme = 'ionic.css';
-    if (location.href.indexOf('ionictheme=dark') > -1) {
-      theme = 'ionic.dark.css';
+    if (!console.time) {
+      console.time = console.log;
     }
+    if (!console.timeEnd) {
+      console.timeEnd = console.log;
+    }
+    console.time('script init');
 
-    var stylesheet = document.createElement('link');
-    stylesheet.setAttribute('rel', 'stylesheet');
-    stylesheet.setAttribute('href', '../../../css/' + theme);
-    document.getElementsByTagName('head')[0].appendChild(stylesheet);
+    if (location.href.indexOf('snapshot=true') > -1) {
+      document.documentElement.classList.add('snapshot');
+    } else {
+      document.documentElement.classList.remove('snapshot');
+    }
   </script>
 
   <style>
+    .snapshot body {
+      /* crop an exact size */
+      max-height: 700px !important;
+    }
+    .snapshot scroll-content {
+      /* disable scrollbars */
+      overflow: hidden !important;
+    }
+    .snapshot *,
+    .snapshot *:before,
+    .snapshot *:after {
+      /* do not allow css animations during snapshot */
+      -webkit-transition-duration: 0ms !important;
+      transition-duration: 0ms !important;
+    }
+    .snapshot md-ripple {
+      display: none !important;
+    }
+
     /* hack to create tall scrollable areas for testing using <f></f> */
     f {
       display: block;
@@ -62,7 +84,9 @@
         "rx": "rx"
       }
     })
-    System.import("index");
+    System.import("index").then(function(m) {}, console.error.bind(console));
+
+    console.timeEnd('script init');
   </script>
 
 </body>

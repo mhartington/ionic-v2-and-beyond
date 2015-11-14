@@ -12,16 +12,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { Component, View, NgIf, NgClass, ElementRef, EventEmitter, Host } from 'angular2/angular2';
+import { Component, NgIf, NgClass, ElementRef, EventEmitter, Host } from 'angular2/angular2';
 import { Content } from '../content/content';
 import * as util from 'ionic/util';
 import { raf, CSS } from 'ionic/util/dom';
 /**
- * @name ionRefresher
- * @description
- * Allows you to add pull-to-refresh to an ionContent component.
+ * Allows you to add pull-to-refresh to an Content component.
  *
- * Place it as the first child of your ionContent or ionScroll element.
+ * Place it as the first child of your Content or Scroll element.
  *
  * When refreshing is complete, call `refresher.complete()` from your controller.
  *
@@ -353,8 +351,7 @@ export let Refresher = class {
 Refresher = __decorate([
     Component({
         selector: 'ion-refresher',
-        events: ['refresh', 'starting', 'pulling'],
-        properties: [
+        inputs: [
             'pullingIcon',
             'pullingText',
             'refreshingIcon',
@@ -362,24 +359,22 @@ Refresher = __decorate([
             'spinner',
             'disablePullingRotation'
         ],
+        outputs: ['refresh', 'starting', 'pulling'],
         host: {
             '[class.active]': 'isActive',
             '[class.refreshing]': 'isRefreshing',
             '[class.refreshingTail]': 'isRefreshingTail'
-        }
-    }),
-    View({
-        template: `<div class="refresher-content" [class.refresher-with-text]="pullingText || refreshingText">
-      <div class="icon-pulling">
-        <i class="icon" [ng-class]="pullingIcon"></i>
-      </div>
-      <div class="text-pulling" [inner-html]="pullingText" *ng-if="pullingText"></div>
-      <div class="icon-refreshing">
-        <!--<ion-spinner ng-if="showSpinner" icon="{{spinner}}"></ion-spinner>-->
-        <i class="icon" [ng-class]="refreshingIcon"></i>
-      </div>
-      <div class="text-refreshing" [inner-html]="refreshingText" *ng-if="refreshingText"></div>
-    </div>`,
+        },
+        template: '<div class="refresher-content" [class.refresher-with-text]="pullingText || refreshingText">' +
+            '<div class="icon-pulling">' +
+            '<i class="icon" [ng-class]="pullingIcon"></i>' +
+            '</div>' +
+            '<div class="text-pulling" [inner-html]="pullingText" *ng-if="pullingText"></div>' +
+            '<div class="icon-refreshing">' +
+            '<i class="icon" [ng-class]="refreshingIcon"></i>' +
+            '</div>' +
+            '<div class="text-refreshing" [inner-html]="refreshingText" *ng-if="refreshingText"></div>' +
+            '</div>',
         directives: [NgIf, NgClass]
     }),
     __param(0, Host()), 

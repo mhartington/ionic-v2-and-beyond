@@ -1,12 +1,10 @@
-System.register("ionic/components/content/content", ["angular2/angular2", "../ion", "../../config/config", "../../platform/platform", "../../animations/scroll-to"], function (_export) {
+System.register("ionic/components/content/content", ["angular2/angular2", "../ion", "../../config/config", "../../util/keyboard", "../nav/view-controller", "../../animations/animation", "../../animations/scroll-to"], function (_export) {
     /**
-     * @name ionContent
-     * @description
-     * The ionContent component provides an easy to use content area that can be configured to use Ionic's custom Scroll View, or the built in overflow scrolling of the browser.
+     * The Content component provides an easy to use content area that can be configured to use Ionic's custom Scroll View, or the built in overflow scrolling of the browser.
      *
      * While we recommend using the custom Scroll features in Ionic in most cases, sometimes (for performance reasons) only the browser's native overflow scrolling will suffice, and so we've made it easy to toggle between the Ionic scroll implementation and overflow scrolling.
      *
-     * You can implement pull-to-refresh with the ionRefresher component.
+     * You can implement pull-to-refresh with the [Refresher](../../scroll/Refresher) component.
      *
      * @usage
      * ```html
@@ -18,11 +16,11 @@ System.register("ionic/components/content/content", ["angular2/angular2", "../io
      */
     "use strict";
 
-    var Component, View, ElementRef, Ion, IonicConfig, IonicPlatform, ScrollTo, __decorate, __metadata, Content, _a, _b, _c;
+    var Component, ElementRef, Optional, NgZone, Ion, Config, Keyboard, ViewController, Animation, ScrollTo, __decorate, __metadata, __param, Content, _a, _b, _c, _d, _e;
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -31,14 +29,19 @@ System.register("ionic/components/content/content", ["angular2/angular2", "../io
     return {
         setters: [function (_angular2Angular2) {
             Component = _angular2Angular2.Component;
-            View = _angular2Angular2.View;
             ElementRef = _angular2Angular2.ElementRef;
+            Optional = _angular2Angular2.Optional;
+            NgZone = _angular2Angular2.NgZone;
         }, function (_ion) {
             Ion = _ion.Ion;
         }, function (_configConfig) {
-            IonicConfig = _configConfig.IonicConfig;
-        }, function (_platformPlatform) {
-            IonicPlatform = _platformPlatform.IonicPlatform;
+            Config = _configConfig.Config;
+        }, function (_utilKeyboard) {
+            Keyboard = _utilKeyboard.Keyboard;
+        }, function (_navViewController) {
+            ViewController = _navViewController.ViewController;
+        }, function (_animationsAnimation) {
+            Animation = _animationsAnimation.Animation;
         }, function (_animationsScrollTo) {
             ScrollTo = _animationsScrollTo.ScrollTo;
         }],
@@ -52,7 +55,7 @@ System.register("ionic/components/content/content", ["angular2/angular2", "../io
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -65,20 +68,31 @@ System.register("ionic/components/content/content", ["angular2/angular2", "../io
                 if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
             };
 
+            __param = undefined && undefined.__param || function (paramIndex, decorator) {
+                return function (target, key) {
+                    decorator(target, key, paramIndex);
+                };
+            };
+
             Content = (function (_Ion) {
                 _inherits(Content, _Ion);
 
                 /**
                  * @param {ElementRef} elementRef  A reference to the component's DOM element.
-                 * @param {IonicConfig} config  The config object to change content's default settings.
+                 * @param {Config} config  The config object to change content's default settings.
                  */
 
-                function Content(elementRef, config, platform) {
+                function Content(elementRef, config, keyboard, viewCtrl, _zone) {
                     _classCallCheck(this, Content);
 
                     _get(Object.getPrototypeOf(Content.prototype), "constructor", this).call(this, elementRef, config);
+                    this._zone = _zone;
                     this.scrollPadding = 0;
-                    this.platform = platform;
+                    this.keyboard = keyboard;
+                    if (viewCtrl) {
+                        viewCtrl.setContent(this);
+                        viewCtrl.setContentRef(elementRef);
+                    }
                 }
 
                 /**
@@ -152,6 +166,15 @@ System.register("ionic/components/content/content", ["angular2/angular2", "../io
                         this._scrollTo = new ScrollTo(this.scrollElement);
                         return this._scrollTo.start(x, y, duration, tolerance);
                     }
+                }, {
+                    key: "scrollToTop",
+                    value: function scrollToTop() {
+                        if (this._scrollTo) {
+                            this._scrollTo.dispose();
+                        }
+                        this._scrollTo = new ScrollTo(this.scrollElement);
+                        return this._scrollTo.start(0, 0, 300, 0);
+                    }
 
                     /**
                      * Returns the content and scroll elements' dimensions.
@@ -197,18 +220,24 @@ System.register("ionic/components/content/content", ["angular2/angular2", "../io
                      * so content below the keyboard can be scrolled into view.
                      */
                 }, {
-                    key: "addKeyboardPadding",
-                    value: function addKeyboardPadding(addPadding) {
+                    key: "addScrollPadding",
+                    value: function addScrollPadding(newScrollPadding) {
                         var _this3 = this;
 
-                        if (addPadding > this.scrollPadding) {
-                            this.scrollPadding = addPadding;
-                            this.scrollElement.style.paddingBottom = addPadding + 'px';
+                        if (newScrollPadding > this.scrollPadding) {
+                            console.debug('addScrollPadding', newScrollPadding);
+                            this.scrollPadding = newScrollPadding;
+                            this.scrollElement.style.paddingBottom = newScrollPadding + 'px';
                             if (!this.keyboardPromise) {
-                                this.keyboardPromise = this.platform.onKeyboardClose(function () {
+                                console.debug('add scroll keyboard close callback', newScrollPadding);
+                                this.keyboardPromise = this.keyboard.onClose(function () {
+                                    console.debug('scroll keyboard closed', newScrollPadding);
                                     if (_this3) {
+                                        if (_this3.scrollPadding && _this3.scrollElement) {
+                                            var _close = new Animation(_this3.scrollElement);
+                                            _close.duration(150).fromTo('paddingBottom', _this3.scrollPadding + 'px', '0px').play();
+                                        }
                                         _this3.scrollPadding = 0;
-                                        if (_this3.scrollElement) _this3.scrollElement.style.paddingBottom = '';
                                         _this3.keyboardPromise = null;
                                     }
                                 });
@@ -224,10 +253,8 @@ System.register("ionic/components/content/content", ["angular2/angular2", "../io
 
             _export("Content", Content = __decorate([Component({
                 selector: 'ion-content',
-                properties: ['parallax']
-            }), View({
-                template: '<scroll-content><ng-content></ng-content></scroll-content>'
-            }), __metadata('design:paramtypes', [typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a || Object, typeof (_b = typeof IonicConfig !== 'undefined' && IonicConfig) === 'function' && _b || Object, typeof (_c = typeof IonicPlatform !== 'undefined' && IonicPlatform) === 'function' && _c || Object])], Content));
+                template: '<scroll-content>' + '<ng-content></ng-content>' + '</scroll-content>'
+            }), __param(3, Optional()), __metadata('design:paramtypes', [typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a || Object, typeof (_b = typeof Config !== 'undefined' && Config) === 'function' && _b || Object, typeof (_c = typeof Keyboard !== 'undefined' && Keyboard) === 'function' && _c || Object, typeof (_d = typeof ViewController !== 'undefined' && ViewController) === 'function' && _d || Object, typeof (_e = typeof NgZone !== 'undefined' && NgZone) === 'function' && _e || Object])], Content));
         }
     };
 });

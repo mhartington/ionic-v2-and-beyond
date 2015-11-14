@@ -3,6 +3,8 @@ System.register("index", ["ionic/ionic"], function (_export) {
 
     var App, __decorate, __metadata, E2EApp;
 
+    var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
     return {
@@ -19,7 +21,7 @@ System.register("index", ["ionic/ionic"], function (_export) {
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -32,9 +34,20 @@ System.register("index", ["ionic/ionic"], function (_export) {
                 if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
             };
 
-            E2EApp = function E2EApp() {
-                _classCallCheck(this, E2EApp);
-            };
+            E2EApp = (function () {
+                function E2EApp() {
+                    _classCallCheck(this, E2EApp);
+                }
+
+                _createClass(E2EApp, [{
+                    key: "testClick",
+                    value: function testClick(ev) {
+                        console.log('CLICK!', ev.target.tagName, ev.target.textContent.trim());
+                    }
+                }]);
+
+                return E2EApp;
+            })();
 
             E2EApp = __decorate([App({
                 templateUrl: 'main.html'

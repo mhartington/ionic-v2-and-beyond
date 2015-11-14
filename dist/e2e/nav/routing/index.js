@@ -1,7 +1,7 @@
 System.register("index", ["angular2/router", "ionic/ionic"], function (_export) {
     "use strict";
 
-    var RouteConfig, Location, App, IonicView, NavParams, ViewController, __decorate, __metadata, View1Cmp, View2Cmp, View3Cmp, InboxApp, _a, _b, _c, _d, _e, _f, _g, _h;
+    var RouteConfig, Location, App, Page, NavParams, ViewController, __decorate, __metadata, View1Cmp, View2Cmp, View3Cmp, InboxApp, _a, _b, _c, _d, _e, _f, _g, _h;
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -13,7 +13,7 @@ System.register("index", ["angular2/router", "ionic/ionic"], function (_export) 
             Location = _angular2Router.Location;
         }, function (_ionicIonic) {
             App = _ionicIonic.App;
-            IonicView = _ionicIonic.IonicView;
+            Page = _ionicIonic.Page;
             NavParams = _ionicIonic.NavParams;
             ViewController = _ionicIonic.ViewController;
         }],
@@ -27,7 +27,7 @@ System.register("index", ["angular2/router", "ionic/ionic"], function (_export) 
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -50,8 +50,8 @@ System.register("index", ["angular2/router", "ionic/ionic"], function (_export) 
                 }
 
                 _createClass(View1Cmp, [{
-                    key: "onViewDidEnter",
-                    value: function onViewDidEnter() {
+                    key: "onPageDidEnter",
+                    value: function onPageDidEnter() {
                         this.windowHash = window.location.hash;
                     }
                 }]);
@@ -59,7 +59,7 @@ System.register("index", ["angular2/router", "ionic/ionic"], function (_export) 
                 return View1Cmp;
             })();
 
-            View1Cmp = __decorate([IonicView({ templateUrl: 'view1.html' }), __metadata('design:paramtypes', [typeof (_a = typeof Location !== 'undefined' && Location) === 'function' && _a || Object, typeof (_b = typeof ViewController !== 'undefined' && ViewController) === 'function' && _b || Object])], View1Cmp);
+            View1Cmp = __decorate([Page({ templateUrl: 'view1.html' }), __metadata('design:paramtypes', [typeof (_a = typeof Location !== 'undefined' && Location) === 'function' && _a || Object, typeof (_b = typeof ViewController !== 'undefined' && ViewController) === 'function' && _b || Object])], View1Cmp);
 
             View2Cmp = (function () {
                 function View2Cmp(location, viewCtrl) {
@@ -71,8 +71,8 @@ System.register("index", ["angular2/router", "ionic/ionic"], function (_export) 
                 }
 
                 _createClass(View2Cmp, [{
-                    key: "onViewDidEnter",
-                    value: function onViewDidEnter() {
+                    key: "onPageDidEnter",
+                    value: function onPageDidEnter() {
                         this.windowHash = window.location.hash;
                     }
                 }]);
@@ -80,7 +80,7 @@ System.register("index", ["angular2/router", "ionic/ionic"], function (_export) 
                 return View2Cmp;
             })();
 
-            View2Cmp = __decorate([IonicView({ templateUrl: 'view2.html' }), __metadata('design:paramtypes', [typeof (_c = typeof Location !== 'undefined' && Location) === 'function' && _c || Object, typeof (_d = typeof ViewController !== 'undefined' && ViewController) === 'function' && _d || Object])], View2Cmp);
+            View2Cmp = __decorate([Page({ templateUrl: 'view2.html' }), __metadata('design:paramtypes', [typeof (_c = typeof Location !== 'undefined' && Location) === 'function' && _c || Object, typeof (_d = typeof ViewController !== 'undefined' && ViewController) === 'function' && _d || Object])], View2Cmp);
 
             View3Cmp = (function () {
                 function View3Cmp(params, location, viewCtrl) {
@@ -93,8 +93,8 @@ System.register("index", ["angular2/router", "ionic/ionic"], function (_export) 
                 }
 
                 _createClass(View3Cmp, [{
-                    key: "onViewDidEnter",
-                    value: function onViewDidEnter() {
+                    key: "onPageDidEnter",
+                    value: function onPageDidEnter() {
                         this.windowHash = window.location.hash;
                     }
                 }]);
@@ -102,7 +102,7 @@ System.register("index", ["angular2/router", "ionic/ionic"], function (_export) 
                 return View3Cmp;
             })();
 
-            View3Cmp = __decorate([IonicView({ templateUrl: 'view3.html' }), __metadata('design:paramtypes', [typeof (_e = typeof NavParams !== 'undefined' && NavParams) === 'function' && _e || Object, typeof (_f = typeof Location !== 'undefined' && Location) === 'function' && _f || Object, typeof (_g = typeof ViewController !== 'undefined' && ViewController) === 'function' && _g || Object])], View3Cmp);
+            View3Cmp = __decorate([Page({ templateUrl: 'view3.html' }), __metadata('design:paramtypes', [typeof (_e = typeof NavParams !== 'undefined' && NavParams) === 'function' && _e || Object, typeof (_f = typeof Location !== 'undefined' && Location) === 'function' && _f || Object, typeof (_g = typeof ViewController !== 'undefined' && ViewController) === 'function' && _g || Object])], View3Cmp);
 
             InboxApp = function InboxApp(location) {
                 _classCallCheck(this, InboxApp);
@@ -110,7 +110,7 @@ System.register("index", ["angular2/router", "ionic/ionic"], function (_export) 
                 this.location = location;
             };
 
-            InboxApp = __decorate([App(), RouteConfig([{ path: '/', component: View1Cmp, as: 'first' }, { path: '/second', component: View2Cmp, as: 'second' }, { path: '/third/:id', component: View3Cmp, as: 'third' }]), __metadata('design:paramtypes', [typeof (_h = typeof Location !== 'undefined' && Location) === 'function' && _h || Object])], InboxApp);
+            InboxApp = __decorate([App(), RouteConfig([{ path: '/', component: View1Cmp, as: 'First' }, { path: '/2', component: View2Cmp, as: 'Second' }, { path: '/3/:id', component: View3Cmp, as: 'Third' }]), __metadata('design:paramtypes', [typeof (_h = typeof Location !== 'undefined' && Location) === 'function' && _h || Object])], InboxApp);
         }
     };
 });

@@ -9,20 +9,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Directive, ElementRef } from 'angular2/angular2';
-import { IonicConfig } from '../../config/config';
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+import { Directive, ElementRef, Renderer, Attribute } from 'angular2/angular2';
+import { Config } from '../../config/config';
 /**
  * TODO
  */
 export let Button = class {
-    constructor(config, elementRef) {
+    constructor(config, elementRef, renderer, type) {
         let element = elementRef.nativeElement;
-        if (config.setting('hoverCSS') === false) {
-            element.classList.add('disable-hover');
+        if (config.get('hoverCSS') === false) {
+            renderer.setElementClass(elementRef, 'disable-hover', true);
         }
         if (element.hasAttribute('ion-item')) {
             // no need to put on these icon classes for an ion-item
             return;
+        }
+        if (type) {
+            renderer.setElementAttribute(elementRef, type, '');
         }
         // figure out if and where the icon lives in the button
         let childNodes = element.childNodes;
@@ -63,9 +69,10 @@ export let Button = class {
 Button = __decorate([
     Directive({
         selector: 'button,[button]'
-    }), 
-    __metadata('design:paramtypes', [(typeof (_a = typeof IonicConfig !== 'undefined' && IonicConfig) === 'function' && _a) || Object, (typeof (_b = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _b) || Object])
+    }),
+    __param(3, Attribute('type')), 
+    __metadata('design:paramtypes', [(typeof (_a = typeof Config !== 'undefined' && Config) === 'function' && _a) || Object, (typeof (_b = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _b) || Object, (typeof (_c = typeof Renderer !== 'undefined' && Renderer) === 'function' && _c) || Object, String])
 ], Button);
 const TEXT = 1;
 const ICON = 2;
-var _a, _b;
+var _a, _b, _c;

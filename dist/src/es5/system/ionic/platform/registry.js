@@ -1,49 +1,49 @@
 System.register('ionic/platform/registry', ['./platform', '../util/dom'], function (_export) {
     'use strict';
 
-    var IonicPlatform, windowLoad;
+    var Platform, windowLoad;
     return {
         setters: [function (_platform) {
-            IonicPlatform = _platform.IonicPlatform;
+            Platform = _platform.Platform;
         }, function (_utilDom) {
             windowLoad = _utilDom.windowLoad;
         }],
         execute: function () {
-            IonicPlatform.register({
+            Platform.register({
                 name: 'core',
                 settings: {
                     mode: 'ios',
                     keyboardHeight: 290
                 }
             });
-            IonicPlatform.setDefault('core');
-            IonicPlatform.register({
+            Platform.setDefault('core');
+            Platform.register({
                 name: 'mobile'
             });
-            IonicPlatform.register({
+            Platform.register({
                 name: 'phablet',
                 isMatch: function isMatch(p) {
                     var smallest = Math.min(p.width(), p.height());
                     var largest = Math.max(p.width(), p.height());
-                    return smallest > 390 && smallest < 520 && (largest > 620 && largest < 800);
+                    return smallest > 390 && smallest < 520 && largest > 620 && largest < 800;
                 }
             });
-            IonicPlatform.register({
+            Platform.register({
                 name: 'tablet',
                 isMatch: function isMatch(p) {
                     var smallest = Math.min(p.width(), p.height());
                     var largest = Math.max(p.width(), p.height());
-                    return smallest > 460 && smallest < 820 && (largest > 780 && largest < 1400);
+                    return smallest > 460 && smallest < 820 && largest > 780 && largest < 1400;
                 }
             });
-            IonicPlatform.register({
+            Platform.register({
                 name: 'android',
                 superset: 'mobile',
                 subsets: ['phablet', 'tablet'],
                 settings: {
                     mode: 'md',
                     keyboardHeight: 290,
-                    keyboardScrollAssist: true,
+                    scrollAssist: true,
                     hoverCSS: false
                 },
                 isMatch: function isMatch(p) {
@@ -53,20 +53,23 @@ System.register('ionic/platform/registry', ['./platform', '../util/dom'], functi
                     return p.matchUserAgentVersion(/Android (\d+).(\d+)?/);
                 }
             });
-            IonicPlatform.register({
+            Platform.register({
                 name: 'ios',
                 superset: 'mobile',
                 subsets: ['ipad', 'iphone'],
                 settings: {
                     mode: 'ios',
-                    keyboardScrollAssist: function keyboardScrollAssist(p) {
+                    scrollAssist: function scrollAssist(p) {
+                        return (/iphone|ipad|ipod/i.test(p.navigatorPlatform())
+                        );
+                    },
+                    tapPolyfill: function tapPolyfill(p) {
                         return (/iphone|ipad|ipod/i.test(p.navigatorPlatform())
                         );
                     },
                     keyboardHeight: 290,
                     hoverCSS: false,
                     swipeBackEnabled: function swipeBackEnabled(p) {
-                        return true; // TODO: remove me! Force it to always work for iOS mode for now
                         return (/iphone|ipad|ipod/i.test(p.navigatorPlatform())
                         );
                     },
@@ -79,7 +82,7 @@ System.register('ionic/platform/registry', ['./platform', '../util/dom'], functi
                     return p.matchUserAgentVersion(/OS (\d+)_(\d+)?/);
                 }
             });
-            IonicPlatform.register({
+            Platform.register({
                 name: 'ipad',
                 superset: 'tablet',
                 settings: {
@@ -89,14 +92,14 @@ System.register('ionic/platform/registry', ['./platform', '../util/dom'], functi
                     return p.isPlatform('ipad');
                 }
             });
-            IonicPlatform.register({
+            Platform.register({
                 name: 'iphone',
                 subsets: ['phablet'],
                 isMatch: function isMatch(p) {
                     return p.isPlatform('iphone');
                 }
             });
-            IonicPlatform.register({
+            Platform.register({
                 name: 'windowsphone',
                 superset: 'mobile',
                 subsets: ['phablet', 'tablet'],
@@ -110,7 +113,7 @@ System.register('ionic/platform/registry', ['./platform', '../util/dom'], functi
                     return p.matchUserAgentVersion(/Windows Phone (\d+).(\d+)?/);
                 }
             });
-            IonicPlatform.register({
+            Platform.register({
                 name: 'cordova',
                 isEngine: true,
                 methods: {

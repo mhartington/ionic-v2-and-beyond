@@ -1,114 +1,214 @@
-import { isObject, isDefined, isFunction, extend } from '../util/util';
 /**
-* TODO
+* @ngdoc service
+* @name Config
+* @module ionic
+* @description
+* Config allows you to set the modes of your components
 */
-export class IonicConfig {
+import { Platform } from '../platform/platform';
+import { isObject, isDefined, isFunction, isArray } from '../util/util';
+/**
+ * Config lets you change multiple or a single value in an apps mode configuration. Things such as tab placement, icon changes, and view animations can be set here.
+ *
+ * ```ts
+ * import {Config} from 'ionic/ionic';
+ * @App({
+ *   template: `<ion-nav [root]="root"></ion-nav>`
+ *   config: {
+ *     backButtonText: 'Go Back',
+ *     iconMode: 'ios',
+ *     modalEnter: 'modal-slide-in',
+ *     modalLeave: 'modal-slide-out',
+ *     tabbarPlacement: 'bottom',
+ *     viewTransition: 'ios',
+ *   }
+ * })
+ * ```
+ *
+ * Config can be overwritting at multiple levels, allowing deeper configuration. Taking the example from earlier, we can override any setting we want based on a platform.
+ * ```ts
+ * import {Config} from 'ionic/ionic';
+ * @App({
+ *   template: `<ion-nav [root]="root"></ion-nav>`
+ *   config: {
+ *     'tabbarPlacement': 'bottom',
+ *     platform: {
+ *      ios: {
+ *        'tabbarPlacement': 'top',
+ *      }
+ *     }
+ *   }
+ * })
+ * ```
+ *
+ * We could also configure these values at a component level. Take `tabbarPlacement`, we can configure this as a property on our `ion-tabs`.
+ *
+ * ```html
+ * <ion-tabs tabbar-placement="top">
+ *    <ion-tab tab-title="Dash" tab-icon="pulse" [root]="DashRoot"></ion-tab>
+ *  </ion-tabs>
+ * ```
+ *
+ * The property will override anything else set in the apps.
+ *
+ * The last way we could configure is through URL query strings. This is useful for testing while in the browser.
+ * Simply add `?ionic<PROPERTYNAME>=<value>` to the url.
+ *
+ * ```
+ * http://localhost:8100/?IonictabbarPlacement=bottom
+ * ```
+**/
+export class Config {
     /**
      * TODO
-     * @param  {Object} settings   The settings for your app
+     * @param  {Object} config   The config for your app
      */
-    constructor(settings) {
-        // defaults
-        this._settings = {};
-        // override defaults w/ user config
-        if (settings) {
-            extend(this._settings, settings);
-        }
+    constructor(config) {
+        this._s = config && isObject(config) && !isArray(config) ? config : {};
+        this._c = {}; // cached values
     }
     /**
-    * TODO
+     * For setting and getting multiple config values
+     */
+    /**
+     * @private
+     * @name settings()
+     * @description
+     */
+    settings() {
+        const args = arguments;
+        switch (args.length) {
+            case 0:
+                return this._s;
+            case 1:
+                // settings({...})
+                this._s = args[0];
+                this._c = {}; // clear cache
+                break;
+            case 2:
+                // settings('ios', {...})
+                this._s.platforms = this._s.platforms || {};
+                this._s.platforms[args[0]] = args[1];
+                this._c = {}; // clear cache
+                break;
+        }
+        return this;
+    }
+    /**
+    * For setting a single config values
     */
-    setting() {
+    /**
+     * @private
+     * @name set()
+     * @description
+     */
+    set() {
         const args = arguments;
         const arg0 = args[0];
         const arg1 = args[1];
-        let settings = this._settings;
         switch (args.length) {
-            case 0:
-                // setting() = get settings object
-                return settings;
-            case 1:
-                // setting({...}) = set settings object
-                // setting('key') = get value
-                if (isObject(arg0)) {
-                    // setting({...}) = set settings object
-                    // arg0 = setting object
-                    this._settings = arg0;
-                    return this;
-                }
-                // time for the big show, get the value
-                // setting('key') = get value
-                // arg0 = key
-                if (!isDefined(settings[arg0])) {
-                    // if the value was already set this will all be skipped
-                    // if there was no user config then it'll check each of
-                    // the user config's platforms, which already contains
-                    // settings from default platform configs
-                    settings[arg0] = null;
-                    // check the platform settings object for this value
-                    // loop though each of the active platforms
-                    let activePlatformKeys = this._platforms;
-                    let platformSettings = settings.platforms;
-                    let platformObj = null;
-                    if (platformSettings) {
-                        let platformValue = undefined;
-                        for (let i = 0; i < activePlatformKeys.length; i++) {
-                            platformObj = platformSettings[activePlatformKeys[i]];
-                            if (platformObj) {
-                                if (isDefined(platformObj[arg0])) {
-                                    // check assigned platform settings
-                                    platformValue = platformObj[arg0];
-                                }
-                                else if (platformObj.mode) {
-                                    // check the platform default mode settings
-                                    platformObj = IonicConfig.modeConfig(platformObj.mode);
-                                    if (platformObj) {
-                                        platformValue = platformObj[arg0];
-                                    }
-                                }
-                            }
-                        }
-                        if (isDefined(platformValue)) {
-                            settings[arg0] = platformValue;
-                        }
-                    }
-                }
-                // return key's value
-                // either it came directly from the user config
-                // or it was from the users platform configs
-                // or it was from the default platform configs
-                // in that order
-                if (isFunction(settings[arg0])) {
-                    settings[arg0] = settings[arg0](this._platform);
-                }
-                return settings[arg0];
             case 2:
-                // setting('ios', {...}) = set platform config object
-                // setting('key', 'value') = set key/value pair
-                if (isObject(arg1)) {
-                    // setting('ios', {...}) = set platform config object
-                    // arg0 = platform
-                    // arg1 = platform config object
-                    settings.platforms = settings.platforms || {};
-                    settings.platforms[arg0] = arg1;
-                }
-                else {
-                    // setting('key', 'value') = set key/value pair
-                    // arg0 = key
-                    // arg1 = value
-                    settings[arg0] = arg1;
-                }
-                return this;
+                // set('key', 'value') = set key/value pair
+                // arg1 = value
+                this._s[arg0] = arg1;
+                delete this._c[arg0]; // clear cache
+                break;
             case 3:
                 // setting('ios', 'key', 'value') = set key/value pair for platform
                 // arg0 = platform
                 // arg1 = key
                 // arg2 = value
-                settings.platforms = settings.platforms || {};
-                settings.platforms[arg0] = settings.platforms[arg0] || {};
-                settings.platforms[arg0][arg1] = args[2];
-                return this;
+                this._s.platforms = this._s.platforms || {};
+                this._s.platforms[arg0] = this._s.platforms[arg0] || {};
+                this._s.platforms[arg0][arg1] = args[2];
+                delete this._c[arg1]; // clear cache
+                break;
         }
+        return this;
+    }
+    /**
+     * For getting a single config values
+     */
+    /**
+     * @private
+     * @name get()
+     * @description
+     */
+    get(key) {
+        if (!isDefined(this._c[key])) {
+            // if the value was already set this will all be skipped
+            // if there was no user config then it'll check each of
+            // the user config's platforms, which already contains
+            // settings from default platform configs
+            let userPlatformValue = undefined;
+            let userDefaultValue = this._s[key];
+            let userPlatformModeValue = undefined;
+            let userDefaultModeValue = undefined;
+            let platformValue = undefined;
+            let platformModeValue = undefined;
+            let configObj = null;
+            if (this._platform) {
+                let queryStringValue = this._platform.query('ionic' + key.toLowerCase());
+                if (isDefined(queryStringValue)) {
+                    return this._c[key] = (queryStringValue === 'true' ? true : queryStringValue === 'false' ? false : queryStringValue);
+                }
+                // check the platform settings object for this value
+                // loop though each of the active platforms
+                // array of active platforms, which also knows the hierarchy,
+                // with the last one the most important
+                let activePlatformKeys = this._platform.platforms();
+                // loop through all of the active platforms we're on
+                for (let i = 0, l = activePlatformKeys.length; i < l; i++) {
+                    // get user defined platform values
+                    if (this._s.platforms) {
+                        configObj = this._s.platforms[activePlatformKeys[i]];
+                        if (configObj) {
+                            if (isDefined(configObj[key])) {
+                                userPlatformValue = configObj[key];
+                            }
+                            configObj = Config.getModeConfig(configObj.mode);
+                            if (configObj && isDefined(configObj[key])) {
+                                userPlatformModeValue = configObj[key];
+                            }
+                        }
+                    }
+                    // get default platform's setting
+                    configObj = Platform.get(activePlatformKeys[i]);
+                    if (configObj && configObj.settings) {
+                        if (isDefined(configObj.settings[key])) {
+                            // found a setting for this platform
+                            platformValue = configObj.settings[key];
+                        }
+                        configObj = Config.getModeConfig(configObj.settings.mode);
+                        if (configObj && isDefined(configObj[key])) {
+                            // found setting for this platform's mode
+                            platformModeValue = configObj[key];
+                        }
+                    }
+                }
+            }
+            configObj = Config.getModeConfig(this._s.mode);
+            if (configObj && isDefined(configObj[key])) {
+                userDefaultModeValue = configObj[key];
+            }
+            // cache the value
+            this._c[key] = isDefined(userPlatformValue) ? userPlatformValue :
+                isDefined(userDefaultValue) ? userDefaultValue :
+                    isDefined(userPlatformModeValue) ? userPlatformModeValue :
+                        isDefined(userDefaultModeValue) ? userDefaultModeValue :
+                            isDefined(platformValue) ? platformValue :
+                                isDefined(platformModeValue) ? platformModeValue :
+                                    null;
+        }
+        // return key's value
+        // either it came directly from the user config
+        // or it was from the users platform configs
+        // or it was from the default platform configs
+        // in that order
+        if (isFunction(this._c[key])) {
+            return this._c[key](this._platform);
+        }
+        return this._c[key];
     }
     /**
      * TODO
@@ -116,23 +216,12 @@ export class IonicConfig {
      */
     setPlatform(platform) {
         this._platform = platform;
-        // get the array of active platforms, which also knows the hierarchy,
-        // with the last one the most important
-        this._platforms = platform.platforms();
-        // copy default platform settings into the user config platform settings
-        // user config platform settings should override default platform settings
-        this._settings.platforms = extend(platform.settings(), this._settings.platforms || {});
     }
-    static modeConfig(mode, config) {
-        const args = arguments;
-        if (args.length === 2) {
-            // modeConfig('ios', {...})
-            modeConfigs[mode] = extend(modeConfigs[mode] || {}, config);
-        }
-        else {
-            // modeConfig('ios')
-            return modeConfigs[mode];
-        }
+    static setModeConfig(mode, config) {
+        modeConfigs[mode] = config;
+    }
+    static getModeConfig(mode) {
+        return modeConfigs[mode] || null;
     }
 }
 let modeConfigs = {};

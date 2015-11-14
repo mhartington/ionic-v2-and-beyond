@@ -16,9 +16,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { View, Injectable, NgFor, NgIf } from 'angular2/angular2';
+import { Component, Injectable, NgFor, NgIf } from 'angular2/angular2';
+import { OverlayController } from '../overlay/overlay-controller';
+import { Config } from '../../config/config';
 import { Icon } from '../icon/icon';
-import { Overlay } from '../overlay/overlay';
 import { Animation } from '../../animations/animation';
 import * as util from 'ionic/util';
 /**
@@ -59,51 +60,64 @@ import * as util from 'ionic/util';
  * }
  * ```
  */
-let ActionSheetDirective = class {
+let ActionSheetCmp = class {
     _cancel() {
         this.cancel && this.cancel();
-        return this.overlayRef.close();
+        return this.close();
     }
     _destructive() {
         let shouldClose = this.destructiveButtonClicked();
         if (shouldClose === true) {
-            return this.overlayRef.close();
+            return this.close();
         }
     }
     _buttonClicked(index) {
         let shouldClose = this.buttonClicked(index);
         if (shouldClose === true) {
-            return this.overlayRef.close();
+            return this.close();
         }
     }
 };
-ActionSheetDirective = __decorate([
-    View({
-        template: '<backdrop (click)="_cancel()" tappable></backdrop>' +
+ActionSheetCmp = __decorate([
+    Component({
+        selector: 'ion-action-sheet',
+        template: '<backdrop (click)="_cancel()" tappable disable-activated></backdrop>' +
             '<action-sheet-wrapper>' +
             '<div class="action-sheet-container">' +
             '<div class="action-sheet-group action-sheet-options">' +
             '<div class="action-sheet-title" *ng-if="titleText">{{titleText}}</div>' +
-            '<button (click)="_buttonClicked(index)" *ng-for="#b of buttons; #index = index" class="action-sheet-option">' +
+            '<button (click)="_buttonClicked(i)" *ng-for="#b of buttons; #i=index" class="action-sheet-option disable-hover">' +
             '<icon [name]="b.icon" *ng-if="b.icon"></icon> ' +
             '{{b.text}}' +
             '</button>' +
-            '<button *ng-if="destructiveText" (click)="_destructive()" class="destructive action-sheet-destructive">' +
+            '<button *ng-if="destructiveText" (click)="_destructive()" class="action-sheet-destructive disable-hover">' +
             '<icon [name]="destructiveIcon" *ng-if="destructiveIcon"></icon> ' +
             '{{destructiveText}}</button>' +
             '</div>' +
             '<div class="action-sheet-group action-sheet-cancel" *ng-if="cancelText">' +
-            '<button (click)="_cancel()">' +
+            '<button (click)="_cancel()" class=" disable-hover">' +
             '<icon [name]="cancelIcon"></icon> ' +
             '{{cancelText}}</button>' +
             '</div>' +
             '</div>' +
             '</action-sheet-wrapper>',
+        host: {
+            '[style.zIndex]': '_zIndex'
+        },
         directives: [NgFor, NgIf, Icon]
     }), 
     __metadata('design:paramtypes', [])
-], ActionSheetDirective);
-export let ActionSheet = class extends Overlay {
+], ActionSheetCmp);
+export let ActionSheet = class {
+    constructor(ctrl, config) {
+        this.ctrl = ctrl;
+        this._defaults = {
+            enterAnimation: config.get('actionSheetEnter'),
+            leaveAnimation: config.get('actionSheetLeave'),
+            cancelIcon: config.get('actionSheetCancelIcon'),
+            destructiveIcon: config.get('actionSheetDestructiveIcon')
+        };
+    }
     /**
      * Create and open a new Action Sheet. This is the
      * public API, and most often you will only use ActionSheet.open()
@@ -112,27 +126,22 @@ export let ActionSheet = class extends Overlay {
      * @return {Promise} Promise that resolves when the action sheet is open.
      */
     open(opts = {}) {
-        let config = this.config;
-        let defaults = {
-            enterAnimation: config.setting('actionSheetEnter'),
-            leaveAnimation: config.setting('actionSheetLeave'),
-            cancelIcon: config.setting('actionSheetCancelIcon'),
-            destructiveIcon: config.setting('actionSheetDestructiveIcon')
-        };
-        let context = util.extend(defaults, opts);
-        return this.create(OVERLAY_TYPE, ActionSheetDirective, context, context);
+        return this.ctrl.open(OVERLAY_TYPE, ActionSheetCmp, util.extend(this._defaults, opts));
     }
     /**
      * TODO
      * @returns {TODO} TODO
      */
-    get() {
-        return this.getByType(OVERLAY_TYPE);
+    get(handle) {
+        if (handle) {
+            return this.ctrl.getByHandle(handle, OVERLAY_TYPE);
+        }
+        return this.ctrl.getByType(OVERLAY_TYPE);
     }
 };
 ActionSheet = __decorate([
     Injectable(), 
-    __metadata('design:paramtypes', [])
+    __metadata('design:paramtypes', [(typeof (_a = typeof OverlayController !== 'undefined' && OverlayController) === 'function' && _a) || Object, (typeof (_b = typeof Config !== 'undefined' && Config) === 'function' && _b) || Object])
 ], ActionSheet);
 const OVERLAY_TYPE = 'action-sheet';
 /**
@@ -141,7 +150,7 @@ const OVERLAY_TYPE = 'action-sheet';
 class ActionSheetAnimation extends Animation {
     constructor(element) {
         super(element);
-        this.easing('cubic-bezier(.36, .66, .04, 1)').duration(450);
+        this.easing('cubic-bezier(.36, .66, .04, 1)');
         this.backdrop = new Animation(element.querySelector('backdrop'));
         this.wrapper = new Animation(element.querySelector('action-sheet-wrapper'));
         this.add(this.backdrop, this.wrapper);
@@ -150,6 +159,7 @@ class ActionSheetAnimation extends Animation {
 class ActionSheetSlideIn extends ActionSheetAnimation {
     constructor(element) {
         super(element);
+        this.duration(400);
         this.backdrop.fromTo('opacity', 0.01, 0.4);
         this.wrapper.fromTo('translateY', '100%', '0%');
     }
@@ -158,6 +168,7 @@ Animation.register('action-sheet-slide-in', ActionSheetSlideIn);
 class ActionSheetSlideOut extends ActionSheetAnimation {
     constructor(element) {
         super(element);
+        this.duration(300);
         this.backdrop.fromTo('opacity', 0.4, 0.01);
         this.wrapper.fromTo('translateY', '0%', '100%');
     }
@@ -166,6 +177,7 @@ Animation.register('action-sheet-slide-out', ActionSheetSlideOut);
 class ActionSheetMdSlideIn extends ActionSheetSlideIn {
     constructor(element) {
         super(element);
+        this.duration(450);
         this.backdrop.fromTo('opacity', 0.01, 0.26);
     }
 }
@@ -173,7 +185,9 @@ Animation.register('action-sheet-md-slide-in', ActionSheetMdSlideIn);
 class ActionSheetMdSlideOut extends ActionSheetSlideOut {
     constructor(element) {
         super(element);
+        this.duration(450);
         this.backdrop.fromTo('opacity', 0.26, 0.01);
     }
 }
 Animation.register('action-sheet-md-slide-out', ActionSheetMdSlideOut);
+var _a, _b;

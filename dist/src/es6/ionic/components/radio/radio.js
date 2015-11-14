@@ -12,14 +12,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { ElementRef, Host, Optional, NgControl, Query, QueryList } from 'angular2/angular2';
-import { IonicDirective, IonicComponent, IonicView } from '../../config/decorators';
-import { IonicConfig } from '../../config/config';
+import { Component, Directive, ElementRef, Renderer, Host, Optional, NgControl, Query, QueryList } from 'angular2/angular2';
+import { Config } from '../../config/config';
 import { Ion } from '../ion';
 import { ListHeader } from '../list/list';
 /**
- * @name ionRadioGroup
- * @description
  * A radio group is a group of radio components.
  *
  * Selecting a radio button in the group unselects all others in the group.
@@ -59,14 +56,15 @@ export let RadioGroup = class extends Ion {
     /**
      * TODO
      * @param {ElementRef} elementRef  TODO
-     * @param {IonicConfig} config  TODO
+     * @param {Config} config  TODO
      * @param {NgControl=} ngControl  TODO
      * @param {QueryList<ListHeader>} headerQuery  TODO
      */
-    constructor(elementRef, config, ngControl, headerQuery) {
+    constructor(elementRef, config, renderer, ngControl, headerQuery) {
         super(elementRef, config);
         this.headerQuery = headerQuery;
         this.radios = [];
+        renderer.setElementClass(elementRef, 'list', true);
         this.id = ++radioGroupIds;
         this.radioIds = -1;
         this.onChange = (_) => { };
@@ -136,18 +134,17 @@ export let RadioGroup = class extends Ion {
     registerOnTouched(fn) { this.onTouched = fn; }
 };
 RadioGroup = __decorate([
-    IonicDirective({
+    Directive({
         selector: 'ion-radio-group',
         host: {
-            'class': 'list',
             'role': 'radiogroup',
             '[attr.aria-activedescendant]': 'activeId',
             '[attr.aria-describedby]': 'describedById'
         }
     }),
-    __param(2, Optional()),
-    __param(3, Query(ListHeader)), 
-    __metadata('design:paramtypes', [(typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a) || Object, (typeof (_b = typeof IonicConfig !== 'undefined' && IonicConfig) === 'function' && _b) || Object, (typeof (_c = typeof NgControl !== 'undefined' && NgControl) === 'function' && _c) || Object, (typeof (_d = typeof QueryList !== 'undefined' && QueryList) === 'function' && _d) || Object])
+    __param(3, Optional()),
+    __param(4, Query(ListHeader)), 
+    __metadata('design:paramtypes', [(typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a) || Object, (typeof (_b = typeof Config !== 'undefined' && Config) === 'function' && _b) || Object, (typeof (_c = typeof Renderer !== 'undefined' && Renderer) === 'function' && _c) || Object, (typeof (_d = typeof NgControl !== 'undefined' && NgControl) === 'function' && _d) || Object, (typeof (_e = typeof QueryList !== 'undefined' && QueryList) === 'function' && _e) || Object])
 ], RadioGroup);
 /**
  * @name ionRadio
@@ -169,10 +166,11 @@ export let RadioButton = class extends Ion {
      * Radio button constructor.
      * @param {RadioGroup=} group  The parent radio group, if any.
      * @param {ElementRef} elementRef  TODO
-     * @param {IonicConfig} config  TODO
+     * @param {Config} config  TODO
      */
-    constructor(group, elementRef, config) {
+    constructor(group, elementRef, config, renderer) {
         super(elementRef, config);
+        renderer.setElementClass(elementRef, 'item', true);
         this.group = group;
         this.tabIndex = 0;
     }
@@ -196,16 +194,15 @@ export let RadioButton = class extends Ion {
     }
 };
 RadioButton = __decorate([
-    IonicComponent({
+    Component({
         selector: 'ion-radio',
-        properties: [
+        inputs: [
             'value',
             'checked',
             'disabled',
             'id'
         ],
         host: {
-            'class': 'item',
             'role': 'radio',
             'tappable': 'true',
             '[attr.id]': 'id',
@@ -214,19 +211,17 @@ RadioButton = __decorate([
             '[attr.aria-disabled]': 'disabled',
             '[attr.aria-labelledby]': 'labelId',
             '(click)': 'click($event)'
-        }
-    }),
-    IonicView({
+        },
         template: '<ion-item-content id="{{labelId}}">' +
             '<ng-content></ng-content>' +
             '</ion-item-content>' +
-            '<div item-right class="media-radio">' +
-            '<div class="radio-icon"></div>' +
-            '</div>'
+            '<media-radio>' +
+            '<radio-icon></radio-icon>' +
+            '</media-radio>'
     }),
     __param(0, Host()),
     __param(0, Optional()), 
-    __metadata('design:paramtypes', [RadioGroup, (typeof (_e = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _e) || Object, (typeof (_f = typeof IonicConfig !== 'undefined' && IonicConfig) === 'function' && _f) || Object])
+    __metadata('design:paramtypes', [RadioGroup, (typeof (_f = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _f) || Object, (typeof (_g = typeof Config !== 'undefined' && Config) === 'function' && _g) || Object, (typeof (_h = typeof Renderer !== 'undefined' && Renderer) === 'function' && _h) || Object])
 ], RadioButton);
 let radioGroupIds = -1;
-var _a, _b, _c, _d, _e, _f;
+var _a, _b, _c, _d, _e, _f, _g, _h;

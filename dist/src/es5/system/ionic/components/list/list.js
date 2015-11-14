@@ -1,24 +1,22 @@
-System.register("ionic/components/list/list", ["angular2/angular2", "../ion", "../../config/config", "../../config/decorators", "./virtual", "ionic/util"], function (_export) {
+System.register("ionic/components/list/list", ["angular2/angular2", "../ion", "../../config/config", "./virtual", "ionic/util"], function (_export) {
     /**
-     * @name ionList
-     * @description
      * The List is a widely used interface element in almost any mobile app, and can include
      * content ranging from basic text all the way to buttons, toggles, icons, and thumbnails.
      *
      * Both the list, which contains items, and the list items themselves can be any HTML
      * element.
      *
-     * Using the ionList and ionItem components make it easy to support various
+     * Using the List and Item components make it easy to support various
      * interaction modes such as swipe to edit, drag to reorder, and removing items.
      *
      */
     "use strict";
 
-    var Directive, ElementRef, Ion, IonicConfig, IonicDirective, ListVirtualScroll, util, __decorate, __metadata, List, ListHeader, _a, _b;
+    var Directive, ElementRef, Renderer, Ion, Config, ListVirtualScroll, util, __decorate, __metadata, List, ListHeader, _a, _b, _c;
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -28,12 +26,11 @@ System.register("ionic/components/list/list", ["angular2/angular2", "../ion", ".
         setters: [function (_angular2Angular2) {
             Directive = _angular2Angular2.Directive;
             ElementRef = _angular2Angular2.ElementRef;
+            Renderer = _angular2Angular2.Renderer;
         }, function (_ion) {
             Ion = _ion.Ion;
         }, function (_configConfig) {
-            IonicConfig = _configConfig.IonicConfig;
-        }, function (_configDecorators) {
-            IonicDirective = _configDecorators.IonicDirective;
+            Config = _configConfig.Config;
         }, function (_virtual) {
             ListVirtualScroll = _virtual.ListVirtualScroll;
         }, function (_ionicUtil) {
@@ -49,7 +46,7 @@ System.register("ionic/components/list/list", ["angular2/angular2", "../ion", ".
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -68,13 +65,14 @@ System.register("ionic/components/list/list", ["angular2/angular2", "../ion", ".
                 /**
                  * TODO
                  * @param {ElementRef} elementRef  TODO
-                 * @param {IonicConfig} config  TODO
+                 * @param {Config} config  TODO
                  */
 
-                function List(elementRef, config) {
+                function List(elementRef, config, renderer) {
                     _classCallCheck(this, List);
 
                     _get(Object.getPrototypeOf(List.prototype), "constructor", this).call(this, elementRef, config);
+                    renderer.setElementClass(elementRef, 'list', true);
                     this.ele = elementRef.nativeElement;
                 }
 
@@ -116,6 +114,28 @@ System.register("ionic/components/list/list", ["angular2/angular2", "../ion", ".
                     value: function setItemTemplate(item) {
                         this.itemTemplate = item;
                     }
+
+                    /**
+                     * Keeps track of any open item (a sliding item, for example), to close it later
+                     */
+                }, {
+                    key: "setOpenItem",
+                    value: function setOpenItem(item) {
+                        this.openItem = item;
+                    }
+                }, {
+                    key: "closeOpenItem",
+                    value: function closeOpenItem() {
+                        if (this.openItem) {
+                            this.openItem.close(true);
+                            this.openItem = null;
+                        }
+                    }
+                }, {
+                    key: "getOpenItem",
+                    value: function getOpenItem() {
+                        return this.openItem;
+                    }
                 }]);
 
                 return List;
@@ -123,10 +143,10 @@ System.register("ionic/components/list/list", ["angular2/angular2", "../ion", ".
 
             _export("List", List);
 
-            _export("List", List = __decorate([IonicDirective({
+            _export("List", List = __decorate([Directive({
                 selector: 'ion-list',
-                properties: ['items', 'virtual', 'content']
-            }), __metadata('design:paramtypes', [typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a || Object, typeof (_b = typeof IonicConfig !== 'undefined' && IonicConfig) === 'function' && _b || Object])], List));
+                inputs: ['items', 'virtual', 'content']
+            }), __metadata('design:paramtypes', [typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a || Object, typeof (_b = typeof Config !== 'undefined' && Config) === 'function' && _b || Object, typeof (_c = typeof Renderer !== 'undefined' && Renderer) === 'function' && _c || Object])], List));
             /**
              * TODO
              */
@@ -139,7 +159,7 @@ System.register("ionic/components/list/list", ["angular2/angular2", "../ion", ".
 
             _export("ListHeader", ListHeader = __decorate([Directive({
                 selector: 'ion-header',
-                properties: ['id'],
+                inputs: ['id'],
                 host: {
                     '[attr.id]': 'id'
                 }

@@ -61,6 +61,13 @@
       </section>
 
       <section>
+        <div style="
+          background: url(img/ionic-logo.png) no-repeat center center;
+          background-size: 390px 390px;
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          opacity: 0.1; z-index: -1;"></div>
         <h3 style="font-size:80px;">Ionic V1!</h3>
         <p>SDK for Developing Hybrid Apps</p>
         <p>Focused on mobile first</p>
@@ -72,9 +79,9 @@
         </aside>
       </section>
 
-      <section>
-          <h3>The Stats:</h3>
-          <p>34th most popular OSS project (19,000+ stars on GitHub)</p>
+      <section  data-background="img/ionic-stats.png">
+          <h3>The Stats</h3>
+          <p>34th most popular OSS project (20,000+ stars on GitHub)</p>
           <p>ONE MILLION apps built with the SDK</p>
           <p>105 Meetup Groups around the world</p>
           <p>Ionic apps top app store charts</p>
@@ -108,23 +115,18 @@
       </section>
 
       <section>
-        <h3>What it was like in 2013</h3>
-        <p>Breaking Bad, 30 Rock, and The Office (USA) had their series finale</p>
-        <p>The iPhone 5 with iOS 6 was released</p>
-        <p>Android 2.3 was still a thing</p>
-
-        <aside class="notes">
-          <p>In 2013, the mobile landscape was completely difrernt than what it was today</p>
-          <p>iOS is essntially gone, and 2.3 is at less than 1% today</p>
-        </aside>
-      </section>
-
-      <section>
-        <h3>A lot's changed since then</h3>
-        <p>Better devices!</p>
-        <p>Fewer bad devices!</p>
-        <p>New browser APIs!</p>
-        <p>New browser engines!</p>
+                <div flex>
+          <div col>
+            <h3>A lot's changed</h3>
+            <p>Better/faster devices!</p>
+            <p>Fewer slow/bad devices!</p>
+            <p>Widely available web APIs!</p>
+            <p>Improved browser engines!</p>
+          </div>
+          <div col center>
+            <img src="img/alot-has-changed.png">
+          </div>
+        </div>
 
         <aside class="notes">
           <p>We have a lot better devices, but more importantly, a lot less bad devices</p>
@@ -133,12 +135,8 @@
       </section>
 
       <section>
-        <h2>V1 was built for the mobile devices of yesterday</h2>
-      </section>
-
-      <section>
         <h2>V2 will be the same powerful framework, but built for the future</h2>
-
+        <img src="img/ionic2.png" width="250" alt="">
         <aside class="notes">
         Every thing that you know and love about Ionic V1, will be in V2, but built to be long lasting and work great on any potential device
         </aside>
@@ -146,13 +144,19 @@
 
       <!-- Goals -->
       <section>
-        <h3>GOALS TO IMPROVE FROM V1</h3>
-        <p>Performance</p>
-        <p>Simplicity</p> <!-- attributes -->
-        <p>Near Native UX</p> <!-- ios/md and navigation -->
-        <p>Creative Freedom</p> <!-- Sass and Web animations -->
-        <p>Future Proof</p> <!-- ES6 and Typescript -->
-
+        <div flex>
+          <div col>
+            <h3>v2 Goals</h3>
+            <p>Simplicity</p>
+            <p>Platform Continuity</p>
+            <p>Performance</p>
+            <p>Creative Freedom</p>
+            <p>Code once</p>
+          </div>
+          <div col center>
+            <img src="img/goals.png">
+          </div>
+        </div>
         <aside class="notes">
           <li>Simplicity: Can we make development with ionic even easier than it was in v1</li>
           <li>Native UX and Design: Can we push our navtive ux even further while still making it easy to cusitmize to your brand</li>
@@ -203,21 +207,30 @@
           <div class="flex">
             <div class="code-left" style="margin-top:60px;">
               <pre><code class="html">
-      &lt;button block&gt;Default&lt;/button&gt;
-      &lt;button secondary block&gt;Secondary&lt;/button&gt;
-      &lt;button danger block&gt;Danger&lt;/button&gt;
-      &lt;button light block&gt;Light&lt;/button&gt;
-      &lt;button dark block&gt;Dark&lt;/button&gt;
+  <button></button>
+  &lt;a button primary&gt;&lt;/a&gt;
+  &lt;a button outlined secondar&gt;&lt;/a&gt;
+  &lt;a button clear dark&gt;&lt;/a&gt;
+  &lt;a button danger&gt;
+    &lt;icon close&gt;&lt;/icon&gt;
+  &lt;/a&gt;
+
               </code></pre>
             </div>
-            <div class="demo">
-              <div class="demo-buttons">
-                <button class="button" onclick="togglePlatform('buttons')"><i class="icon ion-social-apple"></i></button>
-                <button class="button" onclick="togglePlatform('buttons')"><i class="icon ion-social-android"></i></button>
+         <div class="demo"><!--{{{-->
+          <div class="demo-buttons">
+            <button class="button" onclick="togglePlatform('buttons', 'ios')"><i class="icon ion-social-apple"></i></button>
+            <button class="button" onclick="togglePlatform('buttons', 'md')"><i class="icon ion-social-android"></i></button>
+          </div>
 
-              </div>
-              <iframe id="buttons" src="dist/demos/buttons/" frameborder="0"></iframe>
-            </div>
+          <div id="buttons">
+          <div class="demo-ios">
+          <iframe src="dist/e2e/button/basic/" frameborder="0"></iframe>
+          </div>
+
+          </div>
+        </div><!--}}}-->
+
           </div>
         </section><!--}}}-->
 
@@ -254,12 +267,18 @@
         </section>
 
         <section>
-          <h3>Platform Continuity</h3>
-          <p>Ionic V1 would change <em>some</em> components based on their platform </p>
-        </section>
-        <section>
-          <h2>Material Design has first class support in Ionic 2</h2>
-
+        <div flex>
+          <div col>
+            <h3>Platform Continuity</h3>
+            <p>iOS : Android</p>
+            <p>One code base</p>
+            <p>Same HTML and JS</p>
+            <p>More than just different CSS</p>
+          </div>
+          <div col center>
+            <img src="img/platformcont.png">
+          </div>
+        </div>
         </section>
         <!-- icons -->
          <section><!--{{{-->
@@ -284,11 +303,17 @@
         </div><!--}}}-->
         <div class="demo"><!--{{{-->
           <div class="demo-buttons">
-            <button class="button" onclick="togglePlatform('icons')"><i class="icon ion-social-apple"></i></button>
-            <button class="button" onclick="togglePlatform('icons')"><i class="icon ion-social-android"></i></button>
-
+            <button class="button" onclick="togglePlatform('icons', 'demo-ios')"><i class="icon ion-social-apple"></i></button>
+            <button class="button" onclick="togglePlatform('icons', 'demo-md')"><i class="icon ion-social-android"></i></button>
           </div>
-          <iframe id="icons" src="dist/demos/icons/" frameborder="0"></iframe>
+
+          <div id="icons">
+          <div class="demo-ios">
+          <iframe src="dist/e2e/icon/basic/" frameborder="0"></iframe>
+          </div>
+          </div>
+
+
         </div><!--}}}-->
         </div>
          </section><!--}}}-->
@@ -310,15 +335,20 @@
 
                 </code></pre>
               </div>
-              <div class="demo">
-                <div class="demo-buttons">
-                  <button class="button" onclick="togglePlatform('action-sheet')"><i class="icon ion-social-apple"></i></button>
-                  <button class="button" onclick="togglePlatform('action-sheet')"><i class="icon ion-social-android"></i></button>
+          <div class="demo"><!--{{{-->
+          <div class="demo-buttons">
+            <button class="button" onclick="togglePlatform('action-sheet', 'demo-ios')"><i class="icon ion-social-apple"></i></button>
+            <button class="button" onclick="togglePlatform('action-sheet', 'demo-md')"><i class="icon ion-social-android"></i></button>
+          </div>
 
-                </div>
-                <iframe id='action-sheet' src="dist/demos/action-sheet/" frameborder="0"></iframe>
-              </div>
-            </div>
+          <div id="action-sheet">
+          <div class="demo-ios">
+          <iframe src="dist/e2e/action-sheet/basic/" frameborder="0"></iframe>
+          </div>
+          </div>
+
+
+        </div><!--}}}-->
 
         </section><!--}}}-->
 
@@ -331,15 +361,21 @@
                 <p>MD: overlay on top of the content</p>
                 <p>Highly configurable</p>
               </div>
-              <div class="demo">
-                <div class="demo-buttons">
-                  <button class="button" onclick="togglePlatform('menu')"><i class="icon ion-social-apple"></i></button>
-                  <button class="button" onclick="togglePlatform('menu')"><i class="icon ion-social-android"></i></button>
+         <div class="demo"><!--{{{-->
+          <div class="demo-buttons">
+            <button class="button" onclick="togglePlatform('menu', 'demo-ios')"><i class="icon ion-social-apple"></i></button>
+            <button class="button" onclick="togglePlatform('menu', 'demo-md')"><i class="icon ion-social-android"></i></button>
+          </div>
 
-                </div>
-                <iframe id='menu' src="dist/demos/menu/" frameborder="0"></iframe>
-              </div>
-            </div>
+          <div id="menu">
+          <div class="demo-ios">
+          <iframe src="dist/e2e/menu/basic/" frameborder="0"></iframe>
+          </div>
+
+          </div>
+
+
+        </div><!--}}}-->
 
         </section><!--}}}-->
 
@@ -352,19 +388,24 @@
                 <p>Built using Web Animations API</p>
                 <p>Easy to change and add new animations</p>
               </div>
-              <div class="demo">
-                <div class="demo-buttons">
-                  <button class="button" onclick="togglePlatform('navigation')"><i class="icon ion-social-apple"></i></button>
-                  <button class="button" onclick="togglePlatform('navigation')"><i class="icon ion-social-android"></i></button>
+        <div class="demo"><!--{{{-->
+          <div class="demo-buttons">
+            <button class="button" onclick="togglePlatform('navigation', 'demo-ios')"><i class="icon ion-social-apple"></i></button>
+            <button class="button" onclick="togglePlatform('navigation', 'demo-md')"><i class="icon ion-social-android"></i></button>
+          </div>
 
-                </div>
-                <iframe id='navigation' src="dist/demos/navigation/" frameborder="0"></iframe>
-              </div>
-            </div>
+          <div id="navigation">
+          <div class="demo-ios">
+          <iframe src="dist/e2e/nav/basic/" frameborder="0"></iframe>
+          </div>
+          </div>
+        </div><!--}}}-->
+
 
         </section><!--}}}-->
 
         <section><!--{{{-->
+
           <h3>All highly configurable</h3>
           <p>Same easy configuration as V1</p>
           <p>Much easier to change the design</p>
@@ -429,7 +470,10 @@
 
         <section><!--{{{-->
           <h3>Push/Pop Navigation</h3>
-          <pre data-trim><code class="javascript">
+          <div class="flex">
+
+            <div class="code-left"><!--{{{-->
+              <pre data-trim><code class="javascript">
   import SecondPage from '../secondpage';
   export class FirstPage {
     constructor(nav: NavController) {
@@ -440,9 +484,28 @@
     };
   };
 
-</code></pre>
+              </code></pre>
+            </div><!--}}}-->
 
-<aside class="notes">
+ <div class="demo"><!--{{{-->
+          <div class="demo-buttons">
+            <button class="button" onclick="togglePlatform('loop', 'demo-ios')"><i class="icon ion-social-apple"></i></button>
+            <button class="button" onclick="togglePlatform('loop', 'demo-md')"><i class="icon ion-social-android"></i></button>
+          </div>
+
+          <div id="loop">
+          <div class="demo-ios">
+          <iframe src="dist/loop/" frameborder="0"></iframe>
+          </div>
+
+          </div>
+
+
+        </div><!--}}}-->
+
+
+          </div>
+        <aside class="notes">
   <li>Heavily inspired by native implimentations</li>
   <li>Much more flexible an mature navigation pattern</li>
 </aside>
@@ -450,10 +513,30 @@
 
 
         <section><!--{{{-->
-          <h3>Navigation Recap</h3>
-          <p>Navigation is not tied to URL</p>
-          <p>More control over the navigation experience</p>
-          <p>More powerful and flexible than V1</p>
+         <div flex>
+          <div col>
+            <h3>Full Control</h3>
+            <p>Push on to the nav stack</p>
+            <p>Pop from the nav stack</p>
+            <p>Insert/Remove/Update</p>
+            <p>URL reflects app's state</p>
+            <p>
+          </div>
+          <pre col>
+            <code class="javascript">pushSettings() {
+  this.nav.push(Settings);
+}
+
+goBack() {
+  this.nav.pop();
+}
+
+resetHome() {
+  this.nav.setRoot(Home);
+}</code>
+          </pre>
+        </div>
+
         </section><!--}}}-->
 
       </section><!--}}}-->
@@ -543,21 +626,33 @@
                 <p>Nice CSS friendly syntax</p>
                 <p>Easy to define your own animations</p>
                 <pre><code data-trim class="javascript">
-    var ionitron = document.querySelector('#ionitron');
-    var spin = new Animation(ionitron);
-    spin
-      .from('transform', 'rotate(0deg)')
-      .to('transform', 'rotate(360deg)')
-    this.animation.add(spin);
-    play() {
-      this.animation.play();
-    }
+var ionitron = document.querySelector('#ionitron');
+var spin = new Animation(ionitron);
+spin
+  .from('transform', 'rotate(0deg)')
+  .to('transform', 'rotate(360deg)')
+this.animation.add(spin);
+play() {
+  this.animation.play();
+}
                 </code></pre>
               </div>
+               <div class="demo"><!--{{{-->
+          <div class="demo-buttons">
+            <button class="button" onclick="togglePlatform('animations', 'demo-ios')"><i class="icon ion-social-apple"></i></button>
+            <button class="button" onclick="togglePlatform('animations', 'demo-md')"><i class="icon ion-social-android"></i></button>
+          </div>
 
-              <div class="demo">
-                <iframe src="dist/demos/animations/" id="animations" frameborder="0"></iframe>
-              </div>
+          <div id="animations">
+          <div class="demo-ios">
+          <iframe src="dist/demos/animations/" frameborder="0"></iframe>
+          </div>
+
+          </div>
+
+
+        </div><!--}}}-->
+
             </div>
           </section>
 
@@ -602,7 +697,7 @@
             <h3>JavaScript has changed</h3>
             <p>Ionic 1 was built with ES5</p>
             <p>ES6 brings many new features</p>
-            <p>NG2 is built on top of ES6</p>
+            <p>NG2 is pushing for ES6</p>
             <p>Different look, but all JS Classes</p>
             <aside class="notes">
               <li>ES5 has served us well</li>
@@ -633,6 +728,7 @@
           </section>
 
           <section>
+            <h3>You pick whats right for you</h3>
             <p>Ionic supports either option: ES6 or TS</p>
             <p>You can mix both filetypes in a project</p>
             <p>Build system will handle them and compile down ES5</p>
@@ -649,7 +745,9 @@
 
       <section>
         <h2>Want to give it a try?</h2>
-        <p>We want you're feedback</p>
+        <h3>
+          <a href="http://ionic.io/2" target="_blank">ionic.io/2</a>
+        </h3>
       </section>
 
       <section><!--{{{-->
@@ -675,6 +773,8 @@
       progress: true,
       history: true,
       center: true,
+      maxScale: 1,
+      minScale: 1,
 
       transition: 'slide', // none/fade/slide/convex/concave/zoom
 
@@ -713,22 +813,23 @@
     });
   </script>
 
-  <script>
-    function togglePlatform(target) {
-      console.log(target);
-      var demoFrame = $('.demo > iframe#' + target);
+    <script>
+    function togglePlatform(target, version) {
+      var demoTarget = $('#' + target + ' > div');
+      var demoFrame = $('#' + target + ' > div > iframe');
       var currentSrc = demoFrame.attr('src');
       var newSrc = currentSrc.split('?')[0] + '?ionicplatform=';
       var currentPlatform = getPlatform(currentSrc);
       if (currentPlatform === 'ios') {
         demoFrame.attr('src', newSrc + 'android');
+        demoTarget.addClass('demo-md');
         return "android";
       } else {
         demoFrame.attr('src', newSrc + 'ios');
+        demoTarget.removeClass('demo-md');
         return "ios";
       }
     }
-
     function getPlatform(iframeSrc) {
       // return: 'ios' or android
       if (iframeSrc.indexOf('android') > -1) {

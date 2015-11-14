@@ -1,4 +1,4 @@
-System.register("index", ["ionic/ionic", "angular2/forms"], function (_export) {
+System.register("index", ["ionic/ionic", "angular2/angular2"], function (_export) {
     "use strict";
 
     var App, Control, ControlGroup, __decorate, __metadata, IonicApp;
@@ -10,9 +10,9 @@ System.register("index", ["ionic/ionic", "angular2/forms"], function (_export) {
     return {
         setters: [function (_ionicIonic) {
             App = _ionicIonic.App;
-        }, function (_angular2Forms) {
-            Control = _angular2Forms.Control;
-            ControlGroup = _angular2Forms.ControlGroup;
+        }, function (_angular2Angular2) {
+            Control = _angular2Angular2.Control;
+            ControlGroup = _angular2Angular2.ControlGroup;
         }],
         execute: function () {
             __decorate = undefined && undefined.__decorate || function (decorators, target, key, desc) {
@@ -24,7 +24,7 @@ System.register("index", ["ionic/ionic", "angular2/forms"], function (_export) {
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {

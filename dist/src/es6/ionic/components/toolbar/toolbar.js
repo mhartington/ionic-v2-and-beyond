@@ -12,11 +12,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { Component, Directive, View, ElementRef, Optional, forwardRef, Inject } from 'angular2/angular2';
+import { Component, Directive, ElementRef, Renderer, Optional, forwardRef, Inject } from 'angular2/angular2';
 import { Ion } from '../ion';
-import { IonicConfig } from '../../config/config';
-import { IonicView } from '../../config/decorators';
-import { Navbar } from '../nav-bar/nav-bar';
+import { Config } from '../../config/config';
+import { Navbar } from '../navbar/navbar';
 /**
  * TODO
  */
@@ -55,27 +54,23 @@ export class ToolbarBase extends Ion {
  * TODO
  */
 export let Toolbar = class extends ToolbarBase {
-    constructor(elementRef, config) {
+    constructor(elementRef, config, renderer) {
         super(elementRef, config);
+        renderer.setElementClass(elementRef, 'toolbar', true);
     }
 };
 Toolbar = __decorate([
     Component({
         selector: 'ion-toolbar',
-        host: {
-            'class': 'toolbar'
-        }
-    }),
-    IonicView({
         template: '<div class="toolbar-inner">' +
             '<ng-content select="[menu-toggle]"></ng-content>' +
-            '<ng-content select="ion-title"></ng-content>' +
+            '<ng-content select="ion-title,ion-searchbar,ion-segment"></ng-content>' +
             '<ng-content select="ion-nav-items[primary]"></ng-content>' +
             '<ng-content select="ion-nav-items[secondary]"></ng-content>' +
             '</div>' +
             '<div class="toolbar-background"></div>'
     }), 
-    __metadata('design:paramtypes', [(typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a) || Object, (typeof (_b = typeof IonicConfig !== 'undefined' && IonicConfig) === 'function' && _b) || Object])
+    __metadata('design:paramtypes', [(typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a) || Object, (typeof (_b = typeof Config !== 'undefined' && Config) === 'function' && _b) || Object, (typeof (_c = typeof Renderer !== 'undefined' && Renderer) === 'function' && _c) || Object])
 ], Toolbar);
 export let ToolbarTitle = class extends Ion {
     constructor(elementRef, toolbar, navbar) {
@@ -89,9 +84,7 @@ export let ToolbarTitle = class extends Ion {
 };
 ToolbarTitle = __decorate([
     Component({
-        selector: 'ion-title'
-    }),
-    View({
+        selector: 'ion-title',
         template: '<div class="toolbar-title">' +
             '<ng-content></ng-content>' +
             '</div>'
@@ -99,7 +92,7 @@ ToolbarTitle = __decorate([
     __param(1, Optional()),
     __param(2, Optional()),
     __param(2, Inject(forwardRef(() => Navbar))), 
-    __metadata('design:paramtypes', [(typeof (_c = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _c) || Object, Toolbar, (typeof (_d = typeof Navbar !== 'undefined' && Navbar) === 'function' && _d) || Object])
+    __metadata('design:paramtypes', [(typeof (_d = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _d) || Object, Toolbar, (typeof (_e = typeof Navbar !== 'undefined' && Navbar) === 'function' && _e) || Object])
 ], ToolbarTitle);
 export let ToolbarItem = class extends Ion {
     constructor(elementRef, toolbar, navbar) {
@@ -115,6 +108,6 @@ ToolbarItem = __decorate([
     __param(1, Optional()),
     __param(2, Optional()),
     __param(2, Inject(forwardRef(() => Navbar))), 
-    __metadata('design:paramtypes', [(typeof (_e = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _e) || Object, Toolbar, (typeof (_f = typeof Navbar !== 'undefined' && Navbar) === 'function' && _f) || Object])
+    __metadata('design:paramtypes', [(typeof (_f = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _f) || Object, Toolbar, (typeof (_g = typeof Navbar !== 'undefined' && Navbar) === 'function' && _g) || Object])
 ], ToolbarItem);
-var _a, _b, _c, _d, _e, _f;
+var _a, _b, _c, _d, _e, _f, _g;

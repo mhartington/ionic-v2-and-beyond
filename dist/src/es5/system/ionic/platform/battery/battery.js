@@ -1,4 +1,16 @@
 System.register("ionic/platform/battery/battery", ["ionic/util", "../plugin"], function (_export) {
+    /**
+     * Track battery status. Uses the HTMl5 Battery API if available or
+     * the `cordova-plugin-battery-status` plugin.
+     *
+     * @usage
+     *
+     * ```js
+     * Battery.getStatus().then((data) => {
+     *   console.log(data.charging, data.level, data.chargingTime, data.dischargingTime)
+     * });
+     * ```
+     */
     "use strict";
 
     var util, NativePlugin, __decorate, __metadata, _Battery;
@@ -23,7 +35,7 @@ System.register("ionic/platform/battery/battery", ["ionic/util", "../plugin"], f
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -43,6 +55,15 @@ System.register("ionic/platform/battery/battery", ["ionic/util", "../plugin"], f
 
                 _createClass(Battery, null, [{
                     key: "getStatus",
+
+                    /**
+                     * Get the status of the battery. Data is of the format:
+                     * { charging, level, chargingTime, dischargingTime }
+                     *
+                     * Note: certain fields might not be available depending on the platform.
+                     *
+                     * @return {object} battery status
+                     */
                     value: function getStatus() {
                         var _this = this;
 

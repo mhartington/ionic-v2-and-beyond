@@ -21,12 +21,19 @@ import { extend } from '../util/util';
 **/
 export class Animation {
     constructor(ele, opts = {}) {
+        this.reset();
+        this._opts = extend({
+            renderDelay: 16
+        }, opts);
+        this.elements(ele);
+        if (!document.documentElement.animate) {
+            console.error('Web Animations polyfill missing');
+        }
+    }
+    reset() {
         this._el = [];
         this._chld = [];
         this._ani = [];
-        this._opts = extend({
-            renderDelay: 36
-        }, opts);
         this._bfAdd = [];
         this._bfSty = {};
         this._bfRmv = [];
@@ -35,10 +42,6 @@ export class Animation {
         this._readys = [];
         this._plays = [];
         this._finishes = [];
-        this.elements(ele);
-        if (!document.documentElement.animate) {
-            console.error('Web Animations polyfill missing');
-        }
     }
     elements(ele) {
         if (ele) {
@@ -76,10 +79,10 @@ export class Animation {
         return this;
     }
     add(childAnimations) {
-        childAnimations = Array.isArray(childAnimations) ? childAnimations : arguments;
-        for (let i = 0; i < childAnimations.length; i++) {
-            childAnimations[i].parent(this);
-            this._chld.push(childAnimations[i]);
+        var _childAnimations = Array.isArray(childAnimations) ? childAnimations : arguments;
+        for (let i = 0; i < _childAnimations.length; i++) {
+            _childAnimations[i].parent(this);
+            this._chld.push(_childAnimations[i]);
         }
         return this;
     }
@@ -88,7 +91,13 @@ export class Animation {
             this._duration = value;
             return this;
         }
-        return this._duration || (this._parent && this._parent.duration());
+        return this._duration || (this._parent && this._parent.duration()) || 0;
+    }
+    clearDuration() {
+        this._duration = null;
+        for (let i = 0, l = this._chld.length; i < l; i++) {
+            this._chld[i].clearDuration();
+        }
     }
     easing(name, opts) {
         if (arguments.length) {
@@ -138,10 +147,10 @@ export class Animation {
         return this.from(property, from).to(property, to);
     }
     fadeIn() {
-        return this.fromTo('opacity', 0.01, 1);
+        return this.fromTo('opacity', 0.001, 1);
     }
     fadeOut() {
-        return this.fromTo('opacity', 1, 0);
+        return this.fromTo('opacity', 0.999, 0);
     }
     get before() {
         return {
@@ -155,6 +164,7 @@ export class Animation {
             },
             setStyles: (styles) => {
                 this._bfSty = styles;
+                return this;
             }
         };
     }
@@ -200,7 +210,7 @@ export class Animation {
                     resolve();
                 });
             }
-            if (self._duration > this._opts.renderDelay) {
+            if (self._duration > 16) {
                 // begin each animation when everything is rendered in their starting point
                 // give the browser some time to render everything in place before starting
                 setTimeout(kickoff, this._opts.renderDelay);
@@ -240,7 +250,7 @@ export class Animation {
             if (this._to) {
                 // only animate the elements if there are defined "to" effects
                 for (i = 0; i < this._el.length; i++) {
-                    animation = new Animate(this._el[i], this._from, this._to, this.duration(), this.easing(), this.playbackRate(), this._opts.renderDelay);
+                    animation = new Animate(this._el[i], this._from, this._to, this.duration(), this.easing(), this.playbackRate());
                     if (animation.shouldAnimate) {
                         this._ani.push(animation);
                     }
@@ -329,6 +339,20 @@ export class Animation {
             this._ani[i].progress(value);
         }
     }
+    /**
+     * Get the current time of the first animation
+     * in the list. To get a specific time of an animation, call
+     * subAnimationInstance.getCurrentTime()
+     */
+    getCurrentTime() {
+        if (this._chld.length > 0) {
+            return this._chld[0].getCurrentTime();
+        }
+        if (this._ani.length > 0) {
+            return this._ani[0].getCurrentTime();
+        }
+        return 0;
+    }
     progressEnd(shouldComplete, rate = 3) {
         let promises = [];
         this.isProgress = false;
@@ -391,7 +415,7 @@ export class Animation {
         for (i = 0; i < this._ani.length; i++) {
             this._ani[i].dispose();
         }
-        this._el = this._parent = this._chld = this._ani = this._readys = this._plays = this._finishes = null;
+        this.reset();
     }
     /*
      STATIC CLASSES
@@ -410,7 +434,7 @@ export class Animation {
     }
 }
 class Animate {
-    constructor(ele, fromEffect, toEffect, duration, easingConfig, playbackRate, renderDelay) {
+    constructor(ele, fromEffect, toEffect, duration, easingConfig, playbackRate) {
         // https://w3c.github.io/web-animations/
         // not using the direct API methods because they're still in flux
         // however, element.animate() seems locked in and uses the latest
@@ -419,7 +443,7 @@ class Animate {
             return console.error(ele.tagName, 'animation fromEffect required, toEffect:', toEffect);
         }
         this.toEffect = parseEffect(toEffect);
-        this.shouldAnimate = (duration > renderDelay);
+        this.shouldAnimate = (duration > 32);
         if (!this.shouldAnimate) {
             return inlineStyle(ele, this.toEffect);
         }
@@ -439,7 +463,7 @@ class Animate {
         }
         this.effects.push(convertProperties(this.toEffect));
     }
-    play(callback) {
+    play(done) {
         const self = this;
         if (self.ani) {
             self.ani.play();
@@ -459,9 +483,11 @@ class Animate {
             // lock in where the element will stop at
             // if the playbackRate is negative then it needs to return
             // to its "from" effects
-            inlineStyle(self.ele, self.rate < 0 ? self.fromEffect : self.toEffect);
-            self.ani = null;
-            callback && callback();
+            if (self.ani) {
+                inlineStyle(self.ele, self.rate < 0 ? self.fromEffect : self.toEffect);
+                self.ani = self.ani.onfinish = null;
+                done && done();
+            }
         };
     }
     pause() {
@@ -478,6 +504,9 @@ class Animate {
             value = Math.min(0.999, Math.max(0.001, value));
             this.ani.currentTime = (this.duration * value);
         }
+    }
+    getCurrentTime() {
+        return (this.ani && this.ani.currentTime) || 0;
     }
     playbackRate(value) {
         this.rate = value;

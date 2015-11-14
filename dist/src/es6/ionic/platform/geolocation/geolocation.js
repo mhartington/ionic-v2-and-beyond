@@ -1,3 +1,6 @@
+// TODO: temporary until https://github.com/angular/angular/issues/4390 decided
+// var Rx = require('@reactivex/rxjs/dist/cjs/Rx');
+// var {Observable} = Rx;
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
     switch (arguments.length) {
@@ -9,9 +12,28 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import * as Rx from 'rx';
 import { NativePlugin } from '../plugin';
+/**
+ * Get geolocation data.
+ *
+ * @usage
+ * ```js
+ * Geolocation.getCurrentPosition().then((resp) => {
+ *  //resp.coords.latitude
+ *  //resp.coords.longitude
+ * })
+ *
+ * let watch = Geolocation.watchPosition();
+ * watch.source.subscribe((data) => {
+ *  //data.coords.latitude
+ *  //data.coords.longitude
+ * })
+ * ```
+ */
 export let Geolocation = class {
+    /**
+     * Get the current GPS location.
+     */
     static getCurrentPosition(options) {
         return new Promise((resolve, reject) => {
             navigator.geolocation.getCurrentPosition(function (result) {
@@ -21,6 +43,9 @@ export let Geolocation = class {
             }, options);
         });
     }
+    /**
+     * Watch for location changes.
+     */
     static watchPosition(options) {
         let watchID;
         let source = Rx.Observable.create((observer) => {
@@ -38,6 +63,10 @@ export let Geolocation = class {
             }
         };
     }
+    /**
+     * Clear a specific watch by watch ID. Generally, you'll call
+     * clear() on the returned watch from `getCurrentPosition` or `watchPosition` above.
+     */
     static clearWatch(watchID) {
         return navigator.geolocation.clearWatch(watchID);
     }

@@ -1,4 +1,12 @@
 System.register("ionic/platform/vibration/vibration", ["../plugin"], function (_export) {
+    /**
+    * Vibrate the device. Uses the HTMl5 Vibration API or the `cordova-plugin-vibration` plugin (preferred)
+    *
+    * @usage
+    * ```js
+    * Vibration.vibrate();
+    * ```
+    */
     "use strict";
 
     var NativePlugin, __decorate, __metadata, Vibration;
@@ -21,7 +29,7 @@ System.register("ionic/platform/vibration/vibration", ["../plugin"], function (_
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -41,6 +49,12 @@ System.register("ionic/platform/vibration/vibration", ["../plugin"], function (_
 
                 _createClass(Vibration, null, [{
                     key: "vibrate",
+
+                    /**
+                     * Vibrate the device. Note: iOS does not support the pattern parameter.
+                     *
+                     * @param pattern the vibration pattern in ms to use [1000,1000,1000] (vibrate three times, one second each)
+                     */
                     value: function vibrate(pattern) {
                         if (!navigator.vibrate) {
                             this.pluginWarn();

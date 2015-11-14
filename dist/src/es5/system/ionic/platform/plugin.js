@@ -30,9 +30,12 @@ System.register('ionic/platform/plugin', [], function (_export) {
                     var returnType = arguments.length <= 1 || arguments[1] === undefined ? null : arguments[1];
 
                     // Convert to boolean the plugin param
-                    var exists = !!check;
+                    var exists;
                     if (typeof _this.config.pluginCheck === 'function') {
                         exists = _this.config.pluginCheck();
+                    } else {
+                        console.error('Plugin "' + _this.config.name + '" is missing a pluginCheck() function for plugin verification. Please add one."');
+                        return false;
                     }
                     if (exists) {
                         return cb();

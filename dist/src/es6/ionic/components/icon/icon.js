@@ -10,27 +10,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { Directive, ElementRef, Renderer } from 'angular2/angular2';
-import { IonicConfig } from '../../config/config';
-/**
- * TODO
- */
+import { Config } from '../../config/config';
 export let Icon = class {
-    /**
-     * TODO
-     * @param {ElementRef} elementRef  TODO
-     * @param {IonicConfig} config  TODO
-     * @param {Renderer} renderer  TODO
-     */
     constructor(elementRef, config, renderer) {
         this.elementRef = elementRef;
         this.renderer = renderer;
         this.eleRef = elementRef;
         this.config = config;
-        this.mode = config.setting('iconMode');
+        this.mode = config.get('iconMode');
     }
-    /**
-     * TODO
-     */
     onInit() {
         let ele = this.eleRef.nativeElement;
         if (this.mode == 'ios' && this.ios) {
@@ -82,24 +70,23 @@ export let Icon = class {
             }
             this._name = this.name;
             this.renderer.setElementClass(this.elementRef, this.name, true);
-            this.label = this.name.replace('ion-', '').replace('ios-', '').replace('md-', '').replace('-', ' ');
+            this.renderer.setElementAttribute(this.elementRef, 'aria-label', this.name.replace('ion-', '').replace('ios-', '').replace('md-', '').replace('-', ' '));
         }
     }
 };
 Icon = __decorate([
     Directive({
         selector: 'icon',
-        properties: [
+        inputs: [
             'name',
             'ios',
             'md',
             'isActive'
         ],
         host: {
-            '[attr.aria-label]': 'label',
             'role': 'img'
         }
     }), 
-    __metadata('design:paramtypes', [(typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a) || Object, (typeof (_b = typeof IonicConfig !== 'undefined' && IonicConfig) === 'function' && _b) || Object, (typeof (_c = typeof Renderer !== 'undefined' && Renderer) === 'function' && _c) || Object])
+    __metadata('design:paramtypes', [(typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a) || Object, (typeof (_b = typeof Config !== 'undefined' && Config) === 'function' && _b) || Object, (typeof (_c = typeof Renderer !== 'undefined' && Renderer) === 'function' && _c) || Object])
 ], Icon);
 var _a, _b, _c;

@@ -1,6 +1,14 @@
 System.register("ionic/platform/camera-roll/camera-roll", ["../plugin"], function (_export) {
     /**
-     * Save and load photos from the Camera Roll
+     * Save and load photos from the Camera Roll (currently iOS only).
+     *
+     * Requires the Cordiva plugin `cordova-plugin-camera-roll`
+     *
+     * @usage
+     * ```js
+     * CameraRoll.save(base64EncodedImage).then(() => {
+     *   // success
+     * }, (err) => {})
      */
     "use strict";
 
@@ -24,7 +32,7 @@ System.register("ionic/platform/camera-roll/camera-roll", ["../plugin"], functio
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -47,6 +55,9 @@ System.register("ionic/platform/camera-roll/camera-roll", ["../plugin"], functio
 
                     /**
                      * Save the base64 encoded image to the camera roll.
+                     *
+                     * @param base64String {String} base-64 encoded image
+                     * @return {Promise}
                      */
                     value: function save(base64String) {
                         var _this = this;
@@ -63,7 +74,7 @@ System.register("ionic/platform/camera-roll/camera-roll", ["../plugin"], functio
                     }
 
                     /**
-                     * Get photos from the camera roll
+                     * Get photos from the camera roll.
                      */
                 }, {
                     key: "getPhotos",
@@ -72,7 +83,9 @@ System.register("ionic/platform/camera-roll/camera-roll", ["../plugin"], functio
 
                         return new Promise(function (resolve, reject) {
                             _this2.ifPlugin(function () {
-                                window.CameraRoll.saveToCameraRoll(base64String);
+                                window.CameraRoll.getPhotos(function (photos) {
+                                    resolve(photos);
+                                });
                             });
                         });
                     }

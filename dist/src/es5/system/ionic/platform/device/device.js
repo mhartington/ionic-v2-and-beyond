@@ -1,4 +1,13 @@
 System.register("ionic/platform/device/device", ["../plugin"], function (_export) {
+    /**
+     * Access information about the underlying device and platform.
+     *
+     * @usage
+     * ```js
+     * let info = Device.getDevice();
+     * // Device sits below
+     * ```
+     */
     "use strict";
 
     var NativePlugin, __decorate, __metadata, _Device;
@@ -21,7 +30,7 @@ System.register("ionic/platform/device/device", ["../plugin"], function (_export
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {

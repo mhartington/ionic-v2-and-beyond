@@ -1,10 +1,18 @@
 System.register('ionic/platform/platform', ['../util/util', '../util/dom'], function (_export) {
     /**
+    +* @ngdoc service
+    +* @name platform
+    +* @module ionic
+    +* @description
+    +* Platform returns the availble information about your current platform
+    +*/
+
+    /**
      * TODO
      */
     'use strict';
 
-    var util, dom, IonicPlatform, PlatformNode, platformRegistry, platformDefault;
+    var util, dom, Platform, PlatformNode, platformRegistry, platformDefault;
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -31,14 +39,15 @@ System.register('ionic/platform/platform', ['../util/util', '../util/dom'], func
             dom = _utilDom;
         }],
         execute: function () {
-            IonicPlatform = (function () {
-                function IonicPlatform() {
+            Platform = (function () {
+                function Platform() {
                     var _this = this;
 
-                    _classCallCheck(this, IonicPlatform);
+                    var platforms = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
 
-                    this._settings = {};
-                    this._platforms = [];
+                    _classCallCheck(this, Platform);
+
+                    this._platforms = platforms;
                     this._versions = {};
                     this._onResizes = [];
                     this._readyPromise = new Promise(function (res) {
@@ -49,20 +58,49 @@ System.register('ionic/platform/platform', ['../util/util', '../util/dom'], func
                 // Methods
                 // **********************************************
                 /**
-                 * TODO
-                 * @param {TODO} platformName  TODO
-                 * @returns {TODO} TODO
+                 * @param {string} platformName
+                 * @returns {bool} returns true/false based on platform you place
+                 * @description
+                 * Depending on the platform name, isPlatform will return true or flase
+                 *
+                 * ```
+                 * import {Platform} 'ionic/ionic';
+                 * export MyClass {
+                 *    constructor(platform: Platform){
+                 *      this.platform = platform;
+                 *      if(this.platform.is('ios'){
+                 *        // what ever you need to do for
+                 *        // if the platfomr is ios
+                 *      }
+                 *    }
+                 * }
+                 * ```
                  */
 
-                _createClass(IonicPlatform, [{
+                _createClass(Platform, [{
                     key: 'is',
                     value: function is(platformName) {
                         return this._platforms.indexOf(platformName) > -1;
                     }
 
                     /**
-                     * TODO
-                     * @returns {TODO} TODO
+                     * @returns {array} the array of platforms
+                     * @description
+                     * Depending on what device you are on, `platforms` can return multiple values.
+                     * Each possible value is a hierarchy of platforms. For example, on an iPhone,
+                     * it would return mobile, ios, and iphone.
+                     *
+                     * ```
+                     * import {Platform} 'ionic/ionic';
+                     * export MyClass {
+                     *    constructor(platform: Platform){
+                     *      this.platform = platform;
+                     *      console.log(this.platform.platforms());
+                     *      // This will return an array of all the availble platforms
+                     *      // From if your on mobile, to mobile os, and device name
+                     *    }
+                     * }
+                     * ```
                      */
                 }, {
                     key: 'platforms',
@@ -73,9 +111,27 @@ System.register('ionic/platform/platform', ['../util/util', '../util/dom'], func
                     }
 
                     /**
-                     * TODO
-                     * @param {TODO} platformName  TODO
-                     * @returns {TODO} TODO
+                     * @param {string} optional platformName
+                     * @returns {object} An object with various platform info
+                     * - `{object=} `cordova`
+                     * - `{object=}` `platformOS` {str: "9.1", num: 9.1, major: 9, minor: 1}
+                     * - `{object=} `deviceName` Returns the name of the device
+                     * - `{object=}` `device platform` R
+                     * @description
+                     * Returns an object conta
+                     *
+                     * ```
+                     * import {Platform} 'ionic/ionic';
+                     * export MyClass {
+                     *    constructor(platform: Platform){
+                     *      this.platform = platform;
+                     *      console.log(this.platform.versions());
+                     *      // or pass in a platform name
+                     *      console.log(this.platform.versions('ios'));
+                     *    }
+                     * }
+                     * ```
+                     *
                      */
                 }, {
                     key: 'versions',
@@ -89,8 +145,22 @@ System.register('ionic/platform/platform', ['../util/util', '../util/dom'], func
                     }
 
                     /**
-                     * TODO
-                     * @returns {TODO} TODO
+                     * @returns {promise}
+                     * @description
+                     * Returns a promise when the platform is ready and native functionality can be called
+                     *
+                     * ```
+                     * import {Platform} 'ionic/ionic';
+                     * export MyClass {
+                     *    constructor(platform: Platform){
+                     *      this.platform = platform;
+                     *      this.platform.ready().then(() => {
+                     *        console.log('Platform ready');
+                     *        // The platform is now ready, execute any native code you want
+                     *       });
+                     *    }
+                     * }
+                     * ```
                      */
                 }, {
                     key: 'ready',
@@ -166,7 +236,7 @@ System.register('ionic/platform/platform', ['../util/util', '../util/dom'], func
                         if (arguments.length) {
                             this._ua = val;
                         }
-                        return this._ua;
+                        return this._ua || '';
                     }
                 }, {
                     key: 'navigatorPlatform',
@@ -197,32 +267,6 @@ System.register('ionic/platform/platform', ['../util/util', '../util/dom'], func
                         return !this.isPortrait();
                     }
                 }, {
-                    key: 'isKeyboardOpen',
-                    value: function isKeyboardOpen() {
-                        return dom.hasFocusedTextInput();
-                    }
-                }, {
-                    key: 'onKeyboardClose',
-                    value: function onKeyboardClose(callback) {
-                        var self = this;
-                        var promise = null;
-                        if (!callback) {
-                            // a callback wasn't provided, so let's return a promise instead
-                            promise = new Promise(function (resolve) {
-                                callback = resolve;
-                            });
-                        }
-                        function checkKeyboard() {
-                            if (!self.isKeyboardOpen()) {
-                                callback();
-                            } else {
-                                setTimeout(checkKeyboard, 500);
-                            }
-                        }
-                        setTimeout(checkKeyboard, 100);
-                        return promise;
-                    }
-                }, {
                     key: 'windowResize',
                     value: function windowResize() {
                         var self = this;
@@ -241,7 +285,6 @@ System.register('ionic/platform/platform', ['../util/util', '../util/dom'], func
                 }, {
                     key: 'onResize',
                     value: function onResize(cb) {
-                        // TODO: Make more good
                         this._onResizes.push(cb);
                     }
 
@@ -259,17 +302,9 @@ System.register('ionic/platform/platform', ['../util/util', '../util/dom'], func
                      * @param {TODO} queryValue  TODO
                      * @returns {boolean} TODO
                      */
-                    value: function testQuery(queryValue) {
-                        var val = this.query('ionicplatform');
-                        if (val) {
-                            var valueSplit = val.toLowerCase().split(';');
-                            for (var i = 0; i < valueSplit.length; i++) {
-                                if (valueSplit[i] == queryValue) {
-                                    return true;
-                                }
-                            }
-                        }
-                        return false;
+                    value: function testQuery(queryValue, queryTestValue) {
+                        var valueSplit = queryValue.toLowerCase().split(';');
+                        return valueSplit.indexOf(queryTestValue) > -1;
                     }
 
                     /**
@@ -281,7 +316,7 @@ System.register('ionic/platform/platform', ['../util/util', '../util/dom'], func
                     key: 'testUserAgent',
                     value: function testUserAgent(userAgentExpression) {
                         var rgx = new RegExp(userAgentExpression, 'i');
-                        return rgx.test(this._ua);
+                        return rgx.test(this._ua || '');
                     }
 
                     /**
@@ -292,12 +327,14 @@ System.register('ionic/platform/platform', ['../util/util', '../util/dom'], func
                 }, {
                     key: 'matchUserAgentVersion',
                     value: function matchUserAgentVersion(userAgentExpression) {
-                        var val = this._ua.match(userAgentExpression);
-                        if (val) {
-                            return {
-                                major: val[1],
-                                minor: val[2]
-                            };
+                        if (this._ua && userAgentExpression) {
+                            var val = this._ua.match(userAgentExpression);
+                            if (val) {
+                                return {
+                                    major: val[1],
+                                    minor: val[2]
+                                };
+                            }
                         }
                     }
 
@@ -309,11 +346,15 @@ System.register('ionic/platform/platform', ['../util/util', '../util/dom'], func
                      */
                 }, {
                     key: 'isPlatform',
-                    value: function isPlatform(queryValue, userAgentExpression) {
+                    value: function isPlatform(queryTestValue, userAgentExpression) {
                         if (!userAgentExpression) {
-                            userAgentExpression = queryValue;
+                            userAgentExpression = queryTestValue;
                         }
-                        return this.testQuery(queryValue) || this.testUserAgent(userAgentExpression);
+                        var queryValue = this.query('ionicplatform');
+                        if (queryValue) {
+                            return this.testQuery(queryValue, queryTestValue);
+                        }
+                        return this.testUserAgent(userAgentExpression);
                     }
 
                     /**
@@ -322,11 +363,11 @@ System.register('ionic/platform/platform', ['../util/util', '../util/dom'], func
                      */
                 }, {
                     key: 'load',
-                    value: function load(config) {
+                    value: function load(platformOverride) {
                         var rootPlatformNode = null;
                         var engineNode = null;
                         var self = this;
-                        this.platformOverride = config.setting('platform');
+                        this.platformOverride = platformOverride;
                         // figure out the most specific platform and active engine
                         var tmpPlatform = null;
                         for (var platformName in platformRegistry) {
@@ -384,8 +425,6 @@ System.register('ionic/platform/platform', ['../util/util', '../util/dom'], func
                                 // set the array of active platforms with
                                 // the last one in the array the most important
                                 this._platforms.push(platformNode.name());
-                                // copy default platform settings into this platform settings obj
-                                this._settings[platformNode.name()] = util.extend({}, platformNode.settings());
                                 // get the platforms version if a version parser was provided
                                 this._versions[platformNode.name()] = platformNode.version(this);
                                 // go to the next platform child
@@ -417,14 +456,6 @@ System.register('ionic/platform/platform', ['../util/util', '../util/dom'], func
                         }
                         return rootNode;
                     }
-                }, {
-                    key: 'settings',
-                    value: function settings(val) {
-                        if (arguments.length) {
-                            this._settings = val;
-                        }
-                        return this._settings;
-                    }
                 }], [{
                     key: 'register',
                     value: function register(platformConfig) {
@@ -453,16 +484,16 @@ System.register('ionic/platform/platform', ['../util/util', '../util/dom'], func
                     }
                 }]);
 
-                return IonicPlatform;
+                return Platform;
             })();
 
-            _export('IonicPlatform', IonicPlatform);
+            _export('Platform', Platform);
 
             PlatformNode = (function () {
                 function PlatformNode(platformName) {
                     _classCallCheck(this, PlatformNode);
 
-                    this.c = IonicPlatform.get(platformName);
+                    this.c = Platform.get(platformName);
                     this.isEngine = this.c.isEngine;
                 }
 
@@ -505,16 +536,12 @@ System.register('ionic/platform/platform', ['../util/util', '../util/dom'], func
                 }, {
                     key: 'isMatch',
                     value: function isMatch(p) {
-                        if (typeof this.c.isMatched !== 'boolean') {
-                            if (p.platformOverride && !this.isEngine) {
-                                this.c.isMatched = p.platformOverride === this.c.name;
-                            } else if (!this.c.isMatch) {
-                                this.c.isMatched = false;
-                            } else {
-                                this.c.isMatched = this.c.isMatch(p);
-                            }
+                        if (p.platformOverride && !this.isEngine) {
+                            return p.platformOverride === this.c.name;
+                        } else if (!this.c.isMatch) {
+                            return false;
                         }
-                        return this.c.isMatched;
+                        return this.c.isMatch(p);
                     }
                 }, {
                     key: 'version',
@@ -557,7 +584,7 @@ System.register('ionic/platform/platform', ['../util/util', '../util/dom'], func
                 }, {
                     key: 'getSubsetParents',
                     value: function getSubsetParents(subsetPlatformName) {
-                        var platformRegistry = IonicPlatform.registry();
+                        var platformRegistry = Platform.registry();
                         var parentPlatformNames = [];
                         var platform = null;
                         for (var platformName in platformRegistry) {

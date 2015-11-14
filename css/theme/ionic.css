@@ -1,8 +1,8 @@
 @import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic);
 @font-face {
   font-family: 'League Gothic';
-  src: url('../../lib/font/league_gothic-webfont.eot');
-  src: url('../../lib/font/league_gothic-webfont.eot?#iefix') format('embedded-opentype'), url('../../lib/font/league_gothic-webfont.woff') format('woff'), url('../../lib/font/league_gothic-webfont.ttf') format('truetype'), url('../../lib/font/league_gothic-webfont.svg#LeagueGothicRegular') format('svg');
+  src: url("../../lib/font/league_gothic-webfont.eot");
+  src: url("../../lib/font/league_gothic-webfont.eot?#iefix") format("embedded-opentype"), url("../../lib/font/league_gothic-webfont.woff") format("woff"), url("../../lib/font/league_gothic-webfont.ttf") format("truetype"), url("../../lib/font/league_gothic-webfont.svg#LeagueGothicRegular") format("svg");
   font-weight: normal;
   font-style: normal; }
 
@@ -20,7 +20,7 @@ body {
   background-color: #313744; }
 
 .reveal {
-  font-family: 'Avenir Next', san-serif;
+  font-family: "Avenir Next", san-serif;
   font-size: 32px;
   font-weight: normal;
   color: #fff; }
@@ -30,17 +30,23 @@ body {
   background: white;
   text-shadow: none; }
 
-.reveal .slides > section, .reveal .slides > section > section {
+.reveal .slides > section,
+.reveal .slides > section > section {
   line-height: 1.3;
   font-weight: inherit; }
 
 /*********************************************
  * HEADERS
  *********************************************/
-.reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 {
   margin: 0 0 20px 0;
   color: #fff;
-  font-family: 'Avenir Next', san-serif;
+  font-family: "Avenir Next", san-serif;
   font-weight: 400;
   line-height: 1.2;
   letter-spacing: 1px;
@@ -71,17 +77,22 @@ body {
   line-height: 1.3; }
 
 /* Ensure certain elements are never larger than the slide itself */
-.reveal img, .reveal video, .reveal iframe {
+.reveal img,
+.reveal video,
+.reveal iframe {
   max-width: 95%;
   max-height: 95%; }
 
-.reveal strong, .reveal b {
+.reveal strong,
+.reveal b {
   font-weight: bold; }
 
 .reveal em {
   font-style: italic; }
 
-.reveal ol, .reveal dl, .reveal ul {
+.reveal ol,
+.reveal dl,
+.reveal ul {
   display: inline-block;
   text-align: left;
   margin: 0 0 0 1em; }
@@ -98,7 +109,10 @@ body {
 .reveal ul ul ul {
   list-style-type: circle; }
 
-.reveal ul ul, .reveal ul ol, .reveal ol ol, .reveal ol ul {
+.reveal ul ul,
+.reveal ul ol,
+.reveal ol ol,
+.reveal ol ul {
   display: block;
   margin-left: 40px; }
 
@@ -108,7 +122,8 @@ body {
 .reveal dd {
   margin-left: 40px; }
 
-.reveal q, .reveal blockquote {
+.reveal q,
+.reveal blockquote {
   quotes: none; }
 
 .reveal blockquote {
@@ -121,7 +136,8 @@ body {
   background: rgba(255, 255, 255, 0.05);
   box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.2); }
 
-.reveal blockquote p:first-child, .reveal blockquote p:last-child {
+.reveal blockquote p:first-child,
+.reveal blockquote p:last-child {
   display: inline-block; }
 
 .reveal q {
@@ -159,15 +175,18 @@ body {
 .reveal table th {
   font-weight: bold; }
 
-.reveal table th, .reveal table td {
+.reveal table th,
+.reveal table td {
   text-align: left;
   padding: 0.2em 0.5em 0.2em 0.5em;
   border-bottom: 1px solid; }
 
-.reveal table th[align="center"], .reveal table td[align="center"] {
+.reveal table th[align="center"],
+.reveal table td[align="center"] {
   text-align: center; }
 
-.reveal table th[align="right"], .reveal table td[align="right"] {
+.reveal table th[align="right"],
+.reveal table td[align="right"] {
   text-align: right; }
 
 .reveal table tr:last-child td {
@@ -229,16 +248,20 @@ body {
 /*********************************************
  * NAVIGATION CONTROLS
  *********************************************/
-.reveal .controls div.navigate-left, .reveal .controls div.navigate-left.enabled {
+.reveal .controls div.navigate-left,
+.reveal .controls div.navigate-left.enabled {
   border-right-color: white; }
 
-.reveal .controls div.navigate-right, .reveal .controls div.navigate-right.enabled {
+.reveal .controls div.navigate-right,
+.reveal .controls div.navigate-right.enabled {
   border-left-color: white; }
 
-.reveal .controls div.navigate-up, .reveal .controls div.navigate-up.enabled {
+.reveal .controls div.navigate-up,
+.reveal .controls div.navigate-up.enabled {
   border-bottom-color: white; }
 
-.reveal .controls div.navigate-down, .reveal .controls div.navigate-down.enabled {
+.reveal .controls div.navigate-down,
+.reveal .controls div.navigate-down.enabled {
   border-top-color: white; }
 
 .reveal .controls div.navigate-left.enabled:hover {
@@ -324,7 +347,8 @@ body {
     .reveal .stack li {
       margin: 8px;
       padding: 5px 6px 7px 12px; }
-  .reveal .ionic-blue, .reveal .ionic-blue * {
+  .reveal .ionic-blue,
+  .reveal .ionic-blue * {
     text-shadow: none;
     color: #313744; }
   .reveal .col {
@@ -338,7 +362,7 @@ body {
   .reveal .col.code > * {
     margin-left: 40px; }
   .reveal .demo-frame {
-    background: url('../img/demo-bg.png') no-repeat;
+    background: url("../img/demo-bg.png") no-repeat;
     background-size: 340px;
     height: 700px;
     margin-top: 0;
@@ -396,12 +420,6 @@ body {
       font-weight: bold; }
   .reveal .demo {
     margin-left: 15px; }
-    .reveal .demo iframe {
-      width: 328px;
-      height: 568px;
-      border: none;
-      border: 4px solid #555;
-      background: white; }
   .reveal .button {
     background-color: white;
     border: none; }
@@ -412,3 +430,55 @@ body {
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex; }
+  .reveal [flex] {
+    display: flex; }
+  .reveal [col] {
+    flex: 1;
+    text-align: left;
+    padding-right: 40px; }
+  .reveal [center] {
+    display: flex;
+    align-items: center;
+    justify-content: center; }
+  .reveal [col][center] img {
+    max-height: 420px; }
+  .reveal pre[col],
+  .reveal pre code {
+    background-color: #22272f;
+    font-size: 20px;
+    line-height: 26px; }
+  .reveal pre[col] {
+    margin: 0;
+    padding: 30px; }
+  .reveal [col][demo] {
+    align-items: center;
+    display: flex;
+    flex-direction: column; }
+  .reveal .demo-ios {
+    position: relative;
+    background: url("../../img/devices-sprite-transparent.png") no-repeat;
+    background-size: 455px 1559px;
+    width: 460px;
+    height: 740px; }
+    .reveal .demo-ios iframe {
+      position: absolute;
+      top: 75px;
+      left: 69px;
+      width: 320px;
+      height: 560px; }
+  .reveal .demo-md {
+    position: relative;
+    background: url("../../img/devices-sprite-transparent.png") no-repeat 0px -775px;
+    background-size: 455px 1559px;
+    width: 460px;
+    height: 780px; }
+    .reveal .demo-md iframe {
+      position: absolute;
+      top: 67px;
+      left: 52px;
+      width: 350px;
+      height: 572px; }
+  .reveal iframe {
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden; }

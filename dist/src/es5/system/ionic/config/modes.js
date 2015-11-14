@@ -2,13 +2,13 @@ System.register('ionic/config/modes', ['./config'], function (_export) {
     // iOS Mode Settings
     'use strict';
 
-    var IonicConfig;
+    var Config;
     return {
         setters: [function (_config) {
-            IonicConfig = _config.IonicConfig;
+            Config = _config.Config;
         }],
         execute: function () {
-            IonicConfig.modeConfig('ios', {
+            Config.setModeConfig('ios', {
                 actionSheetEnter: 'action-sheet-slide-in',
                 actionSheetLeave: 'action-sheet-slide-out',
                 actionSheetCancelIcon: '',
@@ -16,11 +16,15 @@ System.register('ionic/config/modes', ['./config'], function (_export) {
                 backButtonText: 'Back',
                 backButtonIcon: 'ion-ios-arrow-back',
                 iconMode: 'ios',
-                tabBarPlacement: 'bottom',
-                viewTransition: 'ios'
+                modalEnter: 'modal-slide-in',
+                modalLeave: 'modal-slide-out',
+                tabbarPlacement: 'bottom',
+                viewTransition: 'ios',
+                popupPopIn: 'popup-pop-in',
+                popupPopOut: 'popup-pop-out'
             });
             // Material Design Mode Settings
-            IonicConfig.modeConfig('md', {
+            Config.setModeConfig('md', {
                 actionSheetEnter: 'action-sheet-md-slide-in',
                 actionSheetLeave: 'action-sheet-md-slide-out',
                 actionSheetCancelIcon: 'ion-md-close',
@@ -28,8 +32,13 @@ System.register('ionic/config/modes', ['./config'], function (_export) {
                 backButtonText: '',
                 backButtonIcon: 'ion-md-arrow-back',
                 iconMode: 'md',
-                tabBarPlacement: 'top',
+                modalEnter: 'modal-md-slide-in',
+                modalLeave: 'modal-md-slide-out',
+                tabbarPlacement: 'top',
                 viewTransition: 'md',
+                popupPopIn: 'popup-md-pop-in',
+                popupPopOut: 'popup-md-pop-out',
+                tabSubPages: true,
                 type: 'overlay',
                 mdRipple: true
             });

@@ -1,67 +1,52 @@
 import { Transition } from './transition';
 import { Animation } from '../animations/animation';
-const DURATION = 300;
-const EASING = 'cubic-bezier(0.36,0.66,0.04,1)';
 const TRANSLATEY = 'translateY';
 const OFF_BOTTOM = '40px';
 const CENTER = '0px';
-class MaterialTransition extends Transition {
-    constructor(nav, opts) {
-        super(nav, opts);
-        // global duration and easing for all child animations
-        this.duration(DURATION);
-        this.easing(EASING);
-        // entering item moves in bottom to center
-        this.enteringView
-            .to(TRANSLATEY, CENTER)
-            .before.setStyles({ zIndex: this.entering.index });
-        // entering item moves in bottom to center
-        this.enteringNavbar
-            .to(TRANSLATEY, CENTER)
-            .before.setStyles({ zIndex: this.entering.index + 10 });
-        // leaving view stays put
-        this.leavingView
-            .before.setStyles({ zIndex: this.leaving.index });
-        this.leavingNavbar
-            .before.setStyles({ zIndex: this.leaving.index + 10 });
-        // set properties depending on direction
-        if (opts.direction === 'back') {
-            // back direction
-            this.enteringView
-                .from(TRANSLATEY, CENTER);
-            this.enteringNavbar
-                .from(TRANSLATEY, CENTER);
-            // leaving view goes center to bottom
-            this.leavingView
-                .fromTo(TRANSLATEY, CENTER, OFF_BOTTOM)
-                .fadeOut();
-            this.leavingNavbar
-                .fromTo(TRANSLATEY, CENTER, OFF_BOTTOM)
-                .fadeOut();
+const SHOW_BACK_BTN_CSS = 'show-back-button';
+class MDTransition extends Animation {
+    constructor(navCtrl, opts) {
+        //opts.renderDelay = 80;
+        super(null, opts);
+        // what direction is the transition going
+        let backDirection = (opts.direction === 'back');
+        // get entering/leaving views
+        let enteringView = navCtrl.getStagedEnteringView();
+        let leavingView = navCtrl.getStagedLeavingView();
+        // do they have navbars?
+        let enteringHasNavbar = enteringView.hasNavbar();
+        let leavingHasNavbar = leavingView && leavingView.hasNavbar();
+        // entering content item moves in bottom to center
+        let enteringPage = new Animation(enteringView.pageRef());
+        enteringPage.before.addClass('show-page');
+        this.add(enteringPage);
+        if (backDirection) {
+            this.duration(200).easing('cubic-bezier(0.47,0,0.745,0.715)');
+            enteringPage.fromTo(TRANSLATEY, CENTER, CENTER);
         }
         else {
-            // forward direction
-            this.enteringView
-                .from(TRANSLATEY, OFF_BOTTOM)
-                .fadeIn();
-            this.enteringNavbar
-                .from(TRANSLATEY, OFF_BOTTOM)
+            this.duration(280).easing('cubic-bezier(0.36,0.66,0.04,1)');
+            enteringPage
+                .fromTo(TRANSLATEY, OFF_BOTTOM, CENTER)
                 .fadeIn();
         }
-        let itemLength = nav.length();
-        if (nav.tabs && (itemLength === 1 || itemLength === 2)) {
-            let tabBarEle = nav.tabs.elementRef.nativeElement.querySelector('.tab-bar-container');
-            let tabBar = new Animation(tabBarEle);
-            if (itemLength === 1 && opts.direction == 'back') {
-                tabBar.fromTo('height', '0px', '69px');
-                tabBar.fadeIn();
+        if (enteringHasNavbar) {
+            let enteringBackButton = new Animation(enteringView.backBtnRef());
+            this.add(enteringBackButton);
+            if (enteringView.enableBack()) {
+                enteringBackButton.before.addClass(SHOW_BACK_BTN_CSS);
             }
-            else if (itemLength === 2 && opts.direction == 'forward') {
-                tabBar.fromTo('height', '69px', '0px');
-                tabBar.fadeOut();
+            else {
+                enteringBackButton.before.removeClass(SHOW_BACK_BTN_CSS);
             }
-            this.add(tabBar);
+        }
+        // setup leaving view
+        if (leavingView && backDirection) {
+            // leaving content
+            this.duration(200).easing('cubic-bezier(0.47,0,0.745,0.715)');
+            let leavingPage = new Animation(leavingView.pageRef());
+            this.add(leavingPage.fromTo(TRANSLATEY, CENTER, OFF_BOTTOM).fadeOut());
         }
     }
 }
-Transition.register('md', MaterialTransition);
+Transition.register('md', MDTransition);

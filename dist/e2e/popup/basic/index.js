@@ -22,7 +22,7 @@ System.register("index", ["ionic/ionic"], function (_export) {
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -53,7 +53,11 @@ System.register("index", ["ionic/ionic"], function (_export) {
                         var _this = this;
 
                         this.alertOpen = true;
-                        this.popup.alert('Alert').then(function () {
+                        this.popup.alert({
+                            title: "New Friend!",
+                            template: "Your friend, Obi wan Kenobi, just accepted your friend request!",
+                            cssClass: 'my-alert'
+                        }).then(function () {
                             _this.alertOpen = false;
                         });
                     }
@@ -63,7 +67,12 @@ System.register("index", ["ionic/ionic"], function (_export) {
                         var _this2 = this;
 
                         this.promptOpen = true;
-                        this.popup.prompt('What is your name?').then(function (name) {
+                        this.popup.prompt({
+                            title: "New Album",
+                            template: "Enter a name for this new album you're so keen on adding",
+                            inputPlaceholder: "Title",
+                            okText: "Save"
+                        }).then(function (name) {
                             _this2.promptResult = name;
                             _this2.promptOpen = false;
                         }, function () {
@@ -77,7 +86,13 @@ System.register("index", ["ionic/ionic"], function (_export) {
                         var _this3 = this;
 
                         this.confirmOpen = true;
-                        this.popup.confirm('Are you sure?').then(function (result, ev) {
+                        this.popup.confirm({
+                            title: "Use this lightsaber?",
+                            subTitle: "You can't exchange lightsabers",
+                            template: "Do you agree to use this lightsaber to do good across the intergalactic galaxy?",
+                            cancelText: "Disagree",
+                            okText: "Agree"
+                        }).then(function (result, ev) {
                             console.log('CONFIRMED', result);
                             _this3.confirmResult = result;
                             _this3.confirmOpen = false;

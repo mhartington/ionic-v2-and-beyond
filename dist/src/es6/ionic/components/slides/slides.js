@@ -12,12 +12,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { View, ElementRef, Host, NgIf, NgClass } from 'angular2/angular2';
+import { Directive, Component, ElementRef, Host, NgClass } from 'angular2/angular2';
 import { Ion } from '../ion';
 import { Animation } from 'ionic/animations/animation';
 import { Gesture } from 'ionic/gestures/gesture';
-import { IonicComponent, IonicDirective } from '../../config/decorators';
-import { IonicConfig } from '../../config/config';
+import { Config } from '../../config/config';
 import { dom } from 'ionic/util';
 import { CSS } from '../../util/dom';
 import * as util from 'ionic/util';
@@ -358,9 +357,9 @@ export let Slides = class extends Ion {
     }
 };
 Slides = __decorate([
-    IonicComponent({
+    Component({
         selector: 'ion-slides',
-        properties: [
+        inputs: [
             'loop',
             'index',
             'bounce',
@@ -369,18 +368,16 @@ Slides = __decorate([
             'zoom',
             'zoomDuration',
             'zoomMax'
-        ]
-    }),
-    View({
-        template: `<div class="swiper-container">
-    <div class="swiper-wrapper">
-      <ng-content></ng-content>
-    </div>
-    <div [class.hide]="!showPager" class="swiper-pagination"></div>
-  </div>`,
-        directives: [NgIf, NgClass]
+        ],
+        template: '<div class="swiper-container">' +
+            '<div class="swiper-wrapper">' +
+            '<ng-content></ng-content>' +
+            '</div>' +
+            '<div [class.hide]="!showPager" class="swiper-pagination"></div>' +
+            '</div>',
+        directives: [NgClass]
     }), 
-    __metadata('design:paramtypes', [(typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a) || Object, (typeof (_b = typeof IonicConfig !== 'undefined' && IonicConfig) === 'function' && _b) || Object])
+    __metadata('design:paramtypes', [(typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a) || Object, (typeof (_b = typeof Config !== 'undefined' && Config) === 'function' && _b) || Object])
 ], Slides);
 /**
  * TODO
@@ -398,12 +395,10 @@ export let Slide = class {
     }
 };
 Slide = __decorate([
-    IonicComponent({
+    Component({
         selector: 'ion-slide',
-        properties: ['zoom']
-    }),
-    View({
-        template: `<div class="slide-zoom"><ng-content></ng-content></div>`
+        inputs: ['zoom'],
+        template: '<div class="slide-zoom"><ng-content></ng-content></div>'
     }),
     __param(1, Host()), 
     __metadata('design:paramtypes', [(typeof (_c = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _c) || Object, Slides])
@@ -414,7 +409,7 @@ export let SlideLazy = class {
     }
 };
 SlideLazy = __decorate([
-    IonicDirective({
+    Directive({
         selector: 'slide-lazy',
     }), 
     __metadata('design:paramtypes', [(typeof (_d = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _d) || Object])

@@ -77,8 +77,7 @@ export let NavRouter = class extends RouterOutlet {
             let componentInstruction = pathRecognizer.generate(viewCtrl.params.data);
             // create an Instruction from the componentInstruction
             let instruction = new Instruction(componentInstruction, null);
-            // update the browser's URL
-            this._parentRouter.navigateInstruction(instruction);
+            this._parentRouter.navigateByInstruction(instruction);
         }
     }
     /**

@@ -12,11 +12,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { Directive, ElementRef, Host, Optional, NgControl, Inject, forwardRef } from 'angular2/angular2';
-import { Ion } from '../ion';
-import { IonInput } from '../form/input';
-import { IonicConfig } from '../../config/config';
-import { IonicComponent, IonicView } from '../../config/decorators';
+import { Component, Directive, ElementRef, Renderer, Host, Optional, NgControl, Inject, forwardRef } from 'angular2/angular2';
+import { Form } from '../../util/form';
+import { Config } from '../../config/config';
 import { pointerCoord } from '../../util/dom';
 /**
  * @name mediaSwitch
@@ -27,7 +25,7 @@ let MediaSwitch = class {
      * TODO
      * @param {Switch} swtch  TODO
      * @param {} elementRef  TODO
-     * @param {IonicConfig} config  TODO
+     * @param {Config} config  TODO
      */
     constructor(swtch, elementRef) {
         swtch.switchEle = elementRef.nativeElement;
@@ -36,11 +34,8 @@ let MediaSwitch = class {
 };
 MediaSwitch = __decorate([
     Directive({
-        selector: '.media-switch',
+        selector: 'media-switch',
         host: {
-            'tappable': 'true',
-            '(touchstart)': 'swtch.pointerDown($event)',
-            '(mousedown)': 'swtch.pointerDown($event)',
             '[class.switch-activated]': 'swtch.isActivated'
         }
     }),
@@ -49,8 +44,6 @@ MediaSwitch = __decorate([
     __metadata('design:paramtypes', [Switch, (typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a) || Object])
 ], MediaSwitch);
 /**
- * @name ionSwitch
- * @description
  * A switch technically is the same thing as an HTML checkbox input, except it looks different and is easier to use on a touch device. Ionic prefers to wrap the checkbox input with the <label> in order to make the entire toggle easy to tap or drag.
  *
  * Toggles can also have colors assigned to them, by adding the `toggle-assertive` attribute to assign the assertive color.
@@ -83,34 +76,35 @@ MediaSwitch = __decorate([
  * ```
  *
  */
-export let Switch = class extends Ion {
+export let Switch = class {
     /**
      * TODO
      * @param {ElementRef} elementRef  TODO
-     * @param {IonicConfig} config  TODO
+     * @param {Config} config  TODO
      * @param {NgControl=} ngControl  TODO
      */
-    constructor(elementRef, config, ngControl) {
-        super(elementRef, config);
+    constructor(form, elementRef, config, renderer, ngControl) {
         this.ngControl = ngControl;
-        let self = this;
-        self.id = IonInput.nextId();
-        self.tabIndex = 0;
-        self.lastTouch = 0;
-        self.onChange = (_) => { };
-        self.onTouched = (_) => { };
+        this.form = form;
+        form.register(this);
+        renderer.setElementClass(elementRef, 'item', true);
+        this.lastTouch = 0;
+        this.mode = config.get('mode');
+        this.onChange = (_) => { };
+        this.onTouched = (_) => { };
         if (ngControl)
             ngControl.valueAccessor = this;
+        let self = this;
         function pointerMove(ev) {
             let currentX = pointerCoord(ev).x;
             if (self.checked) {
                 if (currentX + 15 < self.startX) {
-                    self.toggle();
+                    self.toggle(ev);
                     self.startX = currentX;
                 }
             }
             else if (currentX - 15 > self.startX) {
-                self.toggle();
+                self.toggle(ev);
                 self.startX = currentX;
             }
         }
@@ -120,19 +114,18 @@ export let Switch = class extends Ion {
             }
         }
         this.addMoveListener = function () {
-            this.switchEle.addEventListener('touchmove', pointerMove);
-            this.switchEle.addEventListener('mousemove', pointerMove);
+            self.switchEle.addEventListener('touchmove', pointerMove);
+            self.switchEle.addEventListener('mousemove', pointerMove);
             elementRef.nativeElement.addEventListener('mouseout', pointerOut);
         };
         this.removeMoveListener = function () {
-            this.switchEle.removeEventListener('touchmove', pointerMove);
-            this.switchEle.removeEventListener('mousemove', pointerMove);
+            self.switchEle.removeEventListener('touchmove', pointerMove);
+            self.switchEle.removeEventListener('mousemove', pointerMove);
             elementRef.nativeElement.removeEventListener('mouseout', pointerOut);
         };
     }
     onInit() {
-        super.onInit();
-        this.labelId = 'label-' + this.id;
+        this.labelId = 'label-' + this.inputId;
     }
     /**
      * Set checked state of this switch.
@@ -145,13 +138,8 @@ export let Switch = class extends Ion {
     /**
      * Toggle the checked state of this switch.
      */
-    toggle() {
+    toggle(ev) {
         this.check(!this.checked);
-    }
-    click(ev) {
-        ev.preventDefault();
-        ev.stopPropagation();
-        this.toggle();
     }
     writeValue(value) {
         this.checked = value;
@@ -160,26 +148,24 @@ export let Switch = class extends Ion {
         if (/touch/.test(ev.type)) {
             this.lastTouch = Date.now();
         }
-        if (this.lastTouch + 999 > Date.now() && /mouse/.test(ev.type)) {
+        if (this.isDisabled(ev))
             return;
-        }
         this.startX = pointerCoord(ev).x;
         this.removeMoveListener();
         this.addMoveListener();
         this.isActivated = true;
     }
     pointerUp(ev) {
-        if (this.lastTouch + 999 > Date.now() && /mouse/.test(ev.type)) {
+        if (this.isDisabled(ev))
             return;
-        }
         let endX = pointerCoord(ev).x;
         if (this.checked) {
             if (this.startX + 4 > endX) {
-                this.toggle();
+                this.toggle(ev);
             }
         }
         else if (this.startX - 4 < endX) {
-            this.toggle();
+            this.toggle(ev);
         }
         this.removeMoveListener();
         this.isActivated = false;
@@ -191,39 +177,43 @@ export let Switch = class extends Ion {
     onDestroy() {
         this.removeMoveListener();
         this.switchEle = this.addMoveListener = this.removeMoveListener = null;
+        this.form.deregister(this);
+    }
+    isDisabled(ev) {
+        return (this.lastTouch + 999 > Date.now() && /mouse/.test(ev.type)) || (this.mode == 'ios' && ev.target.tagName == 'ION-SWITCH');
     }
 };
 Switch = __decorate([
-    IonicComponent({
+    Component({
         selector: 'ion-switch',
-        properties: [
+        inputs: [
             'value',
             'checked',
             'disabled',
             'id'
         ],
         host: {
-            'class': 'item',
             'role': 'checkbox',
+            'tappable': 'true',
             '[attr.tab-index]': 'tabIndex',
             '[attr.aria-checked]': 'checked',
             '[attr.aria-disabled]': 'disabled',
             '[attr.aria-labelledby]': 'labelId',
+            '(touchstart)': 'pointerDown($event)',
+            '(mousedown)': 'pointerDown($event)',
             '(touchend)': 'pointerUp($event)',
-            '(mouseup)': 'pointerUp($event)',
-        }
-    }),
-    IonicView({
+            '(mouseup)': 'pointerUp($event)'
+        },
         template: '<ng-content select="[item-left]"></ng-content>' +
             '<ion-item-content id="{{labelId}}">' +
             '<ng-content></ng-content>' +
             '</ion-item-content>' +
-            '<div item-right class="media-switch">' +
-            '<div class="switch-icon"></div>' +
-            '</div>',
+            '<media-switch disable-activated>' +
+            '<switch-icon></switch-icon>' +
+            '</media-switch>',
         directives: [MediaSwitch]
     }),
-    __param(2, Optional()), 
-    __metadata('design:paramtypes', [(typeof (_b = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _b) || Object, (typeof (_c = typeof IonicConfig !== 'undefined' && IonicConfig) === 'function' && _c) || Object, (typeof (_d = typeof NgControl !== 'undefined' && NgControl) === 'function' && _d) || Object])
+    __param(4, Optional()), 
+    __metadata('design:paramtypes', [(typeof (_b = typeof Form !== 'undefined' && Form) === 'function' && _b) || Object, (typeof (_c = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _c) || Object, (typeof (_d = typeof Config !== 'undefined' && Config) === 'function' && _d) || Object, (typeof (_e = typeof Renderer !== 'undefined' && Renderer) === 'function' && _e) || Object, (typeof (_f = typeof NgControl !== 'undefined' && NgControl) === 'function' && _f) || Object])
 ], Switch);
-var _a, _b, _c, _d;
+var _a, _b, _c, _d, _e, _f;

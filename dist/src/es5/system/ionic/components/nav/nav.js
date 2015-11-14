@@ -1,14 +1,101 @@
-System.register("ionic/components/nav/nav", ["angular2/angular2", "../../config/decorators", "./nav-controller"], function (_export) {
+System.register("ionic/components/nav/nav", ["angular2/angular2", "../app/app", "../../config/config", "../../config/decorators", "./nav-controller", "./view-controller"], function (_export) {
     /**
-     * TODO
+     * _For a quick walkthrough of navigation in Ionic, check out the
+     * [Navigation section](../../../../components/#navigation) of the Component
+     * docs._
+     *
+     * Nav is a basic navigation controller component.  As a subclass of NavController
+     * you use it to navigate to pages in your app and manipulate the navigation stack.
+     * Nav automatically animates transitions between pages for you.
+     *
+     * For more information on using navigation controllers like Nav or [Tab](../../Tabs/Tab/),
+     * take a look at the [NavController API reference](../NavController/).
+     *
+     * You must set a root page (where page is any [@Page](../../config/Page/)
+     * component) to be loaded initially by any Nav you create, using
+     * the 'root' property:
+     *
+     * ```ts
+     * import {GettingStartedPage} from 'getting-started';
+     * @App({
+     *   template: `<ion-nav [root]="rootPage"></ion-nav>`
+     * })
+     * class MyApp {
+     *   constructor(){
+     *     this.rootPage = GettingStartedPage;
+     *   }
+     * }
+     * ```
+     *
+     * <h2 id="back_navigation">Back navigation</h2>
+     * If a [page](../NavController/#creating_pages) you navigate to has a [NavBar](../NavBar/),
+     * Nav will automatically add a back button to it if there is a page
+     * before the one you are navigating to in the navigation stack.
+     *
+     * Additionally, specifying the `swipe-back-enabled` property will allow you to
+     * swipe to go back:
+     * ```ts
+     * <ion-nav swipe-back-enabled="false" [root]="rootPage"></ion-nav>
+     * ```
+     *
+     * Here is a diagram of how Nav animates smoothly between pages:
+     *
+     * <div class="highlight less-margin">
+     *   <pre>
+     *                           +-------+
+     *                           |  App  |
+     *                           +---+---+
+     *                           &lt;ion-app&gt;
+     *                               |
+     *                  +------------+-------------+
+     *                  |   Ionic Nav Controller   |
+     *                  +------------+-------------+
+     *                           &lt;ion-nav&gt;
+     *                               |
+     *                               |
+     *             Page 3  +--------------------+                     LoginPage
+     *           Page 2  +--------------------+ |
+     *         Page 1  +--------------------+ | |              +--------------------+
+     *                 | | Header           |&lt;-----------------|       Login        |
+     *                 +--------------------+ | |              +--------------------+
+     *                 | | |                | | |              | Username:          |
+     *                 | | |                | | |              | Password:          |
+     *                 | | |  Page 3 is     | | |              |                    |
+     *                 | | |  only content  | | |              |                    |
+     *                 | | |                |&lt;-----------------|                    |
+     *                 | | |                | | |              |                    |
+     *                 | | |                | | |              |                    |
+     *                 | +------------------|-+ |              |                    |
+     *                 | | Footer           |-|-+              |                    |
+     *                 | +------------------|-+                |                    |
+     *                 +--------------------+                  +--------------------+
+     *
+     *           +--------------------+    +--------------------+    +--------------------+
+     *           | Header             |    | Content            |    | Content            |
+     *           +--------------------+    |                    |    |                    |
+     *           | Content            |    |                    |    |                    |
+     *           |                    |    |                    |    |                    |
+     *           |                    |    |                    |    |                    |
+     *           |                    |    |                    |    |                    |
+     *           |                    |    |                    |    |                    |
+     *           |                    |    |                    |    |                    |
+     *           |                    |    |                    |    |                    |
+     *           |                    |    |                    |    |                    |
+     *           |                    |    +--------------------+    |                    |
+     *           |                    |    | Footer             |    |                    |
+     *           +--------------------+    +--------------------+    +--------------------+
+     *
+     *   </pre>
+     * </div>
+     *
      */
     "use strict";
 
-    var Directive, View, ElementRef, Host, Optional, forwardRef, Injector, NgZone, IonicComponent, NavController, __decorate, __metadata, __param, Nav, NavPaneAnchor, _a, _b, _c, _d, _e;
+    var ElementRef, Optional, NgZone, Compiler, AppViewManager, DynamicComponentLoader, Renderer, IonicApp, Config, ConfigComponent, NavController, ViewController, __decorate, __metadata, __param, Nav, _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -16,18 +103,23 @@ System.register("ionic/components/nav/nav", ["angular2/angular2", "../../config/
 
     return {
         setters: [function (_angular2Angular2) {
-            Directive = _angular2Angular2.Directive;
-            View = _angular2Angular2.View;
             ElementRef = _angular2Angular2.ElementRef;
-            Host = _angular2Angular2.Host;
             Optional = _angular2Angular2.Optional;
-            forwardRef = _angular2Angular2.forwardRef;
-            Injector = _angular2Angular2.Injector;
             NgZone = _angular2Angular2.NgZone;
+            Compiler = _angular2Angular2.Compiler;
+            AppViewManager = _angular2Angular2.AppViewManager;
+            DynamicComponentLoader = _angular2Angular2.DynamicComponentLoader;
+            Renderer = _angular2Angular2.Renderer;
+        }, function (_appApp) {
+            IonicApp = _appApp.IonicApp;
+        }, function (_configConfig) {
+            Config = _configConfig.Config;
         }, function (_configDecorators) {
-            IonicComponent = _configDecorators.IonicComponent;
+            ConfigComponent = _configDecorators.ConfigComponent;
         }, function (_navController) {
             NavController = _navController.NavController;
+        }, function (_viewController) {
+            ViewController = _viewController.ViewController;
         }],
         execute: function () {
             __decorate = undefined && undefined.__decorate || function (decorators, target, key, desc) {
@@ -39,7 +131,7 @@ System.register("ionic/components/nav/nav", ["angular2/angular2", "../../config/
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -61,23 +153,17 @@ System.register("ionic/components/nav/nav", ["angular2/angular2", "../../config/
             Nav = (function (_NavController) {
                 _inherits(Nav, _NavController);
 
-                /**
-                 * TODO
-                 * @param {NavController} hostnavCtrl  TODO
-                 * @param {Injector} injector  TODO
-                 * @param {ElementRef} elementRef  TODO
-                 * @param {NgZone} zone  TODO
-                 */
-
-                function Nav(hostnavCtrl, injector, elementRef, zone) {
+                function Nav(hostNavCtrl, viewCtrl, app, config, elementRef, compiler, loader, viewManager, zone, renderer) {
                     _classCallCheck(this, Nav);
 
-                    _get(Object.getPrototypeOf(Nav.prototype), "constructor", this).call(this, hostnavCtrl, injector, elementRef, zone);
+                    _get(Object.getPrototypeOf(Nav.prototype), "constructor", this).call(this, hostNavCtrl, app, config, elementRef, compiler, loader, viewManager, zone, renderer);
+                    if (viewCtrl) {
+                        // an ion-nav can also act as an ion-page within a parent ion-nav
+                        // this would happen when an ion-nav nests a child ion-nav.
+                        viewCtrl.setContent(this);
+                        viewCtrl.setContentRef(elementRef);
+                    }
                 }
-
-                /**
-                 * TODO
-                 */
 
                 _createClass(Nav, [{
                     key: "onInit",
@@ -90,8 +176,7 @@ System.register("ionic/components/nav/nav", ["angular2/angular2", "../../config/
                             this.push(this.root);
                         }
                         // default the swipe back to be enabled
-                        var isSwipeBackEnabled = (this.swipeBackEnabled || '').toString() !== 'false';
-                        this.isSwipeBackEnabled(isSwipeBackEnabled);
+                        this.isSwipeBackEnabled((this.swipeBackEnabled || '').toString() !== 'false');
                     }
                 }]);
 
@@ -100,26 +185,14 @@ System.register("ionic/components/nav/nav", ["angular2/angular2", "../../config/
 
             _export("Nav", Nav);
 
-            _export("Nav", Nav = __decorate([IonicComponent({
+            _export("Nav", Nav = __decorate([ConfigComponent({
                 selector: 'ion-nav',
-                properties: ['root'],
-                defaultProperties: {
+                inputs: ['root'],
+                defaultInputs: {
                     'swipeBackEnabled': true
-                }
-            }), View({
-                template: '<template pane-anchor></template>',
-                directives: [forwardRef(function () {
-                    return NavPaneAnchor;
-                })]
-            }), __param(0, Optional()), __metadata('design:paramtypes', [typeof (_a = typeof NavController !== 'undefined' && NavController) === 'function' && _a || Object, typeof (_b = typeof Injector !== 'undefined' && Injector) === 'function' && _b || Object, typeof (_c = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _c || Object, typeof (_d = typeof NgZone !== 'undefined' && NgZone) === 'function' && _d || Object])], Nav));
-
-            NavPaneAnchor = function NavPaneAnchor(nav, elementRef) {
-                _classCallCheck(this, NavPaneAnchor);
-
-                nav.anchorElementRef(elementRef);
-            };
-
-            NavPaneAnchor = __decorate([Directive({ selector: 'template[pane-anchor]' }), __param(0, Host()), __metadata('design:paramtypes', [Nav, typeof (_e = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _e || Object])], NavPaneAnchor);
+                },
+                template: '<template #contents></template>'
+            }), __param(0, Optional()), __param(1, Optional()), __metadata('design:paramtypes', [typeof (_a = typeof NavController !== 'undefined' && NavController) === 'function' && _a || Object, typeof (_b = typeof ViewController !== 'undefined' && ViewController) === 'function' && _b || Object, typeof (_c = typeof IonicApp !== 'undefined' && IonicApp) === 'function' && _c || Object, typeof (_d = typeof Config !== 'undefined' && Config) === 'function' && _d || Object, typeof (_e = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _e || Object, typeof (_f = typeof Compiler !== 'undefined' && Compiler) === 'function' && _f || Object, typeof (_g = typeof DynamicComponentLoader !== 'undefined' && DynamicComponentLoader) === 'function' && _g || Object, typeof (_h = typeof AppViewManager !== 'undefined' && AppViewManager) === 'function' && _h || Object, typeof (_j = typeof NgZone !== 'undefined' && NgZone) === 'function' && _j || Object, typeof (_k = typeof Renderer !== 'undefined' && Renderer) === 'function' && _k || Object])], Nav));
         }
     };
 });

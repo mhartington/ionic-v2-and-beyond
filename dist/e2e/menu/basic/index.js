@@ -1,7 +1,7 @@
 System.register("index", ["ionic/ionic"], function (_export) {
     "use strict";
 
-    var App, IonicApp, IonicView, NavController, __decorate, __metadata, Page1, Page3, Page2, E2EApp, _a, _b;
+    var App, IonicApp, Page, NavController, __decorate, __metadata, Page1, Page3, Page2, E2EApp, _a, _b;
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -11,7 +11,7 @@ System.register("index", ["ionic/ionic"], function (_export) {
         setters: [function (_ionicIonic) {
             App = _ionicIonic.App;
             IonicApp = _ionicIonic.IonicApp;
-            IonicView = _ionicIonic.IonicView;
+            Page = _ionicIonic.Page;
             NavController = _ionicIonic.NavController;
         }],
         execute: function () {
@@ -24,7 +24,7 @@ System.register("index", ["ionic/ionic"], function (_export) {
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -41,13 +41,13 @@ System.register("index", ["ionic/ionic"], function (_export) {
                 _classCallCheck(this, Page1);
             };
 
-            Page1 = __decorate([IonicView({ templateUrl: 'page1.html' }), __metadata('design:paramtypes', [])], Page1);
+            Page1 = __decorate([Page({ templateUrl: 'page1.html' }), __metadata('design:paramtypes', [])], Page1);
 
             Page3 = function Page3() {
                 _classCallCheck(this, Page3);
             };
 
-            Page3 = __decorate([IonicView({ templateUrl: 'page3.html' }), __metadata('design:paramtypes', [])], Page3);
+            Page3 = __decorate([Page({ templateUrl: 'page3.html' }), __metadata('design:paramtypes', [])], Page3);
 
             Page2 = (function () {
                 function Page2(nav) {
@@ -66,7 +66,7 @@ System.register("index", ["ionic/ionic"], function (_export) {
                 return Page2;
             })();
 
-            Page2 = __decorate([IonicView({ templateUrl: 'page2.html' }), __metadata('design:paramtypes', [typeof (_a = typeof NavController !== 'undefined' && NavController) === 'function' && _a || Object])], Page2);
+            Page2 = __decorate([Page({ templateUrl: 'page2.html' }), __metadata('design:paramtypes', [typeof (_a = typeof NavController !== 'undefined' && NavController) === 'function' && _a || Object])], Page2);
 
             E2EApp = (function () {
                 function E2EApp(app) {
@@ -80,12 +80,16 @@ System.register("index", ["ionic/ionic"], function (_export) {
                 _createClass(E2EApp, [{
                     key: "openPage",
                     value: function openPage(page) {
-                        // close the menu when clicking a link from the menu
-                        this.app.getComponent('leftMenu').close();
+                        var _this = this;
+
                         // Reset the content nav to have just this page
                         // we wouldn't want the back button to show in this scenario
                         var nav = this.app.getComponent('nav');
-                        nav.setRoot(page.component);
+                        nav.setRoot(page.component).then(function () {
+                            // wait for the root page to be completely loaded
+                            // then close the menu
+                            _this.app.getComponent('leftMenu').close();
+                        });
                     }
                 }]);
 

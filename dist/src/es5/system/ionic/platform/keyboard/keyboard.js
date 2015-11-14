@@ -3,6 +3,14 @@ System.register("ionic/platform/keyboard/keyboard", ["../plugin"], function (_ex
      * Manage the native keyboard. Note: this plugin performs mainly in the native
      * app context. Most operations are non-functional in a normal web browser as
      * keyboard control is limited.
+     *
+     * @usage
+     * ```js
+     * // Hide the accessory bar
+     * Keyboard.setAccessoryBarVisible(false)
+     *
+     * Keyboard.close()
+     * ```
      */
     "use strict";
 
@@ -26,7 +34,7 @@ System.register("ionic/platform/keyboard/keyboard", ["../plugin"], function (_ex
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {

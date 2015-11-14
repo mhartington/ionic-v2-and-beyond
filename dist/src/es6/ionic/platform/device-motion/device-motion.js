@@ -1,3 +1,6 @@
+// TODO: temporary until https://github.com/angular/angular/issues/4390 decided
+// var Rx = require('@reactivex/rxjs/dist/cjs/Rx');
+// var {Observable} = Rx;
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
     switch (arguments.length) {
@@ -9,9 +12,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import * as Rx from 'rx';
 import * as util from 'ionic/util';
 import { NativePlugin } from '../plugin';
+/**
+ * Respond to device movement in the x/y/z axes.
+ *
+ * @usage
+ * ```js
+ * let watch = DeviceMotion.watchAcceleration();
+ * watch.source.subscribe((data) => {
+ *  // data.acceleration.x
+ *  // data.acceleration.y
+ *  // data.acceleration.z
+ * })
+ *
+ * watch.clear() // to stop watching
+ * ```
+ */
 export let DeviceMotion = class {
     static _wrap(result) {
         // Mimic the DeviceMotionEvent
@@ -23,6 +40,12 @@ export let DeviceMotion = class {
             native: true
         }, result);
     }
+    /**
+     * Get the current acceleration from the device. Generally, watchAcceleration
+     * is more commonly used.
+     *
+     * @return {Promise} that resolves with current motion data.
+     */
     static getCurrentAcceleration() {
         return new Promise((resolve, reject) => {
             if (window.DeviceMotionEvent || ('listenForDeviceMovement' in window)) {
@@ -46,6 +69,9 @@ export let DeviceMotion = class {
             }
         });
     }
+    /**
+     * Watch for device motion.
+     */
     static watchAcceleration(options) {
         if (window.DeviceMotionEvent || ('listenForDeviceMovement' in window)) {
             let watchID;

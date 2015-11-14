@@ -9,8 +9,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Directive } from 'angular2/angular2';
-import { IonicConfig } from '../../config/config';
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+import { Directive, Optional } from 'angular2/angular2';
+import { Config } from '../../config/config';
+import { TextInput } from './text-input';
 import { pointerCoord, hasPointerMoved } from '../../util/dom';
 /**
  * TODO
@@ -18,10 +22,15 @@ import { pointerCoord, hasPointerMoved } from '../../util/dom';
 export let Label = class {
     /**
      * TODO
-     * @param {IonicConfig} config
+     * @param {Config} config
      */
-    constructor(config) {
-        this.scrollAssist = config.setting('keyboardScrollAssist');
+    constructor(config, container) {
+        this.scrollAssist = config.get('scrollAssist');
+        if (!this.id) {
+            this.id = 'lbl-' + (++labelIds);
+        }
+        this.container = container;
+        container && container.registerLabel(this);
     }
     /**
      * TODO
@@ -45,7 +54,7 @@ export let Label = class {
             if (!hasPointerMoved(20, this.startCoord, endCoord)) {
                 ev.preventDefault();
                 ev.stopPropagation();
-                this.container.focus();
+                this.container.initFocus();
             }
             this.startCoord = null;
         }
@@ -54,18 +63,19 @@ export let Label = class {
 Label = __decorate([
     Directive({
         selector: 'ion-label',
-        properties: [
+        inputs: [
             'id'
         ],
         host: {
             '[attr.id]': 'id',
-            'class': 'input-label',
             '(touchstart)': 'pointerStart($event)',
             '(touchend)': 'pointerEnd($event)',
             '(mousedown)': 'pointerStart($event)',
             '(mouseup)': 'pointerEnd($event)'
         }
-    }), 
-    __metadata('design:paramtypes', [(typeof (_a = typeof IonicConfig !== 'undefined' && IonicConfig) === 'function' && _a) || Object])
+    }),
+    __param(1, Optional()), 
+    __metadata('design:paramtypes', [(typeof (_a = typeof Config !== 'undefined' && Config) === 'function' && _a) || Object, (typeof (_b = typeof TextInput !== 'undefined' && TextInput) === 'function' && _b) || Object])
 ], Label);
-var _a;
+let labelIds = -1;
+var _a, _b;

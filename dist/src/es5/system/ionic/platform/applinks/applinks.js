@@ -3,8 +3,9 @@ System.register("ionic/platform/applinks/applinks", ["../plugin"], function (_ex
      * Open installed apps on the device. Note: Android and iOS have different ways of
      * opening and specifying launch params, so they have separate launch functions.
      *
-     * Example:
+     * @usage
      *
+     * ```js
      * if(platform.is('ios') {
      *   AppLinks.check('twitter://').then((installed) => {
      *     AppLinks.openIOS('twitter://user?screen_name=ionicframework')
@@ -16,6 +17,7 @@ System.register("ionic/platform/applinks/applinks", ["../plugin"], function (_ex
      *     AppLinks.openAndroid([["action", "VIEW"], ['twitter://user?screen_name=ionicframework']])
      *   })
      * }
+     * ```
      */
     "use strict";
 
@@ -41,7 +43,7 @@ System.register("ionic/platform/applinks/applinks", ["../plugin"], function (_ex
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -116,7 +118,7 @@ System.register("ionic/platform/applinks/applinks", ["../plugin"], function (_ex
                 name: 'AppLinks',
                 platforms: ['ios', 'android'],
                 engines: {
-                    cordova: 'cordova-plugin-statusbar'
+                    cordova: 'com.lampa.startapp'
                 },
                 pluginCheck: function pluginCheck() {
                     return !!navigator.startApp;

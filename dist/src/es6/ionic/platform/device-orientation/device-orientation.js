@@ -1,3 +1,6 @@
+// TODO: temporary until https://github.com/angular/angular/issues/4390 decided
+// var Rx = require('@reactivex/rxjs/dist/cjs/Rx');
+// var {Observable} = Rx;
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") return Reflect.decorate(decorators, target, key, desc);
     switch (arguments.length) {
@@ -9,9 +12,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import * as Rx from 'rx';
 import * as util from 'ionic/util';
 import { NativePlugin } from '../plugin';
+/**
+ * Respond to device orientation changes (compass).
+ *
+ * @usage
+ * ```js
+ * let watch = DeviceOrientation.watchHeading();
+ * watch.source.subscribe((data) => {
+ *  // data.alpha is the compass heading
+ * })
+ *
+ * watch.clear() // to stop watching
+ * ```
+ */
 export let DeviceOrientation = class {
     static _wrap(result) {
         return util.extend({

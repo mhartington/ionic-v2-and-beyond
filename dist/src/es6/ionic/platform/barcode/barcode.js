@@ -10,6 +10,26 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 import { NativePlugin } from '../plugin';
+/**
+ * Scan barcodes and QR codes.
+ *
+ * @usage
+ *
+ * ## Scanning a code
+ *
+ * ```js
+ * Barcode.scan().then((data) => {
+ *   console.log("Result: " + result.text + "\n" + "Format: " + result.format + "\n" + "Cancelled: " + result.cancelled);
+ * }, (err) => {
+ * })
+ * ```
+ *
+ * ## Encoding data
+ *
+ * ```js
+ * Barcode.encode(Barcode.TEXT_TYPE).then((data) => {}, (fail) => {});
+ * ```
+ */
 export let Barcode = class {
     /**
      * Scan a barcode.

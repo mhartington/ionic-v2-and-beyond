@@ -1,6 +1,7 @@
 System.register("ionic/components/nav/nav-registry", [], function (_export) {
     /**
-     * Map of possible views that can be navigated to using an Ionic NavController
+     * @private
+     * Map of possible pages that can be navigated to using an Ionic NavController
      */
     "use strict";
 
@@ -15,24 +16,24 @@ System.register("ionic/components/nav/nav-registry", [], function (_export) {
         execute: function () {
             NavRegistry = (function () {
                 function NavRegistry() {
-                    var views = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
+                    var pages = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
 
                     _classCallCheck(this, NavRegistry);
 
-                    this._views = new Map(views.map(function (view) {
-                        return [view.name, view];
+                    this._pages = new Map(pages.map(function (page) {
+                        return [page.name, page];
                     }));
                 }
 
                 _createClass(NavRegistry, [{
                     key: "get",
-                    value: function get(viewName) {
-                        return this._views.get(viewName);
+                    value: function get(pageName) {
+                        return this._pages.get(pageName);
                     }
                 }, {
                     key: "set",
-                    value: function set(view) {
-                        this._views.set(view.name, view);
+                    value: function set(page) {
+                        this._pages.set(page.name, page);
                     }
                 }]);
 

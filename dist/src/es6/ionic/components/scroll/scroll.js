@@ -9,22 +9,21 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { View, ElementRef } from 'angular2/angular2';
+import { Component, ElementRef } from 'angular2/angular2';
 import { Ion } from '../ion';
-import { IonicConfig } from '../../config/config';
-import { IonicComponent } from '../../config/decorators';
+import { Config } from '../../config/config';
 /**
- * ion-scroll is a non-flexboxed scroll area that can
- * scroll horizontally or vertically.
+ * Scroll is a non-flexboxed scroll area that can scroll horizontally or
+ * vertically.
  */
 export let Scroll = class extends Ion {
     /**
      * TODO
      * @param {ElementRef} elementRef  TODO
-     * @param {IonicConfig} config  TODO
+     * @param {Config} config  TODO
      */
-    constructor(elementRef, ionicConfig) {
-        super(elementRef, ionicConfig);
+    constructor(elementRef, Config) {
+        super(elementRef, Config);
         this.maxScale = 3;
         this.zoomDuration = 250;
     }
@@ -48,19 +47,21 @@ export let Scroll = class extends Ion {
     }
 };
 Scroll = __decorate([
-    IonicComponent({
+    Component({
         selector: 'ion-scroll',
-        properties: [
+        inputs: [
             'scrollX', 'scrollY', 'zoom', 'maxZoom'
         ],
         host: {
             '[class.scroll-x]': 'scrollX',
             '[class.scroll-y]': 'scrollY'
         },
-    }),
-    View({
-        template: '<scroll-content><div class="scroll-zoom-wrapper"><ng-content></ng-content></div></scroll-content>'
+        template: '<scroll-content>' +
+            '<div class="scroll-zoom-wrapper">' +
+            '<ng-content></ng-content>' +
+            '</div>' +
+            '</scroll-content>'
     }), 
-    __metadata('design:paramtypes', [(typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a) || Object, (typeof (_b = typeof IonicConfig !== 'undefined' && IonicConfig) === 'function' && _b) || Object])
+    __metadata('design:paramtypes', [(typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a) || Object, (typeof (_b = typeof Config !== 'undefined' && Config) === 'function' && _b) || Object])
 ], Scroll);
 var _a, _b;

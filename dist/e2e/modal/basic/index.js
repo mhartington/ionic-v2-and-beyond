@@ -1,9 +1,9 @@
 System.register("index", ["ionic/ionic"], function (_export) {
     "use strict";
 
-    var App, IonicView, IonicApp, IonicConfig, IonicPlatform, Modal, ActionSheet, NavController, NavParams, Animation, __decorate, __metadata, MyAppCmp, ContactModal, ModalFirstPage, ModalSecondPage, FadeIn, FadeOut, _a, _b, _c, _d, _e, _f, _g, _h, _j;
+    var App, Page, IonicApp, Config, Platform, Modal, ActionSheet, NavController, NavParams, Animation, __decorate, __metadata, MyAppCmp, PlainPage, ContactModal, ModalFirstPage, ModalSecondPage, FadeIn, FadeOut, _a, _b, _c, _d, _e, _f, _g, _h, _j, _k;
 
-    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -14,10 +14,10 @@ System.register("index", ["ionic/ionic"], function (_export) {
     return {
         setters: [function (_ionicIonic) {
             App = _ionicIonic.App;
-            IonicView = _ionicIonic.IonicView;
+            Page = _ionicIonic.Page;
             IonicApp = _ionicIonic.IonicApp;
-            IonicConfig = _ionicIonic.IonicConfig;
-            IonicPlatform = _ionicIonic.IonicPlatform;
+            Config = _ionicIonic.Config;
+            Platform = _ionicIonic.Platform;
             Modal = _ionicIonic.Modal;
             ActionSheet = _ionicIonic.ActionSheet;
             NavController = _ionicIonic.NavController;
@@ -34,7 +34,7 @@ System.register("index", ["ionic/ionic"], function (_export) {
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -53,7 +53,7 @@ System.register("index", ["ionic/ionic"], function (_export) {
 
                     this.modal = modal;
                     console.log('platforms', platform.platforms());
-                    console.log('mode', config.setting('mode'));
+                    console.log('mode', config.get('mode'));
                     console.log('core', platform.is('core'));
                     console.log('cordova', platform.is('cordova'));
                     console.log('mobile', platform.is('mobile'));
@@ -64,7 +64,6 @@ System.register("index", ["ionic/ionic"], function (_export) {
                     console.log('ios', platform.is('ios'));
                     console.log('android', platform.is('android'));
                     console.log('windows phone', platform.is('windowsphone'));
-                    console.log('isRTL', app.isRTL());
                     platform.ready().then(function () {
                         console.log('platform.ready');
                     });
@@ -73,10 +72,21 @@ System.register("index", ["ionic/ionic"], function (_export) {
                 _createClass(MyAppCmp, [{
                     key: "openModal",
                     value: function openModal() {
+                        this.modal.open(PlainPage);
+                    }
+                }, {
+                    key: "openModalChildNav",
+                    value: function openModalChildNav() {
+                        this.modal.open(ContactModal, {
+                            handle: 'my-awesome-modal'
+                        });
+                    }
+                }, {
+                    key: "openModalCustomAnimation",
+                    value: function openModalCustomAnimation() {
                         this.modal.open(ContactModal, {
                             enterAnimation: 'my-fade-in',
-                            leaveAnimation: 'my-fade-out',
-                            handle: 'my-awesome-modal'
+                            leaveAnimation: 'my-fade-out'
                         });
                     }
                 }]);
@@ -86,7 +96,28 @@ System.register("index", ["ionic/ionic"], function (_export) {
 
             MyAppCmp = __decorate([App({
                 templateUrl: 'main.html'
-            }), __metadata('design:paramtypes', [typeof (_a = typeof Modal !== 'undefined' && Modal) === 'function' && _a || Object, typeof (_b = typeof IonicApp !== 'undefined' && IonicApp) === 'function' && _b || Object, typeof (_c = typeof IonicConfig !== 'undefined' && IonicConfig) === 'function' && _c || Object, typeof (_d = typeof IonicPlatform !== 'undefined' && IonicPlatform) === 'function' && _d || Object])], MyAppCmp);
+            }), __metadata('design:paramtypes', [typeof (_a = typeof Modal !== 'undefined' && Modal) === 'function' && _a || Object, typeof (_b = typeof IonicApp !== 'undefined' && IonicApp) === 'function' && _b || Object, typeof (_c = typeof Config !== 'undefined' && Config) === 'function' && _c || Object, typeof (_d = typeof Platform !== 'undefined' && Platform) === 'function' && _d || Object])], MyAppCmp);
+
+            PlainPage = (function () {
+                function PlainPage(modal) {
+                    _classCallCheck(this, PlainPage);
+
+                    this.modal = modal;
+                }
+
+                _createClass(PlainPage, [{
+                    key: "closeModal",
+                    value: function closeModal() {
+                        this.modal.get().close();
+                    }
+                }]);
+
+                return PlainPage;
+            })();
+
+            PlainPage = __decorate([Page({
+                template: "\n    <p>Plain Page in a modal</p>\n    <p>Not inside of ion-content</p>\n    <p><button (click)=\"closeModal()\">Close Modal</button></p>\n  "
+            }), __metadata('design:paramtypes', [typeof (_e = typeof Modal !== 'undefined' && Modal) === 'function' && _e || Object])], PlainPage);
 
             ContactModal = (function () {
                 function ContactModal() {
@@ -97,50 +128,48 @@ System.register("index", ["ionic/ionic"], function (_export) {
                 }
 
                 _createClass(ContactModal, [{
-                    key: "onViewLoaded",
-                    value: function onViewLoaded() {
-                        console.log('ContactModal onViewLoaded');
+                    key: "onPageLoaded",
+                    value: function onPageLoaded() {
+                        console.log('ContactModal onPageLoaded');
                     }
                 }, {
-                    key: "onViewWillEnter",
-                    value: function onViewWillEnter() {
-                        console.log('ContactModal onViewWillEnter');
+                    key: "onPageWillEnter",
+                    value: function onPageWillEnter() {
+                        console.log('ContactModal onPageWillEnter');
                     }
                 }, {
-                    key: "onViewDidEnter",
-                    value: function onViewDidEnter() {
-                        console.log('ContactModal onViewDidEnter');
+                    key: "onPageDidEnter",
+                    value: function onPageDidEnter() {
+                        console.log('ContactModal onPageDidEnter');
                     }
                 }, {
-                    key: "onViewWillLeave",
-                    value: function onViewWillLeave() {
-                        console.log('ContactModal onViewWillLeave');
+                    key: "onPageWillLeave",
+                    value: function onPageWillLeave() {
+                        console.log('ContactModal onPageWillLeave');
                     }
                 }, {
-                    key: "onViewDidLeave",
-                    value: function onViewDidLeave() {
-                        console.log('ContactModal onViewDidLeave');
+                    key: "onPageDidLeave",
+                    value: function onPageDidLeave() {
+                        console.log('ContactModal onPageDidLeave');
                     }
                 }, {
-                    key: "onViewWillUnload",
-                    value: function onViewWillUnload() {
-                        console.log('ContactModal onViewWillUnload');
+                    key: "onPageWillUnload",
+                    value: function onPageWillUnload() {
+                        console.log('ContactModal onPageWillUnload');
                     }
                 }, {
-                    key: "onViewDidUnload",
-                    value: function onViewDidUnload() {
-                        console.log('ContactModal onViewDidUnload');
+                    key: "onPageDidUnload",
+                    value: function onPageDidUnload() {
+                        console.log('ContactModal onPageDidUnload');
                     }
                 }]);
 
                 return ContactModal;
             })();
 
-            _export("ContactModal", ContactModal);
-
-            _export("ContactModal", ContactModal = __decorate([IonicView({
+            ContactModal = __decorate([Page({
                 template: '<ion-nav [root]="rootView"></ion-nav>'
-            }), __metadata('design:paramtypes', [])], ContactModal));
+            }), __metadata('design:paramtypes', [])], ContactModal);
 
             ModalFirstPage = (function () {
                 function ModalFirstPage(nav, modal, actionSheet) {
@@ -200,11 +229,9 @@ System.register("index", ["ionic/ionic"], function (_export) {
                 return ModalFirstPage;
             })();
 
-            _export("ModalFirstPage", ModalFirstPage);
-
-            _export("ModalFirstPage", ModalFirstPage = __decorate([IonicView({
+            ModalFirstPage = __decorate([Page({
                 template: "\n    <ion-navbar *navbar><ion-title>First Page Header</ion-title><ion-nav-items primary><button class=\"e2eCloseMenu\" (click)=\"closeModal()\">Close</button></ion-nav-items></ion-navbar>\n    <ion-content padding>\n      <p>\n        <button (click)=\"push()\">Push (Go to 2nd)</button>\n      </p>\n      <p>\n        <button (click)=\"openActionSheet()\">Open Action Sheet</button>\n      </p>\n      <p>\n        <button (click)=\"closeByHandeModal()\">Close By Handle</button>\n      </p>\n      <f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f>\n      <f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f>\n    </ion-content>\n  "
-            }), __metadata('design:paramtypes', [typeof (_e = typeof NavController !== 'undefined' && NavController) === 'function' && _e || Object, typeof (_f = typeof Modal !== 'undefined' && Modal) === 'function' && _f || Object, typeof (_g = typeof ActionSheet !== 'undefined' && ActionSheet) === 'function' && _g || Object])], ModalFirstPage));
+            }), __metadata('design:paramtypes', [typeof (_f = typeof NavController !== 'undefined' && NavController) === 'function' && _f || Object, typeof (_g = typeof Modal !== 'undefined' && Modal) === 'function' && _g || Object, typeof (_h = typeof ActionSheet !== 'undefined' && ActionSheet) === 'function' && _h || Object])], ModalFirstPage);
 
             ModalSecondPage = function ModalSecondPage(nav, params) {
                 _classCallCheck(this, ModalSecondPage);
@@ -214,11 +241,9 @@ System.register("index", ["ionic/ionic"], function (_export) {
                 console.log('Second page params:', params);
             };
 
-            _export("ModalSecondPage", ModalSecondPage);
-
-            _export("ModalSecondPage", ModalSecondPage = __decorate([IonicView({
+            ModalSecondPage = __decorate([Page({
                 template: "\n    <ion-navbar *navbar><ion-title>Second Page Header</ion-title></ion-navbar>\n    <ion-content padding>\n      <p>\n        <button (click)=\"nav.pop()\">Pop (Go back to 1st)</button>\n      </p>\n      <f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f>\n      <f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f><f></f>\n    </ion-content>\n  "
-            }), __metadata('design:paramtypes', [typeof (_h = typeof NavController !== 'undefined' && NavController) === 'function' && _h || Object, typeof (_j = typeof NavParams !== 'undefined' && NavParams) === 'function' && _j || Object])], ModalSecondPage));
+            }), __metadata('design:paramtypes', [typeof (_j = typeof NavController !== 'undefined' && NavController) === 'function' && _j || Object, typeof (_k = typeof NavParams !== 'undefined' && NavParams) === 'function' && _k || Object])], ModalSecondPage);
 
             FadeIn = (function (_Animation) {
                 _inherits(FadeIn, _Animation);

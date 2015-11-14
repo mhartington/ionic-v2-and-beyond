@@ -1,14 +1,13 @@
 System.register("index", ["ionic/ionic"], function (_export) {
     "use strict";
 
-    var App, IonicApp, __decorate, __metadata, MyApp, _a;
+    var App, __decorate, __metadata, MyApp;
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
     return {
         setters: [function (_ionicIonic) {
             App = _ionicIonic.App;
-            IonicApp = _ionicIonic.IonicApp;
         }],
         execute: function () {
             __decorate = undefined && undefined.__decorate || function (decorators, target, key, desc) {
@@ -20,7 +19,7 @@ System.register("index", ["ionic/ionic"], function (_export) {
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -33,15 +32,13 @@ System.register("index", ["ionic/ionic"], function (_export) {
                 if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
             };
 
-            MyApp = function MyApp(app) {
+            MyApp = function MyApp() {
                 _classCallCheck(this, MyApp);
-
-                this.app = app;
             };
 
             MyApp = __decorate([App({
                 templateUrl: 'main.html'
-            }), __metadata('design:paramtypes', [typeof (_a = typeof IonicApp !== 'undefined' && IonicApp) === 'function' && _a || Object])], MyApp);
+            }), __metadata('design:paramtypes', [])], MyApp);
         }
     };
 });

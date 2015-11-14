@@ -1,4 +1,4 @@
-<ion-menu [content]="content" id="leftMenu">
+<ion-menu [content]="content" id="leftMenu" side="left">
 
   <ion-toolbar secondary>
     <ion-title>Left Menu</ion-title>
@@ -12,7 +12,7 @@
         {{p.title}}
       </button>
 
-      <button ion-item menu-toggle="leftMenu" no-forward-icon class="e2eCloseMenu">
+      <button ion-item menu-close="leftMenu" detail-none>
         Close Menu
       </button>
 
@@ -22,9 +22,9 @@
 </ion-menu>
 
 
-<ion-menu side="right" [content]="content" id="rightMenu">
+<ion-menu [content]="content" id="rightMenu" side="right">
 
-  <ion-toolbar secondary>
+  <ion-toolbar danger>
     <ion-title>Right Menu</ion-title>
   </ion-toolbar>
 
@@ -36,7 +36,7 @@
         {{p.title}}
       </button>
 
-      <button ion-item menu-toggle="rightMenu" no-forward-icon class="e2eCloseMenu">
+      <button ion-item menu-close="rightMenu" detail-none>
         Close Menu
       </button>
 
@@ -44,6 +44,7 @@
   </ion-content>
 
 </ion-menu>
+
 
 
 <ion-nav id="nav" [root]="rootView" #content swipe-back-enabled="false"></ion-nav>

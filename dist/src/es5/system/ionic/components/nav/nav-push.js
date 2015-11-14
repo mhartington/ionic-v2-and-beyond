@@ -1,10 +1,42 @@
 System.register("ionic/components/nav/nav-push", ["angular2/angular2", "./nav-controller", "./nav-registry"], function (_export) {
     /**
-     * TODO
+     * Directive for declaratively linking to a new page instead of using
+     * [NavController.push()](../NavController/#push). Similar to ui-router's `ui-sref`.
+     *
+     * Basic usage:
+     * ```html
+     * <button [nav-push]="pushPage"></button>
+     * ```
+     * To specify parameters you can use array syntax or the `nav-params` property:
+     * ```html
+     * <button [nav-push]="pushPage" [nav-params]="params"></button>
+     * ```
+     * Where `pushPage` and `params` are specified in your component, and `pushPage`
+     * contains a reference to a [@Page component](../../../config/Page/):
+     *
+     * ```ts
+     * import {LoginPage} from 'login';
+     * @Page({
+     *   template: `<button [nav-push]="pushPage" [nav-params]="params"></button>`
+     * })
+     * class MyPage {
+     *   constructor(){
+     *     this.pushPage = LoginPage;
+     *     this.params = { id: 42 };
+     *   }
+     * }
+     * ```
+     *
+     * ### Alternate syntax
+     * You can also use syntax similar to Angular2's router, passing an array to
+     * NavPush:
+     * ```html
+     * <button [nav-push]="[pushPage, params]"></button>
+     * ```
      */
     "use strict";
 
-    var Directive, NavController, NavRegistry, __decorate, __metadata, NavPush, NavPop, _a, _b, _c;
+    var Directive, Optional, NavController, NavRegistry, __decorate, __metadata, __param, NavPush, NavPop, _a, _b, _c;
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
@@ -13,6 +45,7 @@ System.register("ionic/components/nav/nav-push", ["angular2/angular2", "./nav-co
     return {
         setters: [function (_angular2Angular2) {
             Directive = _angular2Angular2.Directive;
+            Optional = _angular2Angular2.Optional;
         }, function (_navController) {
             NavController = _navController.NavController;
         }, function (_navRegistry) {
@@ -28,7 +61,7 @@ System.register("ionic/components/nav/nav-push", ["angular2/angular2", "./nav-co
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -39,6 +72,12 @@ System.register("ionic/components/nav/nav-push", ["angular2/angular2", "./nav-co
 
             __metadata = undefined && undefined.__metadata || function (k, v) {
                 if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+            };
+
+            __param = undefined && undefined.__param || function (paramIndex, decorator) {
+                return function (target, key) {
+                    decorator(target, key, paramIndex);
+                };
             };
 
             NavPush = (function () {
@@ -52,11 +91,14 @@ System.register("ionic/components/nav/nav-push", ["angular2/angular2", "./nav-co
 
                     this.nav = nav;
                     this.registry = registry;
+                    if (!nav) {
+                        console.error('nav-push must be within a NavController');
+                    }
                 }
 
                 _createClass(NavPush, [{
                     key: "onClick",
-                    value: function onClick(event) {
+                    value: function onClick() {
                         var destination = undefined,
                             params = undefined;
                         if (this.instruction instanceof Array) {
@@ -72,7 +114,7 @@ System.register("ionic/components/nav/nav-push", ["angular2/angular2", "./nav-co
                         if (typeof destination === "string") {
                             destination = this.registry.get(destination);
                         }
-                        this.nav.push(destination, params);
+                        this.nav && this.nav.push(destination, params);
                     }
                 }]);
 
@@ -83,12 +125,12 @@ System.register("ionic/components/nav/nav-push", ["angular2/angular2", "./nav-co
 
             _export("NavPush", NavPush = __decorate([Directive({
                 selector: '[nav-push]',
-                properties: ['instruction: navPush', 'params: navParams'],
+                inputs: ['instruction: navPush', 'params: navParams'],
                 host: {
-                    '(click)': 'onClick($event)',
+                    '(click)': 'onClick()',
                     'role': 'link'
                 }
-            }), __metadata('design:paramtypes', [typeof (_a = typeof NavController !== 'undefined' && NavController) === 'function' && _a || Object, typeof (_b = typeof NavRegistry !== 'undefined' && NavRegistry) === 'function' && _b || Object])], NavPush));
+            }), __param(0, Optional()), __metadata('design:paramtypes', [typeof (_a = typeof NavController !== 'undefined' && NavController) === 'function' && _a || Object, typeof (_b = typeof NavRegistry !== 'undefined' && NavRegistry) === 'function' && _b || Object])], NavPush));
             /**
              * TODO
              */
@@ -103,12 +145,15 @@ System.register("ionic/components/nav/nav-push", ["angular2/angular2", "./nav-co
                     _classCallCheck(this, NavPop);
 
                     this.nav = nav;
+                    if (!nav) {
+                        console.error('nav-pop must be within a NavController');
+                    }
                 }
 
                 _createClass(NavPop, [{
                     key: "onClick",
-                    value: function onClick(event) {
-                        this.nav.pop();
+                    value: function onClick() {
+                        this.nav && this.nav.pop();
                     }
                 }]);
 
@@ -120,10 +165,10 @@ System.register("ionic/components/nav/nav-push", ["angular2/angular2", "./nav-co
             _export("NavPop", NavPop = __decorate([Directive({
                 selector: '[nav-pop]',
                 host: {
-                    '(click)': 'onClick($event)',
+                    '(click)': 'onClick()',
                     'role': 'link'
                 }
-            }), __metadata('design:paramtypes', [typeof (_c = typeof NavController !== 'undefined' && NavController) === 'function' && _c || Object])], NavPop));
+            }), __param(0, Optional()), __metadata('design:paramtypes', [typeof (_c = typeof NavController !== 'undefined' && NavController) === 'function' && _c || Object])], NavPop));
         }
     };
 });

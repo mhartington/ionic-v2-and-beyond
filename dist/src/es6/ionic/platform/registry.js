@@ -1,17 +1,17 @@
-import { IonicPlatform } from './platform';
+import { Platform } from './platform';
 import { windowLoad } from '../util/dom';
-IonicPlatform.register({
+Platform.register({
     name: 'core',
     settings: {
         mode: 'ios',
         keyboardHeight: 290,
     }
 });
-IonicPlatform.setDefault('core');
-IonicPlatform.register({
+Platform.setDefault('core');
+Platform.register({
     name: 'mobile'
 });
-IonicPlatform.register({
+Platform.register({
     name: 'phablet',
     isMatch(p) {
         let smallest = Math.min(p.width(), p.height());
@@ -20,7 +20,7 @@ IonicPlatform.register({
             (largest > 620 && largest < 800);
     }
 });
-IonicPlatform.register({
+Platform.register({
     name: 'tablet',
     isMatch(p) {
         let smallest = Math.min(p.width(), p.height());
@@ -29,7 +29,7 @@ IonicPlatform.register({
             (largest > 780 && largest < 1400);
     }
 });
-IonicPlatform.register({
+Platform.register({
     name: 'android',
     superset: 'mobile',
     subsets: [
@@ -39,7 +39,7 @@ IonicPlatform.register({
     settings: {
         mode: 'md',
         keyboardHeight: 290,
-        keyboardScrollAssist: true,
+        scrollAssist: true,
         hoverCSS: false,
     },
     isMatch(p) {
@@ -49,7 +49,7 @@ IonicPlatform.register({
         return p.matchUserAgentVersion(/Android (\d+).(\d+)?/);
     }
 });
-IonicPlatform.register({
+Platform.register({
     name: 'ios',
     superset: 'mobile',
     subsets: [
@@ -58,13 +58,15 @@ IonicPlatform.register({
     ],
     settings: {
         mode: 'ios',
-        keyboardScrollAssist: function (p) {
+        scrollAssist: function (p) {
+            return /iphone|ipad|ipod/i.test(p.navigatorPlatform());
+        },
+        tapPolyfill: function (p) {
             return /iphone|ipad|ipod/i.test(p.navigatorPlatform());
         },
         keyboardHeight: 290,
         hoverCSS: false,
         swipeBackEnabled: function (p) {
-            return true; // TODO: remove me! Force it to always work for iOS mode for now
             return /iphone|ipad|ipod/i.test(p.navigatorPlatform());
         },
         swipeBackThreshold: 40,
@@ -76,7 +78,7 @@ IonicPlatform.register({
         return p.matchUserAgentVersion(/OS (\d+)_(\d+)?/);
     }
 });
-IonicPlatform.register({
+Platform.register({
     name: 'ipad',
     superset: 'tablet',
     settings: {
@@ -86,7 +88,7 @@ IonicPlatform.register({
         return p.isPlatform('ipad');
     }
 });
-IonicPlatform.register({
+Platform.register({
     name: 'iphone',
     subsets: [
         'phablet'
@@ -95,7 +97,7 @@ IonicPlatform.register({
         return p.isPlatform('iphone');
     }
 });
-IonicPlatform.register({
+Platform.register({
     name: 'windowsphone',
     superset: 'mobile',
     subsets: [
@@ -112,7 +114,7 @@ IonicPlatform.register({
         return p.matchUserAgentVersion(/Windows Phone (\d+).(\d+)?/);
     }
 });
-IonicPlatform.register({
+Platform.register({
     name: 'cordova',
     isEngine: true,
     methods: {

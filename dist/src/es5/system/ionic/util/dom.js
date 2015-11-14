@@ -19,6 +19,8 @@ System.register('ionic/util/dom', [], function (_export) {
 
     _export('hasPointerMoved', hasPointerMoved);
 
+    _export('isActive', isActive);
+
     _export('hasFocus', hasFocus);
 
     _export('isTextInput', isTextInput);
@@ -40,6 +42,19 @@ System.register('ionic/util/dom', [], function (_export) {
     _export('windowDimensions', windowDimensions);
 
     _export('flushDimensionCache', flushDimensionCache);
+
+    _export('parentOffsetEl', parentOffsetEl);
+
+    /**
+    * Get the current coordinates of the element, relative to the document.
+    * Read-only equivalent of [jQuery's offset function](http://api.jquery.com/offset/).
+    * @param {element} element The element to get the offset of.
+    * @returns {object} Returns an object containing the properties top, left, width and height.
+    */
+
+    _export('position', position);
+
+    _export('offset', offset);
 
     function rafPromise() {
         return new Promise(function (resolve) {
@@ -152,8 +167,12 @@ System.register('ionic/util/dom', [], function (_export) {
         return startCoord && endCoord && (Math.abs(startCoord.x - endCoord.x) > threshold || Math.abs(startCoord.y - endCoord.y) > threshold);
     }
 
+    function isActive(ele) {
+        return !!(ele && document.activeElement === ele);
+    }
+
     function hasFocus(ele) {
-        return !!(ele && (document.activeElement === ele.nativeElement || document.activeElement === ele));
+        return isActive(ele) && ele.parentElement.querySelector(':focus') === ele;
     }
 
     function isTextInput(ele) {
@@ -204,26 +223,91 @@ System.register('ionic/util/dom', [], function (_export) {
         var dimensions = dimensionCache[ion._dimId];
         if (!dimensions) {
             var ele = ion.getNativeElement();
-            dimensions = dimensionCache[ion._dimId] = {
-                w: ele.offsetWidth,
-                h: ele.offsetHeight
-            };
+            // make sure we got good values before caching
+            if (ele.offsetWidth && ele.offsetHeight) {
+                dimensions = dimensionCache[ion._dimId] = {
+                    width: ele.offsetWidth,
+                    height: ele.offsetHeight,
+                    left: ele.offsetLeft,
+                    top: ele.offsetTop
+                };
+            } else {
+                // do not cache bad values
+                return { width: 0, height: 0, left: 0, top: 0 };
+            }
         }
         return dimensions;
     }
 
     function windowDimensions() {
         if (!dimensionCache.win) {
-            dimensionCache.win = {
-                width: window.innerWidth,
-                height: window.innerHeight
-            };
+            // make sure we got good values before caching
+            if (window.innerWidth && window.innerHeight) {
+                dimensionCache.win = {
+                    width: window.innerWidth,
+                    height: window.innerHeight
+                };
+            } else {
+                // do not cache bad values
+                return { width: 0, height: 0 };
+            }
         }
         return dimensionCache.win;
     }
 
     function flushDimensionCache() {
         dimensionCache = {};
+    }
+
+    function isStaticPositioned(element) {
+        return (element.style.position || 'static') === 'static';
+    }
+    /**
+     * returns the closest, non-statically positioned parentOffset of a given element
+     * @param element
+     */
+
+    function parentOffsetEl(element) {
+        var offsetParent = element.offsetParent || document;
+        while (offsetParent && offsetParent !== document && isStaticPositioned(offsetParent)) {
+            offsetParent = offsetParent.offsetParent;
+        }
+        return offsetParent || document;
+    }
+
+    /**
+     * Get the current coordinates of the element, relative to the offset parent.
+     * Read-only equivalent of [jQuery's position function](http://api.jquery.com/position/).
+     * @param {element} element The element to get the position of.
+     * @returns {object} Returns an object containing the properties top, left, width and height.
+     */
+
+    function position(element) {
+        var elBCR = offset(element);
+        var offsetParentBCR = { top: 0, left: 0 };
+        var offsetParentEl = parentOffsetEl(element);
+        if (offsetParentEl != document) {
+            offsetParentBCR = offset(offsetParentEl);
+            offsetParentBCR.top += offsetParentEl.clientTop - offsetParentEl.scrollTop;
+            offsetParentBCR.left += offsetParentEl.clientLeft - offsetParentEl.scrollLeft;
+        }
+        var boundingClientRect = element.getBoundingClientRect();
+        return {
+            width: boundingClientRect.width || element.offsetWidth,
+            height: boundingClientRect.height || element.offsetHeight,
+            top: elBCR.top - offsetParentBCR.top,
+            left: elBCR.left - offsetParentBCR.left
+        };
+    }
+
+    function offset(element) {
+        var boundingClientRect = element.getBoundingClientRect();
+        return {
+            width: boundingClientRect.width || element.offsetWidth,
+            height: boundingClientRect.height || element.offsetHeight,
+            top: boundingClientRect.top + (window.pageYOffset || document.documentElement.scrollTop),
+            left: boundingClientRect.left + (window.pageXOffset || document.documentElement.scrollLeft)
+        };
     }
 
     return {
@@ -293,6 +377,8 @@ System.register('ionic/util/dom', [], function (_export) {
             }
             dimensionCache = {};
             dimensionIds = 0;
+
+            ;
         }
     };
 });

@@ -1,6 +1,6 @@
-import { IonicConfig } from './config';
+import { Config } from './config';
 // iOS Mode Settings
-IonicConfig.modeConfig('ios', {
+Config.setModeConfig('ios', {
     actionSheetEnter: 'action-sheet-slide-in',
     actionSheetLeave: 'action-sheet-slide-out',
     actionSheetCancelIcon: '',
@@ -8,11 +8,15 @@ IonicConfig.modeConfig('ios', {
     backButtonText: 'Back',
     backButtonIcon: 'ion-ios-arrow-back',
     iconMode: 'ios',
-    tabBarPlacement: 'bottom',
+    modalEnter: 'modal-slide-in',
+    modalLeave: 'modal-slide-out',
+    tabbarPlacement: 'bottom',
     viewTransition: 'ios',
+    popupPopIn: 'popup-pop-in',
+    popupPopOut: 'popup-pop-out',
 });
 // Material Design Mode Settings
-IonicConfig.modeConfig('md', {
+Config.setModeConfig('md', {
     actionSheetEnter: 'action-sheet-md-slide-in',
     actionSheetLeave: 'action-sheet-md-slide-out',
     actionSheetCancelIcon: 'ion-md-close',
@@ -20,8 +24,13 @@ IonicConfig.modeConfig('md', {
     backButtonText: '',
     backButtonIcon: 'ion-md-arrow-back',
     iconMode: 'md',
-    tabBarPlacement: 'top',
+    modalEnter: 'modal-md-slide-in',
+    modalLeave: 'modal-md-slide-out',
+    tabbarPlacement: 'top',
     viewTransition: 'md',
+    popupPopIn: 'popup-md-pop-in',
+    popupPopOut: 'popup-md-pop-out',
+    tabSubPages: true,
     type: 'overlay',
     mdRipple: true,
 });

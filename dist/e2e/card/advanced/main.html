@@ -22,11 +22,11 @@
     <ion-item actions>
       <button clear item-left>
         <icon star></icon>
-        Favorite
+        Star
       </button>
-      <button clear item-right>
+      <button clear item-right class="activated">
         <icon share></icon>
-        Share
+        Share.activated
       </button>
     </ion-item>
 
@@ -50,6 +50,46 @@
     <ion-card-content>
       <p>Hello. I am a paragraph.</p>
     </ion-card-content>
+
+    <ion-item actions>
+      <button clear item-left danger class="activated">
+        <icon star></icon>
+        Favorite.activated
+      </button>
+      <button clear item danger>
+        <icon musical-notes></icon>
+        Listen
+      </button>
+      <ion-note item-right>
+        Right Note
+      </ion-note>
+    </ion-item>
+  </ion-card>
+
+  <ion-card>
+
+    <div>
+      <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAAAAACH5BAAAAAAALAAAAAABAAEAAAICTAEAOw==">
+    </div>
+
+    <ion-card-content>
+      This card was breaking the border radius.
+    </ion-card-content>
+
+    <ion-item actions>
+      <button clear item-left dark>
+        <icon star></icon>
+        Favorite
+      </button>
+      <button clear item dark>
+        <icon musical-notes></icon>
+        Listen
+      </button>
+      <button clear item-right dark>
+        <icon share-alt></icon>
+        Share
+      </button>
+    </ion-item>
 
   </ion-card>
 

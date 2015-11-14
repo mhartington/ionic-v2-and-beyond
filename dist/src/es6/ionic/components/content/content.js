@@ -9,19 +9,22 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component, View, ElementRef } from 'angular2/angular2';
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
+import { Component, ElementRef, Optional, NgZone } from 'angular2/angular2';
 import { Ion } from '../ion';
-import { IonicConfig } from '../../config/config';
-import { IonicPlatform } from '../../platform/platform';
+import { Config } from '../../config/config';
+import { Keyboard } from '../../util/keyboard';
+import { ViewController } from '../nav/view-controller';
+import { Animation } from '../../animations/animation';
 import { ScrollTo } from '../../animations/scroll-to';
 /**
- * @name ionContent
- * @description
- * The ionContent component provides an easy to use content area that can be configured to use Ionic's custom Scroll View, or the built in overflow scrolling of the browser.
+ * The Content component provides an easy to use content area that can be configured to use Ionic's custom Scroll View, or the built in overflow scrolling of the browser.
  *
  * While we recommend using the custom Scroll features in Ionic in most cases, sometimes (for performance reasons) only the browser's native overflow scrolling will suffice, and so we've made it easy to toggle between the Ionic scroll implementation and overflow scrolling.
  *
- * You can implement pull-to-refresh with the ionRefresher component.
+ * You can implement pull-to-refresh with the [Refresher](../../scroll/Refresher) component.
  *
  * @usage
  * ```html
@@ -34,12 +37,17 @@ import { ScrollTo } from '../../animations/scroll-to';
 export let Content = class extends Ion {
     /**
      * @param {ElementRef} elementRef  A reference to the component's DOM element.
-     * @param {IonicConfig} config  The config object to change content's default settings.
+     * @param {Config} config  The config object to change content's default settings.
      */
-    constructor(elementRef, config, platform) {
+    constructor(elementRef, config, keyboard, viewCtrl, _zone) {
         super(elementRef, config);
+        this._zone = _zone;
         this.scrollPadding = 0;
-        this.platform = platform;
+        this.keyboard = keyboard;
+        if (viewCtrl) {
+            viewCtrl.setContent(this);
+            viewCtrl.setContentRef(elementRef);
+        }
     }
     /**
      * TODO
@@ -96,6 +104,13 @@ export let Content = class extends Ion {
         this._scrollTo = new ScrollTo(this.scrollElement);
         return this._scrollTo.start(x, y, duration, tolerance);
     }
+    scrollToTop() {
+        if (this._scrollTo) {
+            this._scrollTo.dispose();
+        }
+        this._scrollTo = new ScrollTo(this.scrollElement);
+        return this._scrollTo.start(0, 0, 300, 0);
+    }
     /**
      * Returns the content and scroll elements' dimensions.
      * @returns {Object} dimensions  The content and scroll elements' dimensions
@@ -136,16 +151,24 @@ export let Content = class extends Ion {
      * Adds padding to the bottom of the scroll element when the keyboard is open
      * so content below the keyboard can be scrolled into view.
      */
-    addKeyboardPadding(addPadding) {
-        if (addPadding > this.scrollPadding) {
-            this.scrollPadding = addPadding;
-            this.scrollElement.style.paddingBottom = addPadding + 'px';
+    addScrollPadding(newScrollPadding) {
+        if (newScrollPadding > this.scrollPadding) {
+            console.debug('addScrollPadding', newScrollPadding);
+            this.scrollPadding = newScrollPadding;
+            this.scrollElement.style.paddingBottom = newScrollPadding + 'px';
             if (!this.keyboardPromise) {
-                this.keyboardPromise = this.platform.onKeyboardClose(() => {
+                console.debug('add scroll keyboard close callback', newScrollPadding);
+                this.keyboardPromise = this.keyboard.onClose(() => {
+                    console.debug('scroll keyboard closed', newScrollPadding);
                     if (this) {
+                        if (this.scrollPadding && this.scrollElement) {
+                            let close = new Animation(this.scrollElement);
+                            close
+                                .duration(150)
+                                .fromTo('paddingBottom', this.scrollPadding + 'px', '0px')
+                                .play();
+                        }
                         this.scrollPadding = 0;
-                        if (this.scrollElement)
-                            this.scrollElement.style.paddingBottom = '';
                         this.keyboardPromise = null;
                     }
                 });
@@ -156,13 +179,11 @@ export let Content = class extends Ion {
 Content = __decorate([
     Component({
         selector: 'ion-content',
-        properties: [
-            'parallax'
-        ]
+        template: '<scroll-content>' +
+            '<ng-content></ng-content>' +
+            '</scroll-content>'
     }),
-    View({
-        template: '<scroll-content><ng-content></ng-content></scroll-content>'
-    }), 
-    __metadata('design:paramtypes', [(typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a) || Object, (typeof (_b = typeof IonicConfig !== 'undefined' && IonicConfig) === 'function' && _b) || Object, (typeof (_c = typeof IonicPlatform !== 'undefined' && IonicPlatform) === 'function' && _c) || Object])
+    __param(3, Optional()), 
+    __metadata('design:paramtypes', [(typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a) || Object, (typeof (_b = typeof Config !== 'undefined' && Config) === 'function' && _b) || Object, (typeof (_c = typeof Keyboard !== 'undefined' && Keyboard) === 'function' && _c) || Object, (typeof (_d = typeof ViewController !== 'undefined' && ViewController) === 'function' && _d) || Object, (typeof (_e = typeof NgZone !== 'undefined' && NgZone) === 'function' && _e) || Object])
 ], Content);
-var _a, _b, _c;
+var _a, _b, _c, _d, _e;

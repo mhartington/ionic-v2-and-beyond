@@ -1,14 +1,101 @@
-System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'angular2/src/core/compiler/dynamic_component_loader', 'angular2/src/core/compiler/view_manager', '../ion', '../../config/config', '../app/app', './view-controller', './pane', '../../transitions/transition', './swipe-back', 'ionic/util'], function (_export) {
+System.register('ionic/components/nav/nav-controller', ['angular2/angular2', '../ion', './view-controller', '../../transitions/transition', './swipe-back', 'ionic/util', '../../util/dom'], function (_export) {
     /**
-     * TODO
+     * _For examples on the basic usage of NavController, check out the [Navigation section](../../../../components/#navigation)
+     * of the Component docs._
+     *
+     * NavController is the base class for navigation controller components like
+     * [`Nav`](../Nav/) and [`Tab`](../../Tabs/Tab/). You use navigation controllers
+     * to navigate to [pages](#creating_pages) in your app. At a basic level, a
+     * navigation controller is an array of pages representing a particular history
+     * (of a Tab for example). This array can be manipulated to navigate throughout
+     * an app by pushing and popping pages or inserting and removing them at
+     * arbitrary locations in history.
+     *
+     * The current page is the last one in the array, or the top of the stack if we
+     * think of it that way.  [Pushing](#push) a new page onto the top of the
+     * navigation stack causes the new page to be animated in, while [popping](#pop)
+     * the current page will navigate to the previous page in the stack.
+     *
+     * Unless you are using a directive like [NavPush](../NavPush/), or need a
+     * specific NavController, most times you will inject and use a reference to the
+     * nearest NavController to manipulate the navigation stack.
+     *
+     * <h3 id="injecting_nav_controller">Injecting NavController</h3>
+     * Injecting NavController will always get you an instance of the nearest
+     * NavController, regardless of whether it is a Tab or a Nav.
+     *
+     * Behind the scenes, when Ionic instantiates a new NavController, it creates an
+     * injector with NavController bound to that instance (usually either a Nav or
+     * Tab) and adds the injector to its own providers.  For more information on
+     * providers and dependency injection, see [Providers and DI]().
+     *
+     * ```ts
+     * // class NavController
+     * this.providers = Injector.resolve([
+     *   provide(NavController, {useValue: this})
+     * ]);
+     * ```
+     *
+     * Instead, you can inject NavController and know that it is the correct
+     * navigation controller for most situations (for more advanced situations, see
+     * [Menu](../../Menu/Menu/) and [Tab](../../Tab/Tab/)).
+     *
+     * ```ts
+     *  class MyComponent {
+     *    constructor(nav: NavController) {
+     *      this.nav = nav;
+     *    }
+     *  }
+     * ```
+     *
+     * <h2 id="creating_pages">Page creation</h2>
+     * _For more information on the `@Page` decorator see the [@Page API
+     * reference](../../../config/Page/)._
+     *
+     * Pages are created when they are added to the navigation stack.  For methods
+     * like [push()](#push), the NavController takes any component class that is
+     * decorated with @Page as its first argument.  The NavController then
+     * [compiles]() that component, adds it to the DOM in a similar fashion to
+     * Angular's [DynamicComponentLoader](https://angular.io/docs/js/latest/api/core/DynamicComponentLoader-interface.html),
+     * and animates it into view.
+     *
+     * By default, pages are cached and left in the DOM if they are navigated away
+     * from but still in the navigation stack (the exiting page on a `push()` for
+     * example).  They are destroyed when removed from the navigation stack (on
+     * [pop()](#pop) or [setRoot()](#setRoot)).
+     *
+     *
+     * <h2 id="Lifecycle">Lifecycle events</h2>
+     * Lifecycle events are fired during various stages of navigation.  They can be
+     * defined in any `@Page` decorated component class.
+     *
+     * ```ts
+     * @Page({
+     *   template: 'Hello World'
+     * })
+     * class HelloWorld {
+     *   onPageLoaded() {
+     *     console.log("I'm alive!");
+     *   }
+     * }
+     * ```
+     *
+     * - `onPageLoaded` - Runs when the page has loaded. This event only happens once per page being created and added to the DOM. If a page leaves but is cached, then this event will not fire again on a subsequent viewing. The `onPageLoaded` event is good place to put your setup code for the page.
+     * - `onPageWillEnter` - Runs when the page is about to enter and become the active page.
+     * - `onPageDidEnter` - Runs when the page has fully entered and is now the active page. This event will fire, whether it was the first load or a cached page.
+     * - `onPageWillLeave` - Runs when the page is about to leave and no longer be the active page.
+     * - `onPageDidLeave` - Runs when the page has finished leaving and is no longer the active page.
+     * - `onPageWillUnload` - Runs when the page is about to be destroyed and have its elements removed.
+     * - `onPageDidUnload` - Runs after the page has been destroyed and its elements have been removed.
+     *
      */
     'use strict';
 
-    var Compiler, Injector, bind, DynamicComponentLoader, AppViewManager, Ion, IonicConfig, IonicApp, ViewController, PaneController, Transition, SwipeBackGesture, util, NavController, ACTIVE_STATE, CACHED_STATE, STAGED_ENTERING_STATE, STAGED_LEAVING_STATE, ctrlIds, NavParams;
+    var Injector, provide, Ion, ViewController, Transition, SwipeBackGesture, util, raf, NavController, ACTIVE_STATE, CACHED_STATE, STAGED_ENTERING_STATE, STAGED_LEAVING_STATE, ctrlIds, NavParams;
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-    var _get = function get(_x7, _x8, _x9) { var _again = true; _function: while (_again) { var object = _x7, property = _x8, receiver = _x9; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x7 = parent; _x8 = property; _x9 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+    var _get = function get(_x12, _x13, _x14) { var _again = true; _function: while (_again) { var object = _x12, property = _x13, receiver = _x14; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x12 = parent; _x13 = property; _x14 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
@@ -16,56 +103,45 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
 
     return {
         setters: [function (_angular2Angular2) {
-            Compiler = _angular2Angular2.Compiler;
             Injector = _angular2Angular2.Injector;
-            bind = _angular2Angular2.bind;
-        }, function (_angular2SrcCoreCompilerDynamic_component_loader) {
-            DynamicComponentLoader = _angular2SrcCoreCompilerDynamic_component_loader.DynamicComponentLoader;
-        }, function (_angular2SrcCoreCompilerView_manager) {
-            AppViewManager = _angular2SrcCoreCompilerView_manager.AppViewManager;
+            provide = _angular2Angular2.provide;
         }, function (_ion) {
             Ion = _ion.Ion;
-        }, function (_configConfig) {
-            IonicConfig = _configConfig.IonicConfig;
-        }, function (_appApp) {
-            IonicApp = _appApp.IonicApp;
         }, function (_viewController) {
             ViewController = _viewController.ViewController;
-        }, function (_pane) {
-            PaneController = _pane.PaneController;
         }, function (_transitionsTransition) {
             Transition = _transitionsTransition.Transition;
         }, function (_swipeBack) {
             SwipeBackGesture = _swipeBack.SwipeBackGesture;
         }, function (_ionicUtil) {
             util = _ionicUtil;
+        }, function (_utilDom) {
+            raf = _utilDom.raf;
         }],
         execute: function () {
             NavController = (function (_Ion) {
                 _inherits(NavController, _Ion);
 
-                function NavController(parentnavCtrl, injector, elementRef, zone) {
+                function NavController(parentnavCtrl, app, config, elementRef, compiler, loader, viewManager, zone, renderer) {
                     _classCallCheck(this, NavController);
 
-                    var config = injector.get(IonicConfig);
                     _get(Object.getPrototypeOf(NavController.prototype), 'constructor', this).call(this, elementRef, config);
                     this.parent = parentnavCtrl;
-                    this.compiler = injector.get(Compiler);
-                    this.loader = injector.get(DynamicComponentLoader);
-                    this.viewMngr = injector.get(AppViewManager);
-                    this.app = injector.get(IonicApp);
+                    this.app = app;
                     this.config = config;
-                    this.zone = zone;
-                    this.views = [];
-                    this.panes = new PaneController(this);
+                    this._compiler = compiler;
+                    this._loader = loader;
+                    this._viewManager = viewManager;
+                    this._zone = zone;
+                    this.renderer = renderer;
+                    this._views = [];
                     this._sbTrans = null;
-                    this._sbEnabled = config.setting('swipeBackEnabled') || false;
-                    this._sbThreshold = config.setting('swipeBackThreshold') || 40;
+                    this._sbEnabled = config.get('swipeBackEnabled') || false;
+                    this._sbThreshold = config.get('swipeBackThreshold') || 40;
                     this.id = ++ctrlIds;
                     this._ids = -1;
-                    this.zIndexes = -1;
                     // build a new injector for child ViewControllers to use
-                    this.bindings = Injector.resolve([bind(NavController).toValue(this)]);
+                    this.providers = Injector.resolve([provide(NavController, { useValue: this })]);
                 }
 
                 /**
@@ -79,6 +155,8 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                 _createClass(NavController, [{
                     key: 'push',
                     value: function push(componentType) {
+                        var _this = this;
+
                         var params = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
                         var opts = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
 
@@ -93,30 +171,35 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                             resolve = res;
                         });
                         // do not animate if this is the first in the stack
-                        if (!this.views.length) {
-                            opts.animation = 'none';
+                        if (!this._views.length) {
+                            opts.animate = false;
                         }
                         // default the direction to "forward"
                         opts.direction = opts.direction || 'forward';
                         // the active view is going to be the leaving one (if one exists)
                         var leavingView = this.getActive() || new ViewController();
-                        leavingView.shouldCache = util.isBoolean(opts.cacheleavingView) ? opts.cacheleavingView : true;
+                        leavingView.shouldCache = util.isBoolean(opts.cacheLeavingView) ? opts.cacheLeavingView : true;
                         leavingView.shouldDestroy = !leavingView.shouldCache;
                         if (leavingView.shouldDestroy) {
                             leavingView.willUnload();
                         }
                         // create a new ViewController
                         var enteringView = new ViewController(this, componentType, params);
+                        enteringView.shouldDestroy = false;
+                        enteringView.shouldCache = false;
                         // add the view to the stack
-                        this.add(enteringView);
+                        this._add(enteringView);
+                        if (opts.preCleanup !== false) {
+                            raf(function () {
+                                _this._cleanup(enteringView);
+                            });
+                        }
                         if (this.router) {
                             // notify router of the state change
                             this.router.stateChange('push', enteringView, params);
                         }
                         // start the transition
-                        this.transition(enteringView, leavingView, opts, function () {
-                            resolve();
-                        });
+                        this._transition(enteringView, leavingView, opts, resolve);
                         return promise;
                     }
 
@@ -142,7 +225,7 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                         // get the active view and set that it is staged to be leaving
                         // was probably the one popped from the stack
                         var leavingView = this.getActive() || new ViewController();
-                        leavingView.shouldCache = util.isBoolean(opts.cacheleavingView) ? opts.cacheleavingView : false;
+                        leavingView.shouldCache = util.isBoolean(opts.cacheLeavingView) ? opts.cacheLeavingView : false;
                         leavingView.shouldDestroy = !leavingView.shouldCache;
                         if (leavingView.shouldDestroy) {
                             leavingView.willUnload();
@@ -157,15 +240,66 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                                 this.router.stateChange('pop', enteringView);
                             }
                             // start the transition
-                            this.transition(enteringView, leavingView, opts, function () {
-                                // transition completed, destroy the leaving view
-                                resolve();
-                            });
+                            this._transition(enteringView, leavingView, opts, resolve);
                         } else {
                             this._transComplete();
                             resolve();
                         }
                         return promise;
+                    }
+
+                    /**
+                     * @private
+                     * Pop to a specific view in the history stack
+                     *
+                     * @param view {ViewController} to pop to
+                     * @param opts {object} pop options
+                     */
+                }, {
+                    key: 'popTo',
+                    value: function popTo(viewCtrl) {
+                        var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+                        // Get the target index of the view to pop to
+                        var viewIndex = this._views.indexOf(viewCtrl);
+                        var targetIndex = viewIndex + 1;
+                        // Don't pop to the view if it wasn't found, or the target is beyond the view list
+                        if (viewIndex < 0 || targetIndex > this._views.length - 1) {
+                            return Promise.resolve();
+                        }
+                        var resolve = undefined;
+                        var promise = new Promise(function (res) {
+                            resolve = res;
+                        });
+                        opts.direction = opts.direction || 'back';
+                        // get the views to auto remove without having to do a transiton for each
+                        // the last view (the currently active one) will do a normal transition out
+                        if (this._views.length > 1) {
+                            var autoRemoveItems = this._views.slice(targetIndex, this._views.length);
+                            for (var i = 0; i < autoRemoveItems.length; i++) {
+                                autoRemoveItems[i].shouldDestroy = true;
+                                autoRemoveItems[i].shouldCache = false;
+                                autoRemoveItems[i].willUnload();
+                            }
+                        }
+                        var leavingView = this.getPrevious(viewCtrl);
+                        if (this.router) {
+                            this.router.stateChange('pop', viewCtrl);
+                        }
+                        this._transition(viewCtrl, leavingView, opts, resolve);
+                        return promise;
+                    }
+
+                    /**
+                     * Pop to the root view.
+                     * @param opts extra animation options
+                     */
+                }, {
+                    key: 'popToRoot',
+                    value: function popToRoot() {
+                        var opts = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
+                        return this._popTo(this.first(), opts);
                     }
 
                     /**
@@ -177,12 +311,15 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                 }, {
                     key: 'insert',
                     value: function insert(componentType, index) {
+                        var params = arguments.length <= 2 || arguments[2] === undefined ? {} : arguments[2];
+                        var opts = arguments.length <= 3 || arguments[3] === undefined ? {} : arguments[3];
+
                         if (!componentType || index < 0) {
                             return Promise.reject();
                         }
                         // push it onto the end
-                        if (index >= this.views.length) {
-                            return this.push(componentType);
+                        if (index >= this._views.length) {
+                            return this.push(componentType, params, opts);
                         }
                         // create new ViewController, but don't render yet
                         var viewCtrl = new ViewController(this, componentType);
@@ -190,7 +327,30 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                         viewCtrl.shouldDestroy = false;
                         viewCtrl.shouldCache = false;
                         this._incrementId(viewCtrl);
-                        this.views.splice(index, 0, viewCtrl);
+                        this._views.splice(index, 0, viewCtrl);
+                        return Promise.resolve();
+                    }
+
+                    /**
+                     * Removes a view from the nav stack at the specified index.
+                     * @param {TODO} index TODO
+                     * @returns {Promise} TODO
+                     */
+                }, {
+                    key: 'remove',
+                    value: function remove(index) {
+                        var opts = arguments.length <= 1 || arguments[1] === undefined ? {} : arguments[1];
+
+                        if (index < 0 || index >= this._views.length) {
+                            return Promise.reject("Index out of range");
+                        }
+                        var viewToRemove = this._views[index];
+                        if (this.isActive(viewToRemove)) {
+                            return this.pop(opts);
+                        }
+                        viewToRemove.shouldDestroy = true;
+                        this._cleanup();
+                        return Promise.resolve();
                     }
 
                     /**
@@ -209,12 +369,13 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                         }
                         // if animate has not been set then default to false
                         opts.animate = opts.animate || false;
+                        opts.preCleanup = false;
                         // ensure leaving views are not cached, and should be destroyed
-                        opts.cacheleavingView = false;
+                        opts.cacheLeavingView = false;
                         // get the views to auto remove without having to do a transiton for each
                         // the last view (the currently active one) will do a normal transition out
-                        if (this.views.length > 1) {
-                            var autoRemoveItems = this.views.slice(0, this.views.length - 1);
+                        if (this._views.length > 1) {
+                            var autoRemoveItems = this._views.slice(0, this._views.length - 1);
                             for (var i = 0; i < autoRemoveItems.length; i++) {
                                 autoRemoveItems[i].shouldDestroy = true;
                                 autoRemoveItems[i].shouldCache = false;
@@ -238,7 +399,7 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                                     viewCtrl.shouldDestroy = false;
                                     viewCtrl.shouldCache = false;
                                     // add the item to the stack
-                                    this.add(viewCtrl);
+                                    this._add(viewCtrl);
                                 }
                             }
                         }
@@ -274,46 +435,54 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                      * @param {TODO} enteringView  TODO
                      * @param {TODO} leavingView  TODO
                      * @param {TODO} opts  TODO
-                     * @param {Function} callback  TODO
+                     * @param {Function} done  TODO
                      * @returns {any} TODO
                      */
                 }, {
-                    key: 'transition',
-                    value: function transition(enteringView, leavingView, opts, callback) {
-                        var _this = this;
+                    key: '_transition',
+                    value: function _transition(enteringView, leavingView, opts, done) {
+                        var _this2 = this;
 
                         if (!enteringView || enteringView === leavingView) {
-                            return callback();
+                            return done();
                         }
-                        if (opts.animate === false) {
-                            opts.animation = 'none';
-                        } else if (!opts.animation) {
-                            opts.animation = this.config.setting('viewTransition');
+                        if (!opts.animation) {
+                            opts.animation = this.config.get('viewTransition');
                         }
-                        opts.animate = opts.animation !== 'none';
+                        if (this.config.get('animate') === false) {
+                            opts.animate = false;
+                        }
                         // wait for the new view to complete setup
-                        enteringView.stage(function () {
-                            _this.zone.runOutsideAngular(function () {
+                        this._stage(enteringView, function () {
+                            if (enteringView.shouldDestroy) {
+                                // already marked as a view that will be destroyed, don't continue
+                                return done();
+                            }
+                            _this2._setZIndex(enteringView.instance, leavingView.instance, opts.direction);
+                            _this2._zone.runOutsideAngular(function () {
                                 enteringView.shouldDestroy = false;
                                 enteringView.shouldCache = false;
-                                enteringView.willEnter();
-                                leavingView.willLeave();
+                                if (!opts.preload) {
+                                    enteringView.willEnter();
+                                    leavingView.willLeave();
+                                }
                                 // set that the new view pushed on the stack is staged to be entering/leaving
                                 // staged state is important for the transition to find the correct view
                                 enteringView.state = STAGED_ENTERING_STATE;
                                 leavingView.state = STAGED_LEAVING_STATE;
                                 // init the transition animation
-                                var transAnimation = Transition.create(_this, opts);
-                                if (!opts.animate) {
+                                var transAnimation = Transition.create(_this2, opts);
+                                if (opts.animate === false) {
                                     // force it to not animate the elements, just apply the "to" styles
+                                    transAnimation.clearDuration();
                                     transAnimation.duration(0);
                                 }
                                 var duration = transAnimation.duration();
                                 if (duration > 64) {
                                     // block any clicks during the transition and provide a
                                     // fallback to remove the clickblock if something goes wrong
-                                    _this.app.setEnabled(false, duration);
-                                    _this.app.setTransitioning(true, duration);
+                                    _this2.app.setEnabled(false, duration);
+                                    _this2.app.setTransitioning(true, duration);
                                 }
                                 // start the transition
                                 transAnimation.play().then(function () {
@@ -322,12 +491,14 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                                     leavingView.state = CACHED_STATE;
                                     // dispose any views that shouldn't stay around
                                     transAnimation.dispose();
-                                    enteringView.didEnter();
-                                    leavingView.didLeave();
+                                    if (!opts.preload) {
+                                        enteringView.didEnter();
+                                        leavingView.didLeave();
+                                    }
                                     // all done!
-                                    _this.zone.run(function () {
-                                        _this._transComplete();
-                                        callback();
+                                    _this2._zone.run(function () {
+                                        _this2._transComplete();
+                                        done();
                                     });
                                 });
                             });
@@ -335,13 +506,95 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                     }
 
                     /**
+                     * @private
+                     */
+                }, {
+                    key: '_stage',
+                    value: function _stage(viewCtrl, done) {
+                        if (viewCtrl.instance || viewCtrl.shouldDestroy) {
+                            // already compiled this view
+                            return done();
+                        }
+                        // get the pane the NavController wants to use
+                        // the pane is where all this content will be placed into
+                        this.loadPage(viewCtrl, null, function () {
+                            // this ViewController instance has finished loading
+                            try {
+                                viewCtrl.loaded();
+                            } catch (e) {
+                                console.error(e);
+                            }
+                            done();
+                        });
+                    }
+                }, {
+                    key: 'loadPage',
+                    value: function loadPage(viewCtrl, navbarContainerRef, done) {
+                        var _this3 = this;
+
+                        var providers = this.providers.concat(Injector.resolve([provide(ViewController, { useValue: viewCtrl }), provide(NavParams, { useValue: viewCtrl.params })]));
+                        console.time('loadPage ' + viewCtrl.componentType.name + ': loadIntoLocation');
+                        this._loader.loadIntoLocation(viewCtrl.componentType, this.elementRef, 'contents', providers).then(function (componentRef) {
+                            console.timeEnd('loadPage ' + viewCtrl.componentType.name + ': loadIntoLocation');
+                            viewCtrl.addDestroy(function () {
+                                componentRef.dispose();
+                            });
+                            // a new ComponentRef has been created
+                            // set the ComponentRef's instance to this ViewController
+                            viewCtrl.setInstance(componentRef.instance);
+                            // remember the ElementRef to the ion-page elementRef that was just created
+                            viewCtrl.setPageRef(componentRef.location);
+                            if (!navbarContainerRef) {
+                                navbarContainerRef = viewCtrl.getNavbarViewRef();
+                            }
+                            var navbarTemplateRef = viewCtrl.getNavbarTemplateRef();
+                            if (navbarContainerRef && navbarTemplateRef) {
+                                (function () {
+                                    console.time('loadPage ' + viewCtrl.componentType.name + ': createEmbeddedView');
+                                    var navbarView = navbarContainerRef.createEmbeddedView(navbarTemplateRef);
+                                    console.timeEnd('loadPage ' + viewCtrl.componentType.name + ': createEmbeddedView');
+                                    viewCtrl.addDestroy(function () {
+                                        var index = navbarContainerRef.indexOf(navbarView);
+                                        if (index > -1) {
+                                            navbarContainerRef.remove(index);
+                                        }
+                                    });
+                                })();
+                            }
+                            if (_this3._views.length === 1) {
+                                _this3._zone.runOutsideAngular(function () {
+                                    setTimeout(function () {
+                                        _this3.renderer.setElementClass(_this3.elementRef, 'has-views', true);
+                                    }, 200);
+                                });
+                            }
+                            done(viewCtrl);
+                        });
+                    }
+                }, {
+                    key: '_setZIndex',
+                    value: function _setZIndex(enteringInstance, leavingInstance, direction) {
+                        if (!leavingInstance) {
+                            enteringInstance._zIndex = 10;
+                        } else if (direction === 'back') {
+                            // moving back
+                            enteringInstance._zIndex = leavingInstance._zIndex - 1;
+                        } else {
+                            // moving forward
+                            enteringInstance._zIndex = leavingInstance._zIndex + 1;
+                        }
+                    }
+
+                    /**
+                     * @private
                      * TODO
                      */
                 }, {
                     key: 'swipeBackStart',
                     value: function swipeBackStart() {
-                        var _this2 = this;
+                        var _this4 = this;
 
+                        return;
                         if (!this.app.isEnabled() || !this.canSwipeBack()) {
                             return;
                         }
@@ -365,26 +618,28 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                         enteringView.shouldCache = false;
                         enteringView.willEnter();
                         // wait for the new view to complete setup
-                        enteringView.stage(function () {
-                            _this2.zone.runOutsideAngular(function () {
+                        enteringView._stage(function () {
+                            _this4._zone.runOutsideAngular(function () {
                                 // set that the new view pushed on the stack is staged to be entering/leaving
                                 // staged state is important for the transition to find the correct view
                                 enteringView.state = STAGED_ENTERING_STATE;
                                 leavingView.state = STAGED_LEAVING_STATE;
                                 // init the swipe back transition animation
-                                _this2._sbTrans = Transition.create(_this2, opts);
-                                _this2._sbTrans.easing('linear').progressStart();
+                                _this4._sbTrans = Transition.create(_this4, opts);
+                                _this4._sbTrans.easing('linear').progressStart();
                             });
                         });
                     }
 
                     /**
+                     * @private
                      * TODO
                      * @param {TODO} progress  TODO
                      */
                 }, {
                     key: 'swipeBackProgress',
                     value: function swipeBackProgress(value) {
+                        return;
                         if (this._sbTrans) {
                             // continue to disable the app while actively dragging
                             this.app.setEnabled(false, 4000);
@@ -402,17 +657,18 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                 }, {
                     key: 'swipeBackEnd',
                     value: function swipeBackEnd(completeSwipeBack, rate) {
-                        var _this3 = this;
+                        var _this5 = this;
 
+                        return;
                         if (!this._sbTrans) return;
                         // disables the app during the transition
                         this.app.setEnabled(false);
                         this.app.setTransitioning(true);
                         this._sbTrans.progressEnd(completeSwipeBack, rate).then(function () {
-                            _this3.zone.run(function () {
+                            _this5._zone.run(function () {
                                 // find the views that were entering and leaving
-                                var enteringView = _this3.getStagedEnteringView();
-                                var leavingView = _this3.getStagedLeavingView();
+                                var enteringView = _this5.getStagedEnteringView();
+                                var leavingView = _this5.getStagedLeavingView();
                                 if (enteringView && leavingView) {
                                     // finish up the animation
                                     if (completeSwipeBack) {
@@ -422,9 +678,9 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                                         leavingView.state = CACHED_STATE;
                                         enteringView.didEnter();
                                         leavingView.didLeave();
-                                        if (_this3.router) {
+                                        if (_this5.router) {
                                             // notify router of the pop state change
-                                            _this3.router.stateChange('pop', enteringView);
+                                            _this5.router.stateChange('pop', enteringView);
                                         }
                                     } else {
                                         // cancelled the swipe back, they didn't end up going back
@@ -439,16 +695,22 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                                     }
                                 }
                                 // empty out and dispose the swipe back transition animation
-                                _this3._sbTrans && _this3._sbTrans.dispose();
-                                _this3._sbTrans = null;
+                                _this5._sbTrans && _this5._sbTrans.dispose();
+                                _this5._sbTrans = null;
                                 // all done!
-                                _this3._transComplete();
+                                _this5._transComplete();
                             });
                         });
                     }
+
+                    /**
+                     * @private
+                     * TODO
+                     */
                 }, {
-                    key: '_runSwipeBack',
-                    value: function _runSwipeBack() {
+                    key: '_sbComplete',
+                    value: function _sbComplete() {
+                        return;
                         if (this.canSwipeBack()) {
                             // it is possible to swipe back
                             if (this.sbGesture) {
@@ -519,121 +781,53 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                 }, {
                     key: '_transComplete',
                     value: function _transComplete() {
-                        var _this4 = this;
+                        var _this6 = this;
 
-                        var destroys = [];
-                        this.views.forEach(function (view) {
+                        this._views.forEach(function (view) {
                             if (view) {
                                 if (view.shouldDestroy) {
-                                    destroys.push(view);
+                                    view.didUnload();
                                 } else if (view.state === CACHED_STATE && view.shouldCache) {
                                     view.shouldCache = false;
                                 }
                             }
                         });
-                        destroys.forEach(function (view) {
-                            _this4.remove(view);
-                            view.destroy();
-                        });
                         // allow clicks again, but still set an enable time
                         // meaning nothing with this view controller can happen for XXms
                         this.app.setEnabled(true);
                         this.app.setTransitioning(false);
-                        if (this.views.length === 1) {
-                            this.elementRef.nativeElement.classList.add('has-views');
-                        }
-                        this._runSwipeBack();
+                        this._sbComplete();
+                        raf(function () {
+                            _this6._cleanup();
+                        });
                     }
-
-                    /**
-                     * TODO
-                     * @returns {TODO} TODO
-                     */
                 }, {
-                    key: 'getActive',
-                    value: function getActive() {
-                        for (var i = 0, ii = this.views.length; i < ii; i++) {
-                            if (this.views[i].state === ACTIVE_STATE) {
-                                return this.views[i];
-                            }
-                        }
-                        return null;
-                    }
+                    key: '_cleanup',
+                    value: function _cleanup(activeView) {
+                        var _this7 = this;
 
-                    /**
-                     * TODO
-                     * @param {TODO} instance  TODO
-                     * @returns {TODO} TODO
-                     */
-                }, {
-                    key: 'getByInstance',
-                    value: function getByInstance(instance) {
-                        if (instance) {
-                            for (var i = 0, ii = this.views.length; i < ii; i++) {
-                                if (this.views[i].instance === instance) {
-                                    return this.views[i];
+                        // the active view, and the previous view, should be rendered in dom and ready to go
+                        // all others, like a cached page 2 back, should be display: none and not rendered
+                        var destroys = [];
+                        activeView = activeView || this.getActive();
+                        var previousView = this.getPrevious(activeView);
+                        this._views.forEach(function (view) {
+                            if (view) {
+                                if (view.shouldDestroy) {
+                                    destroys.push(view);
+                                } else {
+                                    var isActiveView = view === activeView;
+                                    var isPreviousView = view === previousView;
+                                    view.domCache && view.domCache(isActiveView, isPreviousView);
                                 }
                             }
-                        }
-                        return null;
-                    }
-
-                    /**
-                     * TODO
-                     * @param {TODO} index  TODO
-                     * @returns {TODO} TODO
-                     */
-                }, {
-                    key: 'getByIndex',
-                    value: function getByIndex(index) {
-                        if (index < this.views.length && index > -1) {
-                            return this.views[index];
-                        }
-                        return null;
-                    }
-
-                    /**
-                     * TODO
-                     * @param {TODO} view  TODO
-                     * @returns {TODO} TODO
-                     */
-                }, {
-                    key: 'getPrevious',
-                    value: function getPrevious(view) {
-                        if (view) {
-                            return this.views[this.views.indexOf(view) - 1];
-                        }
-                        return null;
-                    }
-
-                    /**
-                     * TODO
-                     * @returns {TODO} TODO
-                     */
-                }, {
-                    key: 'getStagedEnteringView',
-                    value: function getStagedEnteringView() {
-                        for (var i = 0, ii = this.views.length; i < ii; i++) {
-                            if (this.views[i].state === STAGED_ENTERING_STATE) {
-                                return this.views[i];
-                            }
-                        }
-                        return null;
-                    }
-
-                    /**
-                     * TODO
-                     * @returns {TODO} TODO
-                     */
-                }, {
-                    key: 'getStagedLeavingView',
-                    value: function getStagedLeavingView() {
-                        for (var i = 0, ii = this.views.length; i < ii; i++) {
-                            if (this.views[i].state === STAGED_LEAVING_STATE) {
-                                return this.views[i];
-                            }
-                        }
-                        return null;
+                        });
+                        // all views being destroyed should be removed from the list of views
+                        // and completely removed from the dom
+                        destroys.forEach(function (view) {
+                            _this7._remove(view);
+                            view.destroy();
+                        });
                     }
 
                     /**
@@ -669,41 +863,16 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                     }
 
                     /**
-                     * TODO
-                     * @returns {TODO} TODO
-                     */
-                }, {
-                    key: 'anchorViewContainerRef',
-                    value: function anchorViewContainerRef() {
-                        if (arguments.length) {
-                            this._anchorVC = arguments[0];
-                        }
-                        return this._anchorVC;
-                    }
-
-                    /**
-                     * TODO
-                     * @returns {TODO} TODO
-                     */
-                }, {
-                    key: 'childNavbar',
-                    value: function childNavbar() {
-                        if (arguments.length) {
-                            this._childNavbar = arguments[0];
-                        }
-                        return this._childNavbar;
-                    }
-
-                    /**
+                     * @private
                      * TODO
                      * @param {TODO} view  TODO
                      * @returns {TODO} TODO
                      */
                 }, {
-                    key: 'add',
-                    value: function add(view) {
+                    key: '_add',
+                    value: function _add(view) {
                         this._incrementId(view);
-                        this.views.push(view);
+                        this._views.push(view);
                     }
                 }, {
                     key: '_incrementId',
@@ -712,14 +881,93 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                     }
 
                     /**
+                     * @private
                      * TODO
                      * @param {TODO} viewOrIndex  TODO
                      * @returns {TODO} TODO
                      */
                 }, {
-                    key: 'remove',
-                    value: function remove(viewOrIndex) {
-                        util.array.remove(this.views, viewOrIndex);
+                    key: '_remove',
+                    value: function _remove(viewOrIndex) {
+                        util.array.remove(this._views, viewOrIndex);
+                    }
+
+                    /**
+                     * TODO
+                     * @returns {TODO} TODO
+                     */
+                }, {
+                    key: 'getActive',
+                    value: function getActive() {
+                        for (var i = this._views.length - 1; i >= 0; i--) {
+                            if (this._views[i].state === ACTIVE_STATE && !this._views[i].shouldDestroy) {
+                                return this._views[i];
+                            }
+                        }
+                        return null;
+                    }
+
+                    /**
+                     * TODO
+                     * @param {TODO} index  TODO
+                     * @returns {TODO} TODO
+                     */
+                }, {
+                    key: 'getByIndex',
+                    value: function getByIndex(index) {
+                        if (index < this._views.length && index > -1) {
+                            return this._views[index];
+                        }
+                        return null;
+                    }
+
+                    /**
+                     * TODO
+                     * @param {TODO} view  TODO
+                     * @returns {TODO} TODO
+                     */
+                }, {
+                    key: 'getPrevious',
+                    value: function getPrevious(view) {
+                        if (view) {
+                            var viewIndex = this._views.indexOf(view);
+                            for (var i = viewIndex - 1; i >= 0; i--) {
+                                if (!this._views[i].shouldDestroy) {
+                                    return this._views[i];
+                                }
+                            }
+                        }
+                        return null;
+                    }
+
+                    /**
+                     * TODO
+                     * @returns {TODO} TODO
+                     */
+                }, {
+                    key: 'getStagedEnteringView',
+                    value: function getStagedEnteringView() {
+                        for (var i = 0, ii = this._views.length; i < ii; i++) {
+                            if (this._views[i].state === STAGED_ENTERING_STATE) {
+                                return this._views[i];
+                            }
+                        }
+                        return null;
+                    }
+
+                    /**
+                     * TODO
+                     * @returns {TODO} TODO
+                     */
+                }, {
+                    key: 'getStagedLeavingView',
+                    value: function getStagedLeavingView() {
+                        for (var i = 0, ii = this._views.length; i < ii; i++) {
+                            if (this._views[i].state === STAGED_LEAVING_STATE) {
+                                return this._views[i];
+                            }
+                        }
+                        return null;
                     }
 
                     /**
@@ -730,9 +978,9 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                 }, {
                     key: 'first',
                     value: function first() {
-                        for (var i = 0, l = this.views.length; i < l; i++) {
-                            if (!this.views[i].shouldDestroy) {
-                                return this.views[i];
+                        for (var i = 0, l = this._views.length; i < l; i++) {
+                            if (!this._views[i].shouldDestroy) {
+                                return this._views[i];
                             }
                         }
                         return null;
@@ -746,9 +994,9 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                 }, {
                     key: 'last',
                     value: function last() {
-                        for (var i = this.views.length - 1; i >= 0; i--) {
-                            if (!this.views[i].shouldDestroy) {
-                                return this.views[i];
+                        for (var i = this._views.length - 1; i >= 0; i--) {
+                            if (!this._views[i].shouldDestroy) {
+                                return this._views[i];
                             }
                         }
                         return null;
@@ -762,7 +1010,7 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                 }, {
                     key: 'indexOf',
                     value: function indexOf(view) {
-                        return this.views.indexOf(view);
+                        return this._views.indexOf(view);
                     }
 
                     /**
@@ -774,8 +1022,8 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                     key: 'length',
                     value: function length() {
                         var len = 0;
-                        for (var i = 0, l = this.views.length; i < l; i++) {
-                            if (!this.views[i].shouldDestroy) {
+                        for (var i = 0, l = this._views.length; i < l; i++) {
+                            if (!this._views[i].shouldDestroy) {
                                 len++;
                             }
                         }
@@ -795,7 +1043,7 @@ System.register('ionic/components/nav/nav-controller', ['angular2/angular2', 'an
                         var _iteratorError = undefined;
 
                         try {
-                            for (var _iterator = this.views[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                            for (var _iterator = this._views[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                                 var view = _step.value;
 
                                 if (view.instance) {

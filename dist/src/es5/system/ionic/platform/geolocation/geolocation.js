@@ -1,16 +1,35 @@
-System.register("ionic/platform/geolocation/geolocation", ["rx", "../plugin"], function (_export) {
+System.register("ionic/platform/geolocation/geolocation", ["../plugin"], function (_export) {
+    // TODO: temporary until https://github.com/angular/angular/issues/4390 decided
+    // var Rx = require('@reactivex/rxjs/dist/cjs/Rx');
+    // var {Observable} = Rx;
+
+    /**
+     * Get geolocation data.
+     *
+     * @usage
+     * ```js
+     * Geolocation.getCurrentPosition().then((resp) => {
+     *  //resp.coords.latitude
+     *  //resp.coords.longitude
+     * })
+     *
+     * let watch = Geolocation.watchPosition();
+     * watch.source.subscribe((data) => {
+     *  //data.coords.latitude
+     *  //data.coords.longitude
+     * })
+     * ```
+     */
     "use strict";
 
-    var Rx, NativePlugin, __decorate, __metadata, Geolocation;
+    var NativePlugin, __decorate, __metadata, Geolocation;
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
     return {
-        setters: [function (_rx) {
-            Rx = _rx;
-        }, function (_plugin) {
+        setters: [function (_plugin) {
             NativePlugin = _plugin.NativePlugin;
         }],
         execute: function () {
@@ -23,7 +42,7 @@ System.register("ionic/platform/geolocation/geolocation", ["rx", "../plugin"], f
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -43,6 +62,10 @@ System.register("ionic/platform/geolocation/geolocation", ["rx", "../plugin"], f
 
                 _createClass(Geolocation, null, [{
                     key: "getCurrentPosition",
+
+                    /**
+                     * Get the current GPS location.
+                     */
                     value: function getCurrentPosition(options) {
                         return new Promise(function (resolve, reject) {
                             navigator.geolocation.getCurrentPosition(function (result) {
@@ -52,6 +75,10 @@ System.register("ionic/platform/geolocation/geolocation", ["rx", "../plugin"], f
                             }, options);
                         });
                     }
+
+                    /**
+                     * Watch for location changes.
+                     */
                 }, {
                     key: "watchPosition",
                     value: function watchPosition(options) {
@@ -71,6 +98,11 @@ System.register("ionic/platform/geolocation/geolocation", ["rx", "../plugin"], f
                             }
                         };
                     }
+
+                    /**
+                     * Clear a specific watch by watch ID. Generally, you'll call
+                     * clear() on the returned watch from `getCurrentPosition` or `watchPosition` above.
+                     */
                 }, {
                     key: "clearWatch",
                     value: function clearWatch(watchID) {

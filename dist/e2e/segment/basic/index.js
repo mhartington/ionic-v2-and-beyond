@@ -1,17 +1,17 @@
-System.register("index", ["angular2/forms", "ionic/ionic"], function (_export) {
+System.register("index", ["angular2/angular2", "ionic/ionic"], function (_export) {
     "use strict";
 
-    var FORM_DIRECTIVES, FormBuilder, Validators, App, __decorate, __metadata, IonicApp, _a;
+    var FORM_DIRECTIVES, FormBuilder, Validators, App, __decorate, __metadata, MyApp, _a;
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
     return {
-        setters: [function (_angular2Forms) {
-            FORM_DIRECTIVES = _angular2Forms.FORM_DIRECTIVES;
-            FormBuilder = _angular2Forms.FormBuilder;
-            Validators = _angular2Forms.Validators;
+        setters: [function (_angular2Angular2) {
+            FORM_DIRECTIVES = _angular2Angular2.FORM_DIRECTIVES;
+            FormBuilder = _angular2Angular2.FormBuilder;
+            Validators = _angular2Angular2.Validators;
         }, function (_ionicIonic) {
             App = _ionicIonic.App;
         }],
@@ -25,7 +25,7 @@ System.register("index", ["angular2/forms", "ionic/ionic"], function (_export) {
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -38,32 +38,34 @@ System.register("index", ["angular2/forms", "ionic/ionic"], function (_export) {
                 if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
             };
 
-            IonicApp = (function () {
-                function IonicApp(fb) {
-                    _classCallCheck(this, IonicApp);
+            MyApp = (function () {
+                function MyApp(fb) {
+                    _classCallCheck(this, MyApp);
 
                     this.myForm = fb.group({
                         mapStyle: ['hybrid', Validators.required]
                     });
-                    console.log(this.myForm);
+                    this.relationship = 'enemies';
+                    this.modelStyle = 'B';
+                    this.appType = 'free';
                 }
 
-                _createClass(IonicApp, [{
+                _createClass(MyApp, [{
                     key: "doSubmit",
                     value: function doSubmit(event) {
-                        console.log('Submitting form', this.form.value);
+                        console.log('Submitting form', this.myForm.value);
                         event.preventDefault();
                     }
                 }]);
 
-                return IonicApp;
+                return MyApp;
             })();
 
-            IonicApp = __decorate([App({
+            MyApp = __decorate([App({
                 templateUrl: 'main.html',
-                appInjector: [FormBuilder],
+                providers: [FormBuilder],
                 directives: [FORM_DIRECTIVES]
-            }), __metadata('design:paramtypes', [typeof (_a = typeof FormBuilder !== 'undefined' && FormBuilder) === 'function' && _a || Object])], IonicApp);
+            }), __metadata('design:paramtypes', [typeof (_a = typeof FormBuilder !== 'undefined' && FormBuilder) === 'function' && _a || Object])], MyApp);
         }
     };
 });

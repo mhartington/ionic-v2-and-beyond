@@ -1,17 +1,13 @@
-
 // Default mixins and settings -----------------
 @import "../template/mixins";
 @import "../template/settings";
+
 // ---------------------------------------------
 
 @font-face {
   font-family: 'League Gothic';
-  src: url('../../lib/font/league_gothic-webfont.eot');
-  src: url('../../lib/font/league_gothic-webfont.eot?#iefix') format('embedded-opentype'),
-  url('../../lib/font/league_gothic-webfont.woff') format('woff'),
-  url('../../lib/font/league_gothic-webfont.ttf') format('truetype'),
-  url('../../lib/font/league_gothic-webfont.svg#LeagueGothicRegular') format('svg');
-
+  src: url("../../lib/font/league_gothic-webfont.eot");
+  src: url("../../lib/font/league_gothic-webfont.eot?#iefix") format("embedded-opentype"), url("../../lib/font/league_gothic-webfont.woff") format("woff"), url("../../lib/font/league_gothic-webfont.ttf") format("truetype"), url("../../lib/font/league_gothic-webfont.svg#LeagueGothicRegular") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -19,9 +15,11 @@
 @import url(https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic);
 
 $ionicBlue: #313744;
-html{
-  background-color: $ionicBlue
+
+html {
+  background-color: $ionicBlue;
 }
+
 // Override theme settings
 $backgroundColor: $ionicBlue;
 
@@ -29,20 +27,20 @@ $mainColor: #fff;
 $headingColor: #fff;
 
 $mainFontSize: 32px;
-$mainFont: 'Avenir Next', san-serif;
-$headingFont: 'Avenir Next', san-serif;
-$headingTextShadow: 1px 1px 15px rgba(0, 0, 0, .2);
+$mainFont: "Avenir Next", san-serif;
+$headingFont: "Avenir Next", san-serif;
+$headingTextShadow: 1px 1px 15px rgba(0, 0, 0, 0.2);
 $headingLetterSpacing: 1px;
 $headingTextTransform: none;
 $headingFontWeight: 400;
 $linkColor: white;
 $linkColorHover: white;
-$selectionBackgroundColor: lighten( $linkColor, 25% );
+$selectionBackgroundColor: lighten($linkColor, 25%);
 
-$heading1Size: 2.0em;
+$heading1Size: 2em;
 $heading2Size: 1.6em;
 $heading3Size: 1.3em;
-$heading4Size: 1.0em;
+$heading4Size: 1em;
 
 section.has-light-background {
   &, h1, h2, h3, h4, h5, h6 {
@@ -50,10 +48,9 @@ section.has-light-background {
   }
 }
 
-
-
 // Theme template ------------------------------
 @import "../template/theme";
+
 // ---------------------------------------------
 
 .reveal {
@@ -61,8 +58,8 @@ section.has-light-background {
 
   h1, h2, h3, h4 {
     text-transform: uppercase;
-    font-weight:600;
-    letter-spacing:2px;
+    font-weight: 600;
+    letter-spacing: 2px;
   }
 
   p, th, td, ol, ul, li {
@@ -89,12 +86,12 @@ section.has-light-background {
   table {
     td, th {
       border: 0;
-      background: rgba(0,0,0,.15);
+      background: rgba(0, 0, 0, 0.15);
     }
 
     th {
       text-transform: uppercase;
-      background: rgba(0,0,0,.4);
+      background: rgba(0, 0, 0, 0.4);
     }
   }
 
@@ -113,13 +110,15 @@ section.has-light-background {
 
   .me {
     margin: 30px 0 0 130px;
-    font-size:1.2em;
+    font-size: 1.2em;
     line-height: 2em;
     list-style-type: none;
 
     li {
       padding: 0 0 0 70px;
-      background-size:
+
+      // background-size:
+
     }
   }
 
@@ -128,12 +127,10 @@ section.has-light-background {
   }
 
   .native-logos {
-
     img {
       width: 100px;
       margin: 40px 20px 0 20px;
     }
-
   }
 
   .stack {
@@ -157,19 +154,22 @@ section.has-light-background {
     float: left;
     width: 50%;
   }
+
   .col.preview {
-    width: 35%;;
+    width: 35%;
   }
+
   .col.code {
     width: 65%;
     text-align: left;
   }
+
   .col.code > * {
     margin-left: 40px;
   }
 
   .demo-frame {
-    background: url('../img/demo-bg.png') no-repeat;
+    background: url("../img/demo-bg.png") no-repeat;
     background-size: 340px;
     height: 700px;
     margin-top: 0;
@@ -182,7 +182,7 @@ section.has-light-background {
     left: 7px;
     top: 98px;
     width: 296px;
-    height: 527px
+    height: 527px;
   }
 
   pre code {
@@ -192,7 +192,7 @@ section.has-light-background {
   .headshot {
     border-radius: 50%;
     border: 5px solid #202532;
-    width:200px;
+    width: 200px;
   }
 
   a {
@@ -218,57 +218,141 @@ section.has-light-background {
     transform: translateY(10px);
   }
 
-  a:not(.icon):hover::after,a:not(.icon):focus::after {
+  a:not(.icon):hover::after, a:not(.icon):focus::after {
     opacity: 0.5;
     -webkit-transform: translateY(0px);
     -moz-transform: translateY(0px);
     transform: translateY(0px);
   }
 
-  .icon{
-    -webkit-transition:all 0.5s ease-out !important;
-    -moz-transition:all 0.5s ease-out !important;
-    -ms-transition:all 0.5s ease-out !important;
-    -o-transition:all 0.5s ease-out !important;
-    transition:all 0.5s ease-out !important;
+  .icon {
+    -webkit-transition: all 0.5s ease-out !important;
+    -moz-transition: all 0.5s ease-out !important;
+    -ms-transition: all 0.5s ease-out !important;
+    -o-transition: all 0.5s ease-out !important;
+    transition: all 0.5s ease-out !important;
     opacity: 0.5;
   }
 
-  .icon:hover{
-    opacity:1;
+  .icon:hover {
+    opacity: 1;
   }
-  .blur{
-    background-color: rgba(0,0,0,0.3);
-    p{
+
+  .blur {
+    background-color: rgba(0, 0, 0, 0.3);
+
+    p {
       text-shadow: -2px 2px 0 #000;
       font-weight: bold;
     }
   }
-  .demo{
+
+  .demo {
     margin-left: 15px;
+
     // float: right;
-    iframe{
-      width: 328px;
-      height: 568px;
-      border: none;
-      // border-radius: 10px;
-      border: 4px solid #555;
-      background: white;
+    iframe {
+      // width: 328px;
+      // height: 568px;
+      // border: none;
+
+      // // border-radius: 10px;
+      // border: 4px solid #555;
+      //background: white;
     }
   }
-  .button{
+
+  .button {
     background-color: white;
     border: none;
   }
 
-  .code-left{
+  .code-left {
     // float: left;
-    width:60%;
+    width: 60%;
     text-align: left;
   }
-  .flex{
+
+  .flex {
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
+  }
+
+  [flex] {
+    display: flex;
+  }
+
+  [col] {
+    flex: 1;
+    text-align: left;
+    padding-right: 40px;
+  }
+
+  [center] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  [col][center] img {
+    max-height: 420px;
+  }
+
+  pre[col],
+  pre code {
+    background-color: #22272f;
+    font-size: 20px;
+    line-height: 26px;
+  }
+
+  pre[col] {
+    margin: 0;
+    padding: 30px;
+  }
+
+  [col][demo] {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .demo-ios {
+    position: relative;
+    background: url("../../img/devices-sprite-transparent.png") no-repeat;
+    background-size: 455px 1559px;
+    width: 460px;
+    height: 740px;
+
+    iframe {
+      position: absolute;
+      top: 75px;
+      left: 69px;
+      width: 320px;
+      height: 560px;
+    }
+  }
+
+  .demo-md {
+    
+    position: relative;
+    background: url("../../img/devices-sprite-transparent.png") no-repeat 0px -775px;
+    background-size: 455px 1559px;
+    width: 460px;
+    height: 780px;
+
+    iframe {
+      position: absolute;
+      top: 67px;
+      left: 52px;
+      width: 350px;
+      height: 572px;
+    }
+  }
+
+  iframe {
+    max-width: 100%;
+    max-height: 100%;
+    overflow: hidden;
   }
 }

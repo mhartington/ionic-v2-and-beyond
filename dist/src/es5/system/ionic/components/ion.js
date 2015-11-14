@@ -29,8 +29,8 @@ System.register('ionic/components/ion', ['ionic/util/dom'], function (_export) {
                     key: 'onInit',
                     value: function onInit() {
                         var cls = this.constructor;
-                        if (cls.defaultProperties && this.config) {
-                            for (var prop in cls.defaultProperties) {
+                        if (cls.defaultInputs && this.config) {
+                            for (var prop in cls.defaultInputs) {
                                 // Priority:
                                 // ---------
                                 // 1) Value set from within constructor
@@ -45,13 +45,13 @@ System.register('ionic/components/ion', ['ionic/util/dom'], function (_export) {
                                     continue;
                                 }
                                 // get the property values from a global user/platform config
-                                var configVal = this.config.setting(prop);
+                                var configVal = this.config.get(prop);
                                 if (configVal) {
                                     this[prop] = configVal;
                                     continue;
                                 }
                                 // wasn't set yet, so go with property's default value
-                                this[prop] = cls.defaultProperties[prop];
+                                this[prop] = cls.defaultInputs[prop];
                             }
                         }
                     }
@@ -73,12 +73,12 @@ System.register('ionic/components/ion', ['ionic/util/dom'], function (_export) {
                 }, {
                     key: 'width',
                     value: function width() {
-                        return this.getDimensions().w;
+                        return dom.getDimensions(this).width;
                     }
                 }, {
                     key: 'height',
                     value: function height() {
-                        return this.getDimensions().h;
+                        return dom.getDimensions(this).height;
                     }
                 }]);
 

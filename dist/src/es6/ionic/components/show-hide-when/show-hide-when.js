@@ -13,7 +13,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 import { Directive, Attribute, NgZone } from 'angular2/angular2';
-import { IonicPlatform } from '../../platform/platform';
+import { Platform } from '../../platform/platform';
 class DisplayWhen {
     constructor(conditions, platform, ngZone) {
         this.isMatch = false;
@@ -76,7 +76,7 @@ ShowWhen = __decorate([
         }
     }),
     __param(0, Attribute('show-when')), 
-    __metadata('design:paramtypes', [String, (typeof (_a = typeof IonicPlatform !== 'undefined' && IonicPlatform) === 'function' && _a) || Object, (typeof (_b = typeof NgZone !== 'undefined' && NgZone) === 'function' && _b) || Object])
+    __metadata('design:paramtypes', [String, (typeof (_a = typeof Platform !== 'undefined' && Platform) === 'function' && _a) || Object, (typeof (_b = typeof NgZone !== 'undefined' && NgZone) === 'function' && _b) || Object])
 ], ShowWhen);
 /**
  * TODO
@@ -102,6 +102,6 @@ HideWhen = __decorate([
         }
     }),
     __param(0, Attribute('hide-when')), 
-    __metadata('design:paramtypes', [String, (typeof (_c = typeof IonicPlatform !== 'undefined' && IonicPlatform) === 'function' && _c) || Object, (typeof (_d = typeof NgZone !== 'undefined' && NgZone) === 'function' && _d) || Object])
+    __metadata('design:paramtypes', [String, (typeof (_c = typeof Platform !== 'undefined' && Platform) === 'function' && _c) || Object, (typeof (_d = typeof NgZone !== 'undefined' && NgZone) === 'function' && _d) || Object])
 ], HideWhen);
 var _a, _b, _c, _d;

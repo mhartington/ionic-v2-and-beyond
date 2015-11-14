@@ -11,8 +11,8 @@ export class Ion {
     }
     onInit() {
         let cls = this.constructor;
-        if (cls.defaultProperties && this.config) {
-            for (let prop in cls.defaultProperties) {
+        if (cls.defaultInputs && this.config) {
+            for (let prop in cls.defaultInputs) {
                 // Priority:
                 // ---------
                 // 1) Value set from within constructor
@@ -27,13 +27,13 @@ export class Ion {
                     continue;
                 }
                 // get the property values from a global user/platform config
-                let configVal = this.config.setting(prop);
+                let configVal = this.config.get(prop);
                 if (configVal) {
                     this[prop] = configVal;
                     continue;
                 }
                 // wasn't set yet, so go with property's default value
-                this[prop] = cls.defaultProperties[prop];
+                this[prop] = cls.defaultInputs[prop];
             }
         }
     }
@@ -47,9 +47,9 @@ export class Ion {
         return dom.getDimensions(this);
     }
     width() {
-        return this.getDimensions().w;
+        return dom.getDimensions(this).width;
     }
     height() {
-        return this.getDimensions().h;
+        return dom.getDimensions(this).height;
     }
 }

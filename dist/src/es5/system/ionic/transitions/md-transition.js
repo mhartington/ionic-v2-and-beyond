@@ -1,9 +1,9 @@
 System.register('ionic/transitions/md-transition', ['./transition', '../animations/animation'], function (_export) {
     'use strict';
 
-    var Transition, Animation, DURATION, EASING, TRANSLATEY, OFF_BOTTOM, CENTER, MaterialTransition;
+    var Transition, Animation, TRANSLATEY, OFF_BOTTOM, CENTER, SHOW_BACK_BTN_CSS, MDTransition;
 
-    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
@@ -16,61 +16,60 @@ System.register('ionic/transitions/md-transition', ['./transition', '../animatio
             Animation = _animationsAnimation.Animation;
         }],
         execute: function () {
-            DURATION = 300;
-            EASING = 'cubic-bezier(0.36,0.66,0.04,1)';
             TRANSLATEY = 'translateY';
             OFF_BOTTOM = '40px';
             CENTER = '0px';
+            SHOW_BACK_BTN_CSS = 'show-back-button';
 
-            MaterialTransition = (function (_Transition) {
-                _inherits(MaterialTransition, _Transition);
+            MDTransition = (function (_Animation) {
+                _inherits(MDTransition, _Animation);
 
-                function MaterialTransition(nav, opts) {
-                    _classCallCheck(this, MaterialTransition);
+                function MDTransition(navCtrl, opts) {
+                    _classCallCheck(this, MDTransition);
 
-                    _get(Object.getPrototypeOf(MaterialTransition.prototype), 'constructor', this).call(this, nav, opts);
-                    // global duration and easing for all child animations
-                    this.duration(DURATION);
-                    this.easing(EASING);
-                    // entering item moves in bottom to center
-                    this.enteringView.to(TRANSLATEY, CENTER).before.setStyles({ zIndex: this.entering.index });
-                    // entering item moves in bottom to center
-                    this.enteringNavbar.to(TRANSLATEY, CENTER).before.setStyles({ zIndex: this.entering.index + 10 });
-                    // leaving view stays put
-                    this.leavingView.before.setStyles({ zIndex: this.leaving.index });
-                    this.leavingNavbar.before.setStyles({ zIndex: this.leaving.index + 10 });
-                    // set properties depending on direction
-                    if (opts.direction === 'back') {
-                        // back direction
-                        this.enteringView.from(TRANSLATEY, CENTER);
-                        this.enteringNavbar.from(TRANSLATEY, CENTER);
-                        // leaving view goes center to bottom
-                        this.leavingView.fromTo(TRANSLATEY, CENTER, OFF_BOTTOM).fadeOut();
-                        this.leavingNavbar.fromTo(TRANSLATEY, CENTER, OFF_BOTTOM).fadeOut();
+                    //opts.renderDelay = 80;
+                    _get(Object.getPrototypeOf(MDTransition.prototype), 'constructor', this).call(this, null, opts);
+                    // what direction is the transition going
+                    var backDirection = opts.direction === 'back';
+                    // get entering/leaving views
+                    var enteringView = navCtrl.getStagedEnteringView();
+                    var leavingView = navCtrl.getStagedLeavingView();
+                    // do they have navbars?
+                    var enteringHasNavbar = enteringView.hasNavbar();
+                    var leavingHasNavbar = leavingView && leavingView.hasNavbar();
+                    // entering content item moves in bottom to center
+                    var enteringPage = new Animation(enteringView.pageRef());
+                    enteringPage.before.addClass('show-page');
+                    this.add(enteringPage);
+                    if (backDirection) {
+                        this.duration(200).easing('cubic-bezier(0.47,0,0.745,0.715)');
+                        enteringPage.fromTo(TRANSLATEY, CENTER, CENTER);
                     } else {
-                        // forward direction
-                        this.enteringView.from(TRANSLATEY, OFF_BOTTOM).fadeIn();
-                        this.enteringNavbar.from(TRANSLATEY, OFF_BOTTOM).fadeIn();
+                        this.duration(280).easing('cubic-bezier(0.36,0.66,0.04,1)');
+                        enteringPage.fromTo(TRANSLATEY, OFF_BOTTOM, CENTER).fadeIn();
                     }
-                    var itemLength = nav.length();
-                    if (nav.tabs && (itemLength === 1 || itemLength === 2)) {
-                        var tabBarEle = nav.tabs.elementRef.nativeElement.querySelector('.tab-bar-container');
-                        var tabBar = new Animation(tabBarEle);
-                        if (itemLength === 1 && opts.direction == 'back') {
-                            tabBar.fromTo('height', '0px', '69px');
-                            tabBar.fadeIn();
-                        } else if (itemLength === 2 && opts.direction == 'forward') {
-                            tabBar.fromTo('height', '69px', '0px');
-                            tabBar.fadeOut();
+                    if (enteringHasNavbar) {
+                        var enteringBackButton = new Animation(enteringView.backBtnRef());
+                        this.add(enteringBackButton);
+                        if (enteringView.enableBack()) {
+                            enteringBackButton.before.addClass(SHOW_BACK_BTN_CSS);
+                        } else {
+                            enteringBackButton.before.removeClass(SHOW_BACK_BTN_CSS);
                         }
-                        this.add(tabBar);
+                    }
+                    // setup leaving view
+                    if (leavingView && backDirection) {
+                        // leaving content
+                        this.duration(200).easing('cubic-bezier(0.47,0,0.745,0.715)');
+                        var leavingPage = new Animation(leavingView.pageRef());
+                        this.add(leavingPage.fromTo(TRANSLATEY, CENTER, OFF_BOTTOM).fadeOut());
                     }
                 }
 
-                return MaterialTransition;
-            })(Transition);
+                return MDTransition;
+            })(Animation);
 
-            Transition.register('md', MaterialTransition);
+            Transition.register('md', MDTransition);
         }
     };
 });

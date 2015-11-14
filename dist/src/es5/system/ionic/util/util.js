@@ -44,7 +44,14 @@ System.register('ionic/util/util', [], function (_export) {
 
     _export('nextUid', nextUid);
 
+    /**
+     * Throttle the given fun, only allowing it to be
+     * called at most every `wait` ms.
+     */
+
     _export('getQuerystring', getQuerystring);
+
+    _export('throttle', throttle);
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
@@ -152,18 +159,44 @@ System.register('ionic/util/util', [], function (_export) {
             var startIndex = url.indexOf('?');
             if (startIndex !== -1) {
                 var queries = url.slice(startIndex + 1).split('&');
-                if (queries.length) {
-                    queries.forEach(function (param) {
-                        var split = param.split('=');
-                        queryParams[split[0]] = split[1].split('#')[0];
-                    });
-                }
+                queries.forEach(function (param) {
+                    var split = param.split('=');
+                    queryParams[split[0].toLowerCase()] = split[1].split('#')[0];
+                });
             }
             if (key) {
                 return queryParams[key] || '';
             }
         }
         return queryParams;
+    }
+
+    function throttle(func, wait, options) {
+        var context, args, result;
+        var timeout = null;
+        var previous = 0;
+        options || (options = {});
+        var later = function later() {
+            previous = options.leading === false ? 0 : Date.now();
+            timeout = null;
+            result = func.apply(context, args);
+        };
+        return function () {
+            var now = Date.now();
+            if (!previous && options.leading === false) previous = now;
+            var remaining = wait - (now - previous);
+            context = this;
+            args = arguments;
+            if (remaining <= 0) {
+                clearTimeout(timeout);
+                timeout = null;
+                previous = now;
+                result = func.apply(context, args);
+            } else if (!timeout && options.trailing !== false) {
+                timeout = setTimeout(later, remaining);
+            }
+            return result;
+        };
     }
 
     return {

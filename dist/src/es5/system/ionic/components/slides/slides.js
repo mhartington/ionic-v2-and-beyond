@@ -1,4 +1,4 @@
-System.register("ionic/components/slides/slides", ["angular2/angular2", "../ion", "ionic/animations/animation", "ionic/gestures/gesture", "../../config/decorators", "../../config/config", "ionic/util", "../../util/dom", "./swiper-widget"], function (_export) {
+System.register("ionic/components/slides/slides", ["angular2/angular2", "../ion", "ionic/animations/animation", "ionic/gestures/gesture", "../../config/config", "ionic/util", "../../util/dom", "./swiper-widget"], function (_export) {
     /**
      * Slides is a slide box implementation based on Swiper.js
      *
@@ -16,11 +16,11 @@ System.register("ionic/components/slides/slides", ["angular2/angular2", "../ion"
      */
     "use strict";
 
-    var View, ElementRef, Host, NgIf, NgClass, Ion, Animation, Gesture, IonicComponent, IonicDirective, IonicConfig, dom, util, CSS, Swiper, __decorate, __metadata, __param, Slides, Slide, SlideLazy, _a, _b, _c, _d;
+    var Directive, Component, ElementRef, Host, NgClass, Ion, Animation, Gesture, Config, dom, util, CSS, Swiper, __decorate, __metadata, __param, Slides, Slide, SlideLazy, _a, _b, _c, _d;
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -28,10 +28,10 @@ System.register("ionic/components/slides/slides", ["angular2/angular2", "../ion"
 
     return {
         setters: [function (_angular2Angular2) {
-            View = _angular2Angular2.View;
+            Directive = _angular2Angular2.Directive;
+            Component = _angular2Angular2.Component;
             ElementRef = _angular2Angular2.ElementRef;
             Host = _angular2Angular2.Host;
-            NgIf = _angular2Angular2.NgIf;
             NgClass = _angular2Angular2.NgClass;
         }, function (_ion) {
             Ion = _ion.Ion;
@@ -39,11 +39,8 @@ System.register("ionic/components/slides/slides", ["angular2/angular2", "../ion"
             Animation = _ionicAnimationsAnimation.Animation;
         }, function (_ionicGesturesGesture) {
             Gesture = _ionicGesturesGesture.Gesture;
-        }, function (_configDecorators) {
-            IonicComponent = _configDecorators.IonicComponent;
-            IonicDirective = _configDecorators.IonicDirective;
         }, function (_configConfig) {
-            IonicConfig = _configConfig.IonicConfig;
+            Config = _configConfig.Config;
         }, function (_ionicUtil) {
             dom = _ionicUtil.dom;
             util = _ionicUtil;
@@ -62,7 +59,7 @@ System.register("ionic/components/slides/slides", ["angular2/angular2", "../ion"
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -448,13 +445,12 @@ System.register("ionic/components/slides/slides", ["angular2/angular2", "../ion"
 
             _export("Slides", Slides);
 
-            _export("Slides", Slides = __decorate([IonicComponent({
+            _export("Slides", Slides = __decorate([Component({
                 selector: 'ion-slides',
-                properties: ['loop', 'index', 'bounce', 'pager', 'options', 'zoom', 'zoomDuration', 'zoomMax']
-            }), View({
-                template: "<div class=\"swiper-container\">\n    <div class=\"swiper-wrapper\">\n      <ng-content></ng-content>\n    </div>\n    <div [class.hide]=\"!showPager\" class=\"swiper-pagination\"></div>\n  </div>",
-                directives: [NgIf, NgClass]
-            }), __metadata('design:paramtypes', [typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a || Object, typeof (_b = typeof IonicConfig !== 'undefined' && IonicConfig) === 'function' && _b || Object])], Slides));
+                inputs: ['loop', 'index', 'bounce', 'pager', 'options', 'zoom', 'zoomDuration', 'zoomMax'],
+                template: '<div class="swiper-container">' + '<div class="swiper-wrapper">' + '<ng-content></ng-content>' + '</div>' + '<div [class.hide]="!showPager" class="swiper-pagination"></div>' + '</div>',
+                directives: [NgClass]
+            }), __metadata('design:paramtypes', [typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a || Object, typeof (_b = typeof Config !== 'undefined' && Config) === 'function' && _b || Object])], Slides));
             /**
              * TODO
              */
@@ -475,11 +471,10 @@ System.register("ionic/components/slides/slides", ["angular2/angular2", "../ion"
 
             _export("Slide", Slide);
 
-            _export("Slide", Slide = __decorate([IonicComponent({
+            _export("Slide", Slide = __decorate([Component({
                 selector: 'ion-slide',
-                properties: ['zoom']
-            }), View({
-                template: "<div class=\"slide-zoom\"><ng-content></ng-content></div>"
+                inputs: ['zoom'],
+                template: '<div class="slide-zoom"><ng-content></ng-content></div>'
             }), __param(1, Host()), __metadata('design:paramtypes', [typeof (_c = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _c || Object, Slides])], Slide));
 
             SlideLazy = function SlideLazy(elementRef) {
@@ -490,7 +485,7 @@ System.register("ionic/components/slides/slides", ["angular2/angular2", "../ion"
 
             _export("SlideLazy", SlideLazy);
 
-            _export("SlideLazy", SlideLazy = __decorate([IonicDirective({
+            _export("SlideLazy", SlideLazy = __decorate([Directive({
                 selector: 'slide-lazy'
             }), __metadata('design:paramtypes', [typeof (_d = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _d || Object])], SlideLazy));
         }

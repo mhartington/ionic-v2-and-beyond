@@ -1,7 +1,5 @@
-System.register("ionic/components/radio/radio", ["angular2/angular2", "../../config/decorators", "../../config/config", "../ion", "../list/list"], function (_export) {
+System.register("ionic/components/radio/radio", ["angular2/angular2", "../../config/config", "../ion", "../list/list"], function (_export) {
     /**
-     * @name ionRadioGroup
-     * @description
      * A radio group is a group of radio components.
      *
      * Selecting a radio button in the group unselects all others in the group.
@@ -39,11 +37,11 @@ System.register("ionic/components/radio/radio", ["angular2/angular2", "../../con
     */
     "use strict";
 
-    var ElementRef, Host, Optional, NgControl, Query, QueryList, IonicDirective, IonicComponent, IonicView, IonicConfig, Ion, ListHeader, __decorate, __metadata, __param, RadioGroup, RadioButton, radioGroupIds, _a, _b, _c, _d, _e, _f;
+    var Component, Directive, ElementRef, Renderer, Host, Optional, NgControl, Query, QueryList, Config, Ion, ListHeader, __decorate, __metadata, __param, RadioGroup, RadioButton, radioGroupIds, _a, _b, _c, _d, _e, _f, _g, _h;
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -51,18 +49,17 @@ System.register("ionic/components/radio/radio", ["angular2/angular2", "../../con
 
     return {
         setters: [function (_angular2Angular2) {
+            Component = _angular2Angular2.Component;
+            Directive = _angular2Angular2.Directive;
             ElementRef = _angular2Angular2.ElementRef;
+            Renderer = _angular2Angular2.Renderer;
             Host = _angular2Angular2.Host;
             Optional = _angular2Angular2.Optional;
             NgControl = _angular2Angular2.NgControl;
             Query = _angular2Angular2.Query;
             QueryList = _angular2Angular2.QueryList;
-        }, function (_configDecorators) {
-            IonicDirective = _configDecorators.IonicDirective;
-            IonicComponent = _configDecorators.IonicComponent;
-            IonicView = _configDecorators.IonicView;
         }, function (_configConfig) {
-            IonicConfig = _configConfig.IonicConfig;
+            Config = _configConfig.Config;
         }, function (_ion) {
             Ion = _ion.Ion;
         }, function (_listList) {
@@ -78,7 +75,7 @@ System.register("ionic/components/radio/radio", ["angular2/angular2", "../../con
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -103,17 +100,18 @@ System.register("ionic/components/radio/radio", ["angular2/angular2", "../../con
                 /**
                  * TODO
                  * @param {ElementRef} elementRef  TODO
-                 * @param {IonicConfig} config  TODO
+                 * @param {Config} config  TODO
                  * @param {NgControl=} ngControl  TODO
                  * @param {QueryList<ListHeader>} headerQuery  TODO
                  */
 
-                function RadioGroup(elementRef, config, ngControl, headerQuery) {
+                function RadioGroup(elementRef, config, renderer, ngControl, headerQuery) {
                     _classCallCheck(this, RadioGroup);
 
                     _get(Object.getPrototypeOf(RadioGroup.prototype), "constructor", this).call(this, elementRef, config);
                     this.headerQuery = headerQuery;
                     this.radios = [];
+                    renderer.setElementClass(elementRef, 'list', true);
                     this.id = ++radioGroupIds;
                     this.radioIds = -1;
                     this.onChange = function (_) {};
@@ -252,15 +250,14 @@ System.register("ionic/components/radio/radio", ["angular2/angular2", "../../con
 
             _export("RadioGroup", RadioGroup);
 
-            _export("RadioGroup", RadioGroup = __decorate([IonicDirective({
+            _export("RadioGroup", RadioGroup = __decorate([Directive({
                 selector: 'ion-radio-group',
                 host: {
-                    'class': 'list',
                     'role': 'radiogroup',
                     '[attr.aria-activedescendant]': 'activeId',
                     '[attr.aria-describedby]': 'describedById'
                 }
-            }), __param(2, Optional()), __param(3, Query(ListHeader)), __metadata('design:paramtypes', [typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a || Object, typeof (_b = typeof IonicConfig !== 'undefined' && IonicConfig) === 'function' && _b || Object, typeof (_c = typeof NgControl !== 'undefined' && NgControl) === 'function' && _c || Object, typeof (_d = typeof QueryList !== 'undefined' && QueryList) === 'function' && _d || Object])], RadioGroup));
+            }), __param(3, Optional()), __param(4, Query(ListHeader)), __metadata('design:paramtypes', [typeof (_a = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _a || Object, typeof (_b = typeof Config !== 'undefined' && Config) === 'function' && _b || Object, typeof (_c = typeof Renderer !== 'undefined' && Renderer) === 'function' && _c || Object, typeof (_d = typeof NgControl !== 'undefined' && NgControl) === 'function' && _d || Object, typeof (_e = typeof QueryList !== 'undefined' && QueryList) === 'function' && _e || Object])], RadioGroup));
             /**
              * @name ionRadio
              * @description
@@ -284,13 +281,14 @@ System.register("ionic/components/radio/radio", ["angular2/angular2", "../../con
                  * Radio button constructor.
                  * @param {RadioGroup=} group  The parent radio group, if any.
                  * @param {ElementRef} elementRef  TODO
-                 * @param {IonicConfig} config  TODO
+                 * @param {Config} config  TODO
                  */
 
-                function RadioButton(group, elementRef, config) {
+                function RadioButton(group, elementRef, config, renderer) {
                     _classCallCheck(this, RadioButton);
 
                     _get(Object.getPrototypeOf(RadioButton.prototype), "constructor", this).call(this, elementRef, config);
+                    renderer.setElementClass(elementRef, 'item', true);
                     this.group = group;
                     this.tabIndex = 0;
                 }
@@ -327,11 +325,10 @@ System.register("ionic/components/radio/radio", ["angular2/angular2", "../../con
 
             _export("RadioButton", RadioButton);
 
-            _export("RadioButton", RadioButton = __decorate([IonicComponent({
+            _export("RadioButton", RadioButton = __decorate([Component({
                 selector: 'ion-radio',
-                properties: ['value', 'checked', 'disabled', 'id'],
+                inputs: ['value', 'checked', 'disabled', 'id'],
                 host: {
-                    'class': 'item',
                     'role': 'radio',
                     'tappable': 'true',
                     '[attr.id]': 'id',
@@ -340,10 +337,9 @@ System.register("ionic/components/radio/radio", ["angular2/angular2", "../../con
                     '[attr.aria-disabled]': 'disabled',
                     '[attr.aria-labelledby]': 'labelId',
                     '(click)': 'click($event)'
-                }
-            }), IonicView({
-                template: '<ion-item-content id="{{labelId}}">' + '<ng-content></ng-content>' + '</ion-item-content>' + '<div item-right class="media-radio">' + '<div class="radio-icon"></div>' + '</div>'
-            }), __param(0, Host()), __param(0, Optional()), __metadata('design:paramtypes', [RadioGroup, typeof (_e = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _e || Object, typeof (_f = typeof IonicConfig !== 'undefined' && IonicConfig) === 'function' && _f || Object])], RadioButton));
+                },
+                template: '<ion-item-content id="{{labelId}}">' + '<ng-content></ng-content>' + '</ion-item-content>' + '<media-radio>' + '<radio-icon></radio-icon>' + '</media-radio>'
+            }), __param(0, Host()), __param(0, Optional()), __metadata('design:paramtypes', [RadioGroup, typeof (_f = typeof ElementRef !== 'undefined' && ElementRef) === 'function' && _f || Object, typeof (_g = typeof Config !== 'undefined' && Config) === 'function' && _g || Object, typeof (_h = typeof Renderer !== 'undefined' && Renderer) === 'function' && _h || Object])], RadioButton));
             radioGroupIds = -1;
         }
     };

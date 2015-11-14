@@ -1,27 +1,17 @@
-System.register('ionic/components/nav/view-controller', ['angular2/angular2', 'angular2/src/core/compiler/element_injector', './nav-controller'], function (_export) {
+System.register('ionic/components/nav/view-controller', ['./nav-controller'], function (_export) {
     /**
      * TODO
      */
     'use strict';
 
-    var Component, bind, Injector, ComponentRef, DirectiveBinding, NavParams, ViewController;
+    var NavParams, ViewController;
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-    function isComponent(elementBinder, id) {
-        return elementBinder && elementBinder.componentDirective && elementBinder.componentDirective.metadata.id == id;
-    }
     return {
-        setters: [function (_angular2Angular2) {
-            Component = _angular2Angular2.Component;
-            bind = _angular2Angular2.bind;
-            Injector = _angular2Angular2.Injector;
-            ComponentRef = _angular2Angular2.ComponentRef;
-        }, function (_angular2SrcCoreCompilerElement_injector) {
-            DirectiveBinding = _angular2SrcCoreCompilerElement_injector.DirectiveBinding;
-        }, function (_navController) {
+        setters: [function (_navController) {
             NavParams = _navController.NavParams;
         }],
         execute: function () {
@@ -36,178 +26,15 @@ System.register('ionic/components/nav/view-controller', ['angular2/angular2', 'a
                     this.params = new NavParams(params);
                     this.instance = null;
                     this.state = 0;
-                    this.disposals = [];
-                    this.protos = {};
-                    this._nbItms = [];
-                    this._promises = [];
-                    this.templateRefs = {};
+                    this._destroys = [];
                 }
 
                 /**
                  * TODO
-                 * @param {TODO} name  TODO
-                 * @param {TODO} protoViewRef  TODO
+                 * @returns {boolean} TODO
                  */
 
                 _createClass(ViewController, [{
-                    key: 'addProtoViewRef',
-                    value: function addProtoViewRef(name, protoViewRef) {
-                        this.protos[name] = protoViewRef;
-                    }
-
-                    /**
-                     * TODO
-                     * @param {TODO} name  TODO
-                     * @param {TODO} templateRef  TODO
-                     */
-                }, {
-                    key: 'addTemplateRef',
-                    value: function addTemplateRef(name, templateRef) {
-                        this.templateRefs[name] = templateRef;
-                    }
-
-                    /**
-                     * TODO
-                     * @param {Function} callback  TODO
-                     * @returns {TODO} TODO
-                     */
-                }, {
-                    key: 'stage',
-                    value: function stage(callback) {
-                        var _this = this;
-
-                        var navCtrl = this.navCtrl;
-                        if (this.instance || !navCtrl) {
-                            // already compiled this view
-                            return callback();
-                        }
-                        var annotation = new Component({
-                            selector: 'ion-view',
-                            host: {
-                                'class': 'nav-item'
-                            }
-                        });
-                        var ionViewComponentType = DirectiveBinding.createFromType(this.componentType, annotation);
-                        // create a unique token that works as a cache key
-                        ionViewComponentType.token = 'ionView' + this.componentType.name;
-                        // compile the Component
-                        navCtrl.compiler.compileInHost(ionViewComponentType).then(function (hostProtoViewRef) {
-                            // figure out the sturcture of this Component
-                            // does it have a navbar? Is it tabs? Should it not have a navbar or any toolbars?
-                            var itemStructure = _this.sturcture = _this.inspectStructure(hostProtoViewRef);
-                            // get the appropriate Pane which this ViewController will fit into
-                            navCtrl.panes.get(itemStructure, function (pane) {
-                                _this.pane = pane;
-                                var bindings = navCtrl.bindings.concat(Injector.resolve([bind(NavParams).toValue(_this.params), bind(ViewController).toValue(_this)]));
-                                // add the content of the view to the content area
-                                // it will already have the correct context
-                                var contentContainer = pane.contentContainerRef;
-                                // the same guts as DynamicComponentLoader.loadNextToLocation
-                                var hostViewRef = contentContainer.createHostView(hostProtoViewRef, -1, bindings);
-                                var newLocation = navCtrl.viewMngr.getHostElement(hostViewRef);
-                                var newComponent = navCtrl.viewMngr.getComponent(newLocation);
-                                pane.totalItems++;
-                                var dispose = function dispose() {
-                                    var index = contentContainer.indexOf(hostViewRef);
-                                    if (index !== -1) {
-                                        contentContainer.remove(index);
-                                        // remove the pane if there are no view items left
-                                        pane.totalItems--;
-                                        if (pane.totalItems === 0) {
-                                            pane.dispose();
-                                        }
-                                    }
-                                };
-                                _this.disposals.push(dispose);
-                                var viewComponetRef = new ComponentRef(newLocation, newComponent, dispose);
-                                // get the component's instance, and set it to the this ViewController
-                                _this.setInstance(viewComponetRef.instance);
-                                _this.viewElementRef(viewComponetRef.location);
-                                // // get the item container's nav bar
-                                var navbarViewContainer = navCtrl.navbarViewContainer();
-                                // // get the item's navbar protoview
-                                var navbarTemplateRef = _this.templateRefs.navbar;
-                                // add a navbar view if the pane has a navbar container, and the
-                                // item's instance has a navbar protoview to go to inside of it
-                                if (navbarViewContainer && navbarTemplateRef) {
-                                    (function () {
-                                        var navbarView = navbarViewContainer.createEmbeddedView(navbarTemplateRef, -1);
-                                        _this.disposals.push(function () {
-                                            var index = navbarViewContainer.indexOf(navbarView);
-                                            if (index > -1) {
-                                                navbarViewContainer.remove(index);
-                                            }
-                                        });
-                                    })();
-                                }
-                                // this item has finished loading
-                                try {
-                                    _this.loaded();
-                                } catch (e) {
-                                    console.error(e);
-                                }
-                                // fire callback when all child promises have been resolved
-                                Promise.all(_this._promises).then(function () {
-                                    callback();
-                                    _this._promises = [];
-                                });
-                            }, function (panesErr) {
-                                console.error(panesErr);
-                            });
-                        }, function (compileInHostErr) {
-                            console.error(compileInHostErr);
-                        });
-                    }
-
-                    /**
-                     * TODO
-                     * @param {TODO} childPromise  TODO
-                     */
-                }, {
-                    key: 'addPromise',
-                    value: function addPromise(childPromise) {
-                        this._promises.push(childPromise);
-                    }
-
-                    /**
-                     * TODO
-                     * @param {TODO} componentProtoViewRef  TODO
-                     */
-                }, {
-                    key: 'inspectStructure',
-                    value: function inspectStructure(componentProtoViewRef) {
-                        var navbar = false;
-                        var key = '_';
-                        componentProtoViewRef._protoView.elementBinders.forEach(function (rootElementBinder) {
-                            if (!rootElementBinder.componentDirective || !rootElementBinder.nestedProtoView) return;
-                            rootElementBinder.nestedProtoView.elementBinders.forEach(function (nestedElementBinder) {
-                                if (isComponent(nestedElementBinder, 'Tabs')) {
-                                    navbar = true;
-                                }
-                                if (!nestedElementBinder.componentDirective && nestedElementBinder.nestedProtoView) {
-                                    nestedElementBinder.nestedProtoView.elementBinders.forEach(function (templatedElementBinder) {
-                                        if (isComponent(templatedElementBinder, 'Navbar')) {
-                                            navbar = true;
-                                        }
-                                    });
-                                }
-                            });
-                        });
-                        if (this.navCtrl.childNavbar()) {
-                            navbar = false;
-                        }
-                        if (navbar) key += 'n';
-                        return {
-                            navbar: navbar,
-                            key: key
-                        };
-                    }
-
-                    /**
-                     * TODO
-                     * @returns {boolean} TODO
-                     */
-                }, {
                     key: 'enableBack',
                     value: function enableBack() {
                         // update if it's possible to go back from this nav item
@@ -234,6 +61,11 @@ System.register('ionic/components/nav/view-controller', ['angular2/angular2', 'a
                     value: function isRoot() {
                         return this.index === 0;
                     }
+                }, {
+                    key: 'addDestroy',
+                    value: function addDestroy(destroyFn) {
+                        this._destroys.push(destroyFn);
+                    }
 
                     /**
                      * TODO
@@ -241,43 +73,80 @@ System.register('ionic/components/nav/view-controller', ['angular2/angular2', 'a
                 }, {
                     key: 'destroy',
                     value: function destroy() {
-                        for (var i = 0; i < this.disposals.length; i++) {
-                            this.disposals[i]();
+                        for (var i = 0; i < this._destroys.length; i++) {
+                            this._destroys[i]();
                         }
-                        this.didUnload();
-                        // just to help prevent any possible memory leaks
-                        for (var _name in this) {
-                            if (this.hasOwnProperty(_name)) {
-                                this[_name] = null;
-                            }
-                        }
+                        this._destroys = [];
+                    }
+                }, {
+                    key: 'setNavbarTemplateRef',
+                    value: function setNavbarTemplateRef(templateRef) {
+                        this._nbTmpRef = templateRef;
+                    }
+                }, {
+                    key: 'getNavbarTemplateRef',
+                    value: function getNavbarTemplateRef() {
+                        return this._nbTmpRef;
+                    }
+                }, {
+                    key: 'getNavbarViewRef',
+                    value: function getNavbarViewRef() {
+                        return this._nbVwRef;
+                    }
+                }, {
+                    key: 'setNavbarViewRef',
+                    value: function setNavbarViewRef(viewContainerRef) {
+                        this._nbVwRef = viewContainerRef;
+                    }
+                }, {
+                    key: 'setPageRef',
+                    value: function setPageRef(elementRef) {
+                        this._pgRef = elementRef;
+                    }
+                }, {
+                    key: 'pageRef',
+                    value: function pageRef() {
+                        return this._pgRef;
+                    }
+                }, {
+                    key: 'setContentRef',
+                    value: function setContentRef(elementRef) {
+                        this._cntRef = elementRef;
+                    }
+                }, {
+                    key: 'contentRef',
+                    value: function contentRef() {
+                        return this._cntRef;
+                    }
+                }, {
+                    key: 'setContent',
+                    value: function setContent(directive) {
+                        this._cntDir = directive;
+                    }
+                }, {
+                    key: 'getContent',
+                    value: function getContent() {
+                        return this._cntDir;
+                    }
+                }, {
+                    key: 'setNavbar',
+                    value: function setNavbar(directive) {
+                        this._nbDir = directive;
+                    }
+                }, {
+                    key: 'getNavbar',
+                    value: function getNavbar() {
+                        return this._nbDir;
                     }
 
                     /**
                      * TODO
-                     * @param {TODO} val  TODO
                      * @returns {TODO} TODO
                      */
                 }, {
-                    key: 'viewElementRef',
-                    value: function viewElementRef(val) {
-                        if (arguments.length) {
-                            this._vwEle = val;
-                        }
-                        return this._vwEle;
-                    }
-
-                    /**
-                     * TODO
-                     * @returns {TODO} TODO
-                     */
-                }, {
-                    key: 'navbarView',
-                    value: function navbarView() {
-                        if (arguments.length) {
-                            this._nbView = arguments[0];
-                        }
-                        return this._nbView;
+                    key: 'hasNavbar',
+                    value: function hasNavbar() {
+                        return !!this.getNavbar();
                     }
 
                     /**
@@ -287,10 +156,8 @@ System.register('ionic/components/nav/view-controller', ['angular2/angular2', 'a
                 }, {
                     key: 'navbarRef',
                     value: function navbarRef() {
-                        var navbarView = this.navbarView();
-                        if (navbarView) {
-                            return navbarView.getElementRef();
-                        }
+                        var navbar = this.getNavbar();
+                        return navbar && navbar.getElementRef();
                     }
 
                     /**
@@ -300,10 +167,8 @@ System.register('ionic/components/nav/view-controller', ['angular2/angular2', 'a
                 }, {
                     key: 'titleRef',
                     value: function titleRef() {
-                        var navbarView = this.navbarView();
-                        if (navbarView) {
-                            return navbarView.getTitleRef();
-                        }
+                        var navbar = this.getNavbar();
+                        return navbar && navbar.getTitleRef();
                     }
 
                     /**
@@ -313,10 +178,8 @@ System.register('ionic/components/nav/view-controller', ['angular2/angular2', 'a
                 }, {
                     key: 'navbarItemRefs',
                     value: function navbarItemRefs() {
-                        var navbarView = this.navbarView();
-                        if (navbarView) {
-                            return navbarView.getItemRefs();
-                        }
+                        var navbar = this.getNavbar();
+                        return navbar && navbar.getItemRefs();
                     }
 
                     /**
@@ -326,10 +189,8 @@ System.register('ionic/components/nav/view-controller', ['angular2/angular2', 'a
                 }, {
                     key: 'backBtnRef',
                     value: function backBtnRef() {
-                        var navbarView = this.navbarView();
-                        if (navbarView) {
-                            return navbarView.getBackButtonRef();
-                        }
+                        var navbar = this.getNavbar();
+                        return navbar && navbar.getBackButtonRef();
                     }
 
                     /**
@@ -339,10 +200,8 @@ System.register('ionic/components/nav/view-controller', ['angular2/angular2', 'a
                 }, {
                     key: 'backBtnTextRef',
                     value: function backBtnTextRef() {
-                        var navbarView = this.navbarView();
-                        if (navbarView) {
-                            return navbarView.getBackButtonTextRef();
-                        }
+                        var navbar = this.getNavbar();
+                        return navbar && navbar.getBackButtonTextRef();
                     }
 
                     /**
@@ -350,23 +209,19 @@ System.register('ionic/components/nav/view-controller', ['angular2/angular2', 'a
                      * @returns {TODO} TODO
                      */
                 }, {
-                    key: 'navbarBackgroundRef',
-                    value: function navbarBackgroundRef() {
-                        var navbarView = this.navbarView();
-                        if (navbarView) {
-                            return navbarView.getNativeElement().querySelector('.toolbar-background');
+                    key: 'navbarBgRef',
+                    value: function navbarBgRef() {
+                        var navbar = this.getNavbar();
+                        return navbar && navbar.getNativeElement().querySelector('.toolbar-background');
+                    }
+                }, {
+                    key: 'hideBackButton',
+                    value: function hideBackButton(shouldHide) {
+                        var navbar = this.getNavbar();
+                        if (navbar) {
+                            navbar.hideBackButton = !!shouldHide;
                         }
                     }
-
-                    /**
-                     * TODO
-                     * @returns {TODO} TODO
-                     */
-                }, {
-                    key: 'postRender',
-                    value: function postRender() {}
-                    // the elements are in the DOM and the browser
-                    // has rendered them in their correct locations
 
                     /**
                      * The view has loaded. This event only happens once per view being
@@ -375,11 +230,12 @@ System.register('ionic/components/nav/view-controller', ['angular2/angular2', 'a
                      * to put your setup code for the view; however, it is not the
                      * recommended method to use when a view becomes active.
                      */
-
                 }, {
                     key: 'loaded',
                     value: function loaded() {
-                        this.instance && this.instance.onViewLoaded && this.instance.onViewLoaded();
+                        if (!this.shouldDestroy) {
+                            this.instance && this.instance.onPageLoaded && this.instance.onPageLoaded();
+                        }
                     }
 
                     /**
@@ -388,7 +244,9 @@ System.register('ionic/components/nav/view-controller', ['angular2/angular2', 'a
                 }, {
                     key: 'willEnter',
                     value: function willEnter() {
-                        this.instance && this.instance.onViewWillEnter && this.instance.onViewWillEnter();
+                        if (!this.shouldDestroy) {
+                            this.instance && this.instance.onPageWillEnter && this.instance.onPageWillEnter();
+                        }
                     }
 
                     /**
@@ -398,11 +256,9 @@ System.register('ionic/components/nav/view-controller', ['angular2/angular2', 'a
                 }, {
                     key: 'didEnter',
                     value: function didEnter() {
-                        var navbarView = this.navbarView();
-                        if (navbarView) {
-                            navbarView.didEnter();
-                        }
-                        this.instance && this.instance.onViewDidEnter && this.instance.onViewDidEnter();
+                        var navbar = this.getNavbar();
+                        navbar && navbar.didEnter();
+                        this.instance && this.instance.onPageDidEnter && this.instance.onPageDidEnter();
                     }
 
                     /**
@@ -411,7 +267,7 @@ System.register('ionic/components/nav/view-controller', ['angular2/angular2', 'a
                 }, {
                     key: 'willLeave',
                     value: function willLeave() {
-                        this.instance && this.instance.onViewWillLeave && this.instance.onViewWillLeave();
+                        this.instance && this.instance.onPageWillLeave && this.instance.onPageWillLeave();
                     }
 
                     /**
@@ -421,7 +277,7 @@ System.register('ionic/components/nav/view-controller', ['angular2/angular2', 'a
                 }, {
                     key: 'didLeave',
                     value: function didLeave() {
-                        this.instance && this.instance.onViewDidLeave && this.instance.onViewDidLeave();
+                        this.instance && this.instance.onPageDidLeave && this.instance.onPageDidLeave();
                     }
 
                     /**
@@ -430,7 +286,7 @@ System.register('ionic/components/nav/view-controller', ['angular2/angular2', 'a
                 }, {
                     key: 'willUnload',
                     value: function willUnload() {
-                        this.instance && this.instance.onViewWillUnload && this.instance.onViewWillUnload();
+                        this.instance && this.instance.onPageWillUnload && this.instance.onPageWillUnload();
                     }
 
                     /**
@@ -439,7 +295,14 @@ System.register('ionic/components/nav/view-controller', ['angular2/angular2', 'a
                 }, {
                     key: 'didUnload',
                     value: function didUnload() {
-                        this.instance && this.instance.onViewDidUnload && this.instance.onViewDidUnload();
+                        this.instance && this.instance.onPageDidUnload && this.instance.onPageDidUnload();
+                    }
+                }, {
+                    key: 'domCache',
+                    value: function domCache(isActiveView, isPreviousView) {
+                        if (this.instance) {
+                            this.instance._hidden = !isActiveView && !isPreviousView;
+                        }
                     }
                 }, {
                     key: 'index',

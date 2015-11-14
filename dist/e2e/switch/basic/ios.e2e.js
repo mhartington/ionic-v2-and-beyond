@@ -1,13 +1,13 @@
 describe('switch/basic: ios', function() {
 
 it('should init', function() {
-  browser.get('http://localhost:8876/dist/e2e/switch/basic/index.html?ionicplatform=ios');
+  browser.get('http://localhost:8876/dist/e2e/switch/basic/index.html?ionicplatform=ios&ionicanimate=false&snapshot=true');
 });
 
 'use strict';
 
 it('should check apple via switch element click', function () {
-    element(by.css('.e2eAppleCheckbox .media-switch')).click();
+    element(by.css('[ng-control=appleCtrl] media-switch')).click();
 });
 it('should enable/check grape via buttons and submit form', function () {
     element(by.css('.e2eGrapeDisabled')).click();

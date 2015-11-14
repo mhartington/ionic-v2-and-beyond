@@ -20,10 +20,10 @@ System.register('ionic/platform/storage/storage', [], function (_export) {
         setters: [],
         execute: function () {
             Storage = (function () {
-                function Storage(strategyCls) {
+                function Storage(strategyCls, options) {
                     _classCallCheck(this, Storage);
 
-                    this._strategy = new strategyCls();
+                    this._strategy = new strategyCls(options);
                 }
 
                 _createClass(Storage, [{

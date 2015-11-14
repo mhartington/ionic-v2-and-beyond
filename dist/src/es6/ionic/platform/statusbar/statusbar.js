@@ -12,6 +12,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 import { NativePlugin } from '../plugin';
 /**
  * Manage the appearance of the native status bar.
+ *
+ * @usage
+ * ```js
+ * StatusBar.hide(); // Hide the bar
+ *
+ * StatusBar.setStyle(StatusBar.LIGHT_CONTENT) // Good for dark backgrounds
+ * ```
  */
 export let StatusBar = class {
     /**
@@ -69,7 +76,7 @@ export let StatusBar = class {
      */
     static setHexColor(hex) {
         this.ifPlugin(() => {
-            window.StatusBar.backgroundColorByHexName(hex);
+            window.StatusBar.backgroundColorByHexString(hex);
         });
     }
     /**

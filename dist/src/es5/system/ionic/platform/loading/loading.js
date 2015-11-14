@@ -1,6 +1,15 @@
 System.register("ionic/platform/loading/loading", ["../plugin"], function (_export) {
     /**
      * Simple loading popup indicators.
+     *
+     * Uses the `cordova-plugin-progressindicator` Cordova plugin. See the [plugin docs](http://paolobernasconi.com/cordova-progressIndicator/)
+     * for more information.
+     *
+     * @usage
+     *
+     * ```js
+     * Loading.show(true, 'Waiting...') // Dim the background and show label
+     * ```
      */
     "use strict";
 
@@ -24,7 +33,7 @@ System.register("ionic/platform/loading/loading", ["../plugin"], function (_expo
                         }, target);
                     case 3:
                         return decorators.reduceRight(function (o, d) {
-                            return (d && d(target, key), void 0);
+                            return d && d(target, key), void 0;
                         }, void 0);
                     case 4:
                         return decorators.reduceRight(function (o, d) {
@@ -44,6 +53,14 @@ System.register("ionic/platform/loading/loading", ["../plugin"], function (_expo
 
                 _createClass(Loading, null, [{
                     key: "simple",
+
+                    /**
+                     * Show a simple loading box.
+                     *
+                     * @param dim {Boolean} whether the dim the background
+                     * @param label {String} the custom label
+                     * @param detail {String} any detail text
+                     */
                     value: function simple(dim, label, detail) {
                         this.ifPlugin(function () {
                             if (typeof label === 'undefined') {
@@ -57,6 +74,15 @@ System.register("ionic/platform/loading/loading", ["../plugin"], function (_expo
                             window.ProgressIndicator.showSimpleWithLabelDetail(dim, label, detail);
                         });
                     }
+
+                    /**
+                     * Show a deteriminate loading box with progress bar
+                     * that completes after a certain amount of time
+                     *
+                     * @param dim {Boolean} whether the dim the background
+                     * @param timeout {Integer} the timeout for the loading box
+                     * @param label {String} the custom label
+                     */
                 }, {
                     key: "determinate",
                     value: function determinate(dim, timeout, label) {
@@ -71,6 +97,14 @@ System.register("ionic/platform/loading/loading", ["../plugin"], function (_expo
                             }
                         });
                     }
+
+                    /**
+                     * Show a spinning circle
+                     *
+                     * @param dim {Boolean} whether the dim the background
+                     * @param timeout {Integer} the timeout for the loading box
+                     * @param label {String} the custom label
+                     */
                 }, {
                     key: "annular",
                     value: function annular(dim, timeout, label) {
@@ -85,6 +119,14 @@ System.register("ionic/platform/loading/loading", ["../plugin"], function (_expo
                             }
                         });
                     }
+
+                    /**
+                     * Show a bar
+                     *
+                     * @param dim {Boolean} whether the dim the background
+                     * @param timeout {Integer} the timeout for the loading box
+                     * @param label {String} the custom label
+                     */
                 }, {
                     key: "bar",
                     value: function bar(dim, timeout, label) {
@@ -99,6 +141,13 @@ System.register("ionic/platform/loading/loading", ["../plugin"], function (_expo
                             }
                         });
                     }
+
+                    /**
+                     * Show a success checkmark
+                     *
+                     * @param dim {Boolean} whether the dim the background
+                     * @param label {String} the custom label
+                     */
                 }, {
                     key: "success",
                     value: function success(dim, label) {
@@ -106,6 +155,10 @@ System.register("ionic/platform/loading/loading", ["../plugin"], function (_expo
                             window.ProgressIndicator.showSuccess(dim, label);
                         });
                     }
+
+                    /**
+                     * Hide a loading box
+                     */
                 }, {
                     key: "hide",
                     value: function hide() {

@@ -5,7 +5,7 @@ System.register('ionic/platform/storage/sql', ['./storage', 'ionic/util'], funct
 
     var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+    var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
     function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
@@ -26,6 +26,29 @@ System.register('ionic/platform/storage/sql', ['./storage', 'ionic/util'], funct
              *
              * This is the preferred storage engine, as data will be stored in appropriate
              * app storage, unlike Local Storage which is treated differently by the OS.
+             *
+             * For convenience, the engine supports key/value storage for simple get/set and blob
+             * storage. The full SQL engine is exposed underneath through the `query` method.
+             *
+             * @usage
+             ```js
+             * let storage = new Storage(SqlStorage, options);
+             * storage.set('name', 'Max');
+             * storage.get('name').then((name) => {
+             * });
+             *
+             * // Sql storage also exposes the full engine underneath
+             * storage.query('insert into projects(name, data) values('Cool Project', 'blah')');'
+             * storage.query('select * from projects').then((resp) => {})
+             * ```
+             *
+             * The `SqlStorage` service supports these options:
+             * {
+             *   name: the name of the database (__ionicstorage by default)
+             *   backupFlag: // where to store the file, default is BACKUP_LOCAL which DOES NOT store to iCloud. Other options: BACKUP_LIBRARY, BACKUP_DOCUMENTS
+             *   existingDatabase: whether to load this as an existing database (default is false)
+             * }
+             *
              */
 
             SqlStorage = (function (_StorageEngine) {
@@ -37,11 +60,11 @@ System.register('ionic/platform/storage/sql', ['./storage', 'ionic/util'], funct
                     _get(Object.getPrototypeOf(SqlStorage.prototype), 'constructor', this).call(this);
                     var dbOptions = util.defaults({
                         name: DB_NAME,
-                        backupFlag: SqlStorage.BACKUP_NONE,
+                        backupFlag: SqlStorage.BACKUP_LOCAL,
                         existingDatabase: false
                     }, options);
                     if (window.sqlitePlugin) {
-                        var _location = this._getBackupLocation(dbOptions);
+                        var _location = this._getBackupLocation(dbOptions.backupFlag);
                         this._db = window.sqlitePlugin.openDatabase(util.extend({
                             name: dbOptions.name,
                             location: _location,
@@ -86,6 +109,7 @@ System.register('ionic/platform/storage/sql', ['./storage', 'ionic/util'], funct
                      * like SELECT, INSERT, and UPDATE.
                      *
                      * @param {string} query the query to run
+                     * @param {array} params the additional params to use for query placeholders
                      * @return {Promise} that resolves or rejects with an object of the form { tx: Transaction, res: Result (or err)}
                      */
                 }, {
@@ -93,9 +117,13 @@ System.register('ionic/platform/storage/sql', ['./storage', 'ionic/util'], funct
                     value: function query(_query) {
                         var _this = this;
 
+                        for (var _len = arguments.length, params = Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+                            params[_key - 1] = arguments[_key];
+                        }
+
                         return new Promise(function (resolve, reject) {
                             _this._db.transaction(function (tx) {
-                                ts.executeSql(_query, [], function (tx, res) {
+                                ts.executeSql(_query, params, function (tx, res) {
                                     resolve({
                                         tx: tx,
                                         res: res
