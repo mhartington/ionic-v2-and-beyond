@@ -420,9 +420,13 @@ body {
       font-weight: bold; }
   .reveal .demo {
     margin-left: 15px; }
-  .reveal .button {
-    background-color: white;
-    border: none; }
+    .reveal .demo .demo-buttons {
+      position: absolute;
+      z-index: 124;
+      right: 0; }
+    .reveal .demo .button {
+      background-color: white;
+      border: none; }
   .reveal .code-left {
     width: 60%;
     text-align: left; }
@@ -456,6 +460,7 @@ body {
     flex-direction: column; }
   .reveal .demo-ios {
     position: relative;
+    margin-top: -20px;
     background: url("../../img/devices-sprite-transparent.png") no-repeat;
     background-size: 455px 1559px;
     width: 460px;
