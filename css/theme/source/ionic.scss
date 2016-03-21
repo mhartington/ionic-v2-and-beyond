@@ -26,7 +26,7 @@ $backgroundColor: $ionicBlue;
 $mainColor: #fff;
 $headingColor: #fff;
 
-$mainFontSize: 32px;
+$mainFontSize: 52px;
 $mainFont: "Avenir Next", san-serif;
 $headingFont: "Avenir Next", san-serif;
 $headingTextShadow: 1px 1px 15px rgba(0, 0, 0, 0.2);
@@ -315,7 +315,7 @@ section.has-light-background {
     position: relative;
     margin-top: -20px;
     background: url("../../img/devices-sprite-transparent.png") no-repeat;
-    background-size: 455px 1559px;
+    background-size: 455px 2320px;
     width: 460px;
     height: 740px;
 
@@ -330,20 +330,37 @@ section.has-light-background {
 
   .demo-md {
     position: relative;
-    background: url("../../img/devices-sprite-transparent.png") no-repeat 0px -775px;
-    background-size: 455px 1559px;
-    width: 460px;
-    height: 780px;
+    width: 467px;
+		height: 800px;
+		background: center center no-repeat url("../../img/devices-sprite-transparent.png");
+		background-size: 467px;
+		margin: 0 auto;
 
     iframe {
       position: absolute;
       top: 67px;
-      left: 52px;
+      left: 57px;
       width: 350px;
       height: 572px;
     }
   }
 
+  .demo-wp {
+    position: relative;
+    width: 467px;
+		height: 800px;
+		background: center bottom no-repeat url("../../img/devices-sprite-transparent.png");
+		background-size: 467px;
+		margin: 0 auto;
+
+    iframe {
+      position: absolute;
+      top: 82px;
+      left: 51px;
+      width: 362px;
+      height: 592px;
+    }
+  }
   iframe {
     max-width: 100%;
     max-height: 100%;

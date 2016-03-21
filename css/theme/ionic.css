@@ -21,7 +21,7 @@ body {
 
 .reveal {
   font-family: "Avenir Next", san-serif;
-  font-size: 32px;
+  font-size: 52px;
   font-weight: normal;
   color: #fff; }
 
@@ -213,9 +213,9 @@ body {
 .reveal a {
   color: white;
   text-decoration: none;
-  -webkit-transition: color 0.15s ease;
-  -moz-transition: color 0.15s ease;
-  transition: color 0.15s ease; }
+  -webkit-transition: color .15s ease;
+  -moz-transition: color .15s ease;
+  transition: color .15s ease; }
 
 .reveal a:hover {
   color: white;
@@ -236,9 +236,9 @@ body {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); }
 
 .reveal a img {
-  -webkit-transition: all 0.15s linear;
-  -moz-transition: all 0.15s linear;
-  transition: all 0.15s linear; }
+  -webkit-transition: all .15s linear;
+  -moz-transition: all .15s linear;
+  transition: all .15s linear; }
 
 .reveal a:hover img {
   background: rgba(255, 255, 255, 0.2);
@@ -462,7 +462,7 @@ body {
     position: relative;
     margin-top: -20px;
     background: url("../../img/devices-sprite-transparent.png") no-repeat;
-    background-size: 455px 1559px;
+    background-size: 455px 2320px;
     width: 460px;
     height: 740px; }
     .reveal .demo-ios iframe {
@@ -473,16 +473,30 @@ body {
       height: 560px; }
   .reveal .demo-md {
     position: relative;
-    background: url("../../img/devices-sprite-transparent.png") no-repeat 0px -775px;
-    background-size: 455px 1559px;
-    width: 460px;
-    height: 780px; }
+    width: 467px;
+    height: 800px;
+    background: center center no-repeat url("../../img/devices-sprite-transparent.png");
+    background-size: 467px;
+    margin: 0 auto; }
     .reveal .demo-md iframe {
       position: absolute;
       top: 67px;
-      left: 52px;
+      left: 57px;
       width: 350px;
       height: 572px; }
+  .reveal .demo-wp {
+    position: relative;
+    width: 467px;
+    height: 800px;
+    background: center bottom no-repeat url("../../img/devices-sprite-transparent.png");
+    background-size: 467px;
+    margin: 0 auto; }
+    .reveal .demo-wp iframe {
+      position: absolute;
+      top: 82px;
+      left: 51px;
+      width: 362px;
+      height: 592px; }
   .reveal iframe {
     max-width: 100%;
     max-height: 100%;
