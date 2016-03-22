@@ -361,19 +361,6 @@ body {
     text-align: left; }
   .reveal .col.code > * {
     margin-left: 40px; }
-  .reveal .demo-frame {
-    background: url("../img/demo-bg.png") no-repeat;
-    background-size: 340px;
-    height: 700px;
-    margin-top: 0;
-    margin-left: -15px;
-    min-width: 345px; }
-  .reveal .demo-frame iframe {
-    position: absolute;
-    left: 7px;
-    top: 98px;
-    width: 296px;
-    height: 527px; }
   .reveal pre code {
     background-color: #1B2B34; }
   .reveal .headshot {
@@ -419,11 +406,12 @@ body {
       text-shadow: -2px 2px 0 #000;
       font-weight: bold; }
   .reveal .demo {
-    margin-left: 15px; }
+    width: 40%; }
     .reveal .demo .demo-buttons {
       position: absolute;
       z-index: 124;
-      right: 0; }
+      right: 0;
+      bottom: 0; }
     .reveal .demo .button {
       background-color: white;
       border: none; }
@@ -458,9 +446,10 @@ body {
     align-items: center;
     display: flex;
     flex-direction: column; }
+  .reveal iframe {
+    background-color: white; }
   .reveal .demo-ios {
     position: relative;
-    margin-top: -20px;
     background: url("../../img/devices-sprite-transparent.png") no-repeat;
     background-size: 455px 2320px;
     width: 460px;
@@ -473,31 +462,25 @@ body {
       height: 560px; }
   .reveal .demo-md {
     position: relative;
-    width: 467px;
-    height: 800px;
+    width: 460px;
+    height: 740px;
     background: center center no-repeat url("../../img/devices-sprite-transparent.png");
-    background-size: 467px;
-    margin: 0 auto; }
+    background-size: 425px; }
     .reveal .demo-md iframe {
       position: absolute;
-      top: 67px;
-      left: 57px;
-      width: 350px;
-      height: 572px; }
+      top: 64px;
+      left: 68px;
+      width: 323px;
+      height: 540px; }
   .reveal .demo-wp {
     position: relative;
-    width: 467px;
-    height: 800px;
+    width: 460px;
+    height: 740px;
     background: center bottom no-repeat url("../../img/devices-sprite-transparent.png");
-    background-size: 467px;
-    margin: 0 auto; }
+    background-size: 430px; }
     .reveal .demo-wp iframe {
       position: absolute;
-      top: 82px;
-      left: 51px;
-      width: 362px;
-      height: 592px; }
-  .reveal iframe {
-    max-width: 100%;
-    max-height: 100%;
-    overflow: hidden; }
+      top: 79px;
+      left: 63px;
+      width: 331px;
+      height: 545px; }
